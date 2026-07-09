@@ -1,1 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MDA-INT - Цифровые документы</title>
+    <!-- Шрифты и иконки -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-gradient-top: #153c8a;
+            --bg-gradient-mid: #3b6fd4;
+            --bg-gradient-bottom: #8ab4f8;
+            --nav-bg: #091a3f;
+            --nav-active: #2354b8;
+            --text-main: #ffffff;
+            --card-bg: linear-gradient(180deg, #f8fbff 0%, #d4dfea 100%);
+            --card-text: #334155;
+            --accent-red: #d32f2f;
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(255, 255, 255, 0.3);
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Контейнер приложения */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            max-height: 896px;
+            background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 415px) {
+            .app-container {
+                height: 850px;
+                border-radius: 40px;
+                border: 8px solid #000;
+            }
+        }
+
+        /* --- ЭКРАНЫ --- */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
+            transition: opacity 0.5s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Экран загрузки */
+        #splash-screen {
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo-box {
+            text-align: center;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+        .logo-box h1 { font-size: 5rem; font-weight: 800; letter-spacing: 2px; }
+        .logo-box h2 { font-size: 3rem; font-weight: 800; }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { transform: scale(1.05); opacity: 0.8; text-shadow: 0 0 25px rgba(255,255,255,0.8); }
+            100% { transform: scale(1); opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        }
+
+        /* Авторизация и Формы */
+        .auth-container {
+            padding: 40px 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        .auth-title {
+            color: white;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .form-group label {
+            display: block;
+            color: #e0ecff;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .form-input:focus {
+            border-color: #fff;
+            background: rgba(255,255,255,0.2);
+        }
+        .form-input::placeholder { color: rgba(255,255,255,0.5); }
+        
+        /* Кнопки */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .btn-primary {
+            background: white;
+            color: var(--bg-gradient-top);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        .btn:active { transform: scale(0.98); }
+
+        /* Кастомный Select (для флагов) */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 100%;
+        }
+        .custom-select {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .custom-select img { width: 24px; height: 16px; margin-right: 10px; object-fit: cover; border-radius: 2px; }
+        .custom-options {
+            position: absolute;
+            top: 100%; left: 0; right: 0;
+            background: #1e3a8a;
+            border-radius: 12px;
+            margin-top: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 99;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .custom-options.show { display: block; }
+        .custom-option {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .custom-option:hover { background: rgba(255,255,255,0.1); }
+
+        /* --- ОСНОВНОЕ ПРИЛОЖЕНИЕ --- */
+        #main-app { z-index: 5; } /* Ниже экранов загрузки/авторизации */
+        
+        header { text-align: center; padding: 40px 20px 10px; color: var(--text-main); }
+        header h1 { font-size: 3rem; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 5px; }
+        header p { font-size: 1rem; font-weight: 600; color: #e0ecff; }
+
+        .section-title {
+            text-align: center; color: var(--text-main); font-size: 1.4rem;
+            font-weight: 700; margin: 10px 0 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Вкладки (Tabs) */
+        .tab-content {
+            display: none;
+            flex-grow: 1;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        .tab-content.active { display: flex; }
+
+        /* Карточка документа */
+        .carousel-wrapper {
+            position: relative; display: flex; justify-content: center;
+            align-items: center; width: 100%; height: 400px; overflow: hidden;
+        }
+        .card-edge {
+            position: absolute; width: 30px; height: 280px;
+            background: linear-gradient(to right, #b4c5d6, #e2eaf3);
+            border-radius: 20px; opacity: 0.8; box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+        .card-edge.left { left: -15px; }
+        .card-edge.right { right: -15px; }
+
+        .document-card {
+            width: 85%; background: var(--card-bg); border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255,255,255,0.8);
+            display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 2;
+        }
+        .card-top { display: flex; padding: 25px 20px; gap: 15px; }
+        .photo-container {
+            width: 110px; height: 140px; border-radius: 12px; overflow: hidden;
+            border: 2px solid #b8cce0; background-color: #cbd5e1; flex-shrink: 0;
+        }
+        .photo-container img { width: 100%; height: 100%; object-fit: cover; }
+        .info-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .info-container h2 { font-size: 1.4rem; color: var(--card-text); text-align: right; margin-bottom: 10px; font-weight: 800; line-height: 1.1; }
+        .info-container p { font-size: 0.75rem; color: #53647a; text-align: right; font-weight: 700; margin-bottom: 3px; }
+        .id-number { text-align: center; color: var(--accent-red); font-weight: 700; font-size: 0.9rem; margin-top: auto; padding: 10px 0; }
+        .card-ribbon {
+            background: linear-gradient(90deg, #2b1055 0%, #3b6fd4 50%, #2b1055 100%);
+            color: #fff; text-align: center; font-size: 0.85rem; font-weight: 600; padding: 6px 0;
+            white-space: nowrap; overflow: hidden;
+        }
+        .bottom-code { background-color: #b0c0d1; color: #1e293b; text-align: center; font-family: monospace; font-size: 1.2rem; font-weight: 800; padding: 12px 0; letter-spacing: 1.5px; }
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 15px; flex-grow: 1; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background-color: rgba(18, 50, 107, 0.4); }
+        .dot.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255,255,255,0.8); }
+
+        /* Вкладка Профиля (Prīpl) */
+        .profile-container {
+            padding: 20px;
+            color: white;
+        }
+        .profile-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .profile-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .profile-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .profile-label { font-size: 0.8rem; color: #b0c0d1; margin-bottom: 5px; }
+        .profile-value { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .profile-value img { width: 30px; border-radius: 4px; }
+        
+        .timer-warning {
+            color: #ffb74d;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* Нижнее меню */
+        .bottom-nav {
+            background-color: var(--nav-bg); display: flex; justify-content: space-between;
+            padding: 10px 15px 20px; margin-top: auto; border-top: 2px solid rgba(255,255,255,0.1);
+            z-index: 10;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; color: #8da6d1;
+            text-decoration: none; font-size: 0.75rem; font-weight: 600; gap: 6px; width: 60px;
+        }
+        .nav-item i { font-size: 1.5rem; height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; border-radius: 10px; }
+        .nav-item.active { color: #ffffff; }
+        .nav-item.active i { background-color: var(--nav-active); color: #ffffff; box-shadow: 0 0 15px rgba(59, 111, 212, 0.6); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- 1. Экран Загрузки -->
+        <div id="splash-screen" class="screen active">
+            <div class="logo-box">
+                <h1>MDA</h1>
+                <h2>INT</h2>
+            </div>
+        </div>
+
+        <!-- 2. Экраны Авторизации -->
+        <div id="auth-wrapper" class="screen">
+            
+            <!-- Приветствие -->
+            <div id="view-welcome" class="auth-container">
+                <div class="logo-box" style="margin-bottom: 40px; animation: none;">
+                    <h1>MDA</h1><h2>INT</h2>
+                </div>
+                <button class="btn btn-primary" onclick="showView('view-login')">Вход</button>
+                <button class="btn btn-secondary" onclick="showView('view-register')">Регистрация</button>
+            </div>
+
+            <!-- Вход -->
+            <div id="view-login" class="auth-container hidden">
+                <h2 class="auth-title">Вход в систему</h2>
+                <div class="form-group">
+                    <label>Логин</label>
+                    <input type="text" id="login-input" class="form-input" placeholder="Только a-z и 0-9">
+                </div>
+                <div class="form-group">
+                    <label>Секретный код</label>
+                    <input type="text" id="login-code" class="form-input" placeholder="10 символов">
+                </div>
+                <button class="btn btn-primary" onclick="processLogin()">Войти</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
+            </div>
+
+            <!-- Регистрация -->
+            <div id="view-register" class="auth-container hidden">
+                <h2 class="auth-title">Регистрация</h2>
+                
+                <div class="form-group">
+                    <label>Имя и Фамилия (Латиница)</label>
+                    <input type="text" id="reg-name-lat" class="form-input" placeholder="Ivan Ivanov">
+                </div>
+                <div class="form-group">
+                    <label>Имя и Фамилия (Кириллица)</label>
+                    <input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов">
+                </div>
+
+                <div class="form-group">
+                    <label>Гражданство</label>
+                    <div class="custom-select-wrapper" id="select-cit">
+                        <!-- Будет заполнено через JS -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Страна проживания</label>
+                    <div class="custom-select-wrapper" id="select-res">
+                         <!-- Будет заполнено через JS -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Логин (маленькие буквы и цифры)</label>
+                    <input type="text" id="reg-login" class="form-input" placeholder="ivan123">
+                </div>
+
+                <button class="btn btn-primary" onclick="processRegistration()">Зарегистрироваться</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
+            </div>
+
+            <!-- Показ кода после регистрации -->
+            <div id="view-code" class="auth-container hidden" style="text-align: center;">
+                <h2 class="auth-title">Ваш уникальный код</h2>
+                <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните этот код! Он потребуется для входа.</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 30px;" id="generated-code-display">
+                    XXXXXXXXXX
+                </div>
+                <p style="color: #ffb74d; margin-bottom: 30px; font-weight: 600;">Регистрация действительна ровно 24 часа.</p>
+                <button class="btn btn-primary" onclick="enterApp()">Понятно, войти</button>
+            </div>
+        </div>
+
+        <!-- 3. Основное приложение -->
+        <div id="main-app" class="screen">
+            <header>
+                <h1>MDA</h1>
+                <p>Wiillkömen ind Das!</p>
+            </header>
+
+            <!-- Вкладка HAUPT (Документ) -->
+            <div id="tab-haupt" class="tab-content active">
+                <div class="section-title">Mëine Düks</div>
+                <div class="carousel-wrapper">
+                    <div class="card-edge left"></div>
+                    <div class="document-card">
+                        <div class="card-top">
+                            <div class="photo-container">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="User">
+                            </div>
+                            <div class="info-container">
+                                <h2 id="card-name">Имя Фамилия</h2>
+                                <p>Gedÿudat: 09/07/2026</p>
+                                <p id="card-cit">Geÿungorte: Mimiländ</p>
+                                <p id="card-res">Geÿungstatt: Simamia-City</p>
+                            </div>
+                        </div>
+                        <div class="id-number" id="card-id">Idäntenümmeer: XXXXXXXXXX</div>
+                        <div class="card-ribbon">Shlax-zu tixx Shlax-zu tixx Shlax-zu t</div>
+                        <div class="bottom-code">223829389292838HJ828</div>
+                    </div>
+                    <div class="card-edge right"></div>
+                </div>
+                <div class="pagination">
+                    <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+
+            <!-- Вкладка PRIPL (Профиль) -->
+            <div id="tab-pripl" class="tab-content">
+                <div class="section-title">Информация (Prīpl)</div>
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-item">
+                            <div class="profile-label">Имя и Фамилия (Латиница)</div>
+                            <div class="profile-value" id="prof-name-lat">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Имя и Фамилия (Кириллица)</div>
+                            <div class="profile-value" id="prof-name-cyr">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Гражданство</div>
+                            <div class="profile-value" id="prof-cit">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Страна проживания</div>
+                            <div class="profile-value" id="prof-res">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Логин</div>
+                            <div class="profile-value" id="prof-login" style="color: #8ab4f8;">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Код доступа</div>
+                            <div class="profile-value" id="prof-code" style="font-family: monospace; letter-spacing: 2px; color: #ffe6a0;">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Статус регистрации</div>
+                            <div class="profile-value" style="color: #69f0ae;">Активна</div>
+                            <div class="timer-warning" id="prof-timer">Истекает через: 24:00:00</div>
+                        </div>
+                    </div>
+                    <button c
