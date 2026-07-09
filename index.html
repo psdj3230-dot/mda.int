@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MDA-INT - Цифровые документы</title>
-    <!-- Шрифты и иконки -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -154,25 +153,17 @@
             transition: 0.3s;
             text-align: center;
         }
-        .btn-primary {
-            background: white;
-            color: var(--bg-gradient-top);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
+        .btn-primary { background: white; color: var(--bg-gradient-top); }
+        .btn-secondary { background: transparent; color: white; border: 2px solid white; }
         .btn:active { transform: scale(0.98); }
 
-        /* Кастомный Select (для флагов) */
+        /* Кастомный Select */
         .custom-select-wrapper {
             position: relative;
             user-select: none;
             width: 100%;
         }
         .custom-select {
-            position: relative;
             display: flex;
             align-items: center;
             padding: 12px 15px;
@@ -203,13 +194,13 @@
             align-items: center;
             color: white;
             cursor: pointer;
-            transition: 0.2s;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .custom-option:hover { background: rgba(255,255,255,0.1); }
+        .custom-option img { width: 24px; height: 16px; margin-right: 10px; object-fit: cover; border-radius: 2px; }
 
         /* --- ОСНОВНОЕ ПРИЛОЖЕНИЕ --- */
-        #main-app { z-index: 5; } /* Ниже экранов загрузки/авторизации */
+        #main-app { z-index: 5; } 
         
         header { text-align: center; padding: 40px 20px 10px; color: var(--text-main); }
         header h1 { font-size: 3rem; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 5px; }
@@ -220,14 +211,7 @@
             font-weight: 700; margin: 10px 0 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
-        /* Вкладки (Tabs) */
-        .tab-content {
-            display: none;
-            flex-grow: 1;
-            flex-direction: column;
-            overflow-y: auto;
-            padding-bottom: 20px;
-        }
+        .tab-content { display: none; flex-grow: 1; flex-direction: column; overflow-y: auto; padding-bottom: 20px; }
         .tab-content.active { display: flex; }
 
         /* Карточка документа */
@@ -255,8 +239,8 @@
         }
         .photo-container img { width: 100%; height: 100%; object-fit: cover; }
         .info-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .info-container h2 { font-size: 1.4rem; color: var(--card-text); text-align: right; margin-bottom: 10px; font-weight: 800; line-height: 1.1; }
-        .info-container p { font-size: 0.75rem; color: #53647a; text-align: right; font-weight: 700; margin-bottom: 3px; }
+        .info-container h2 { font-size: 1.2rem; color: var(--card-text); text-align: right; margin-bottom: 10px; font-weight: 800; line-height: 1.1; }
+        .info-container p { font-size: 0.70rem; color: #53647a; text-align: right; font-weight: 700; margin-bottom: 3px; }
         .id-number { text-align: center; color: var(--accent-red); font-weight: 700; font-size: 0.9rem; margin-top: auto; padding: 10px 0; }
         .card-ribbon {
             background: linear-gradient(90deg, #2b1055 0%, #3b6fd4 50%, #2b1055 100%);
@@ -269,38 +253,22 @@
         .dot.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255,255,255,0.8); }
 
         /* Вкладка Профиля (Prīpl) */
-        .profile-container {
-            padding: 20px;
-            color: white;
-        }
+        .profile-container { padding: 20px; color: white; }
         .profile-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 20px; border: 1px solid rgba(255,255,255,0.2);
         }
-        .profile-item {
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-        }
+        .profile-item { margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .profile-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .profile-label { font-size: 0.8rem; color: #b0c0d1; margin-bottom: 5px; }
         .profile-value { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        .profile-value img { width: 30px; border-radius: 4px; }
-        
-        .timer-warning {
-            color: #ffb74d;
-            font-size: 0.85rem;
-            margin-top: 5px;
-            font-weight: 600;
-        }
+        .profile-value img { width: 30px; height: 20px; object-fit: cover; border-radius: 4px; }
+        .timer-warning { color: #ffb74d; font-size: 0.85rem; margin-top: 5px; font-weight: 600; }
 
         /* Нижнее меню */
         .bottom-nav {
             background-color: var(--nav-bg); display: flex; justify-content: space-between;
-            padding: 10px 15px 20px; margin-top: auto; border-top: 2px solid rgba(255,255,255,0.1);
-            z-index: 10;
+            padding: 10px 15px 20px; margin-top: auto; border-top: 2px solid rgba(255,255,255,0.1); z-index: 10;
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; color: #8da6d1;
@@ -317,7 +285,6 @@
 
     <div class="app-container">
         
-        <!-- 1. Экран Загрузки -->
         <div id="splash-screen" class="screen active">
             <div class="logo-box">
                 <h1>MDA</h1>
@@ -325,10 +292,8 @@
             </div>
         </div>
 
-        <!-- 2. Экраны Авторизации -->
         <div id="auth-wrapper" class="screen">
             
-            <!-- Приветствие -->
             <div id="view-welcome" class="auth-container">
                 <div class="logo-box" style="margin-bottom: 40px; animation: none;">
                     <h1>MDA</h1><h2>INT</h2>
@@ -337,7 +302,6 @@
                 <button class="btn btn-secondary" onclick="showView('view-register')">Регистрация</button>
             </div>
 
-            <!-- Вход -->
             <div id="view-login" class="auth-container hidden">
                 <h2 class="auth-title">Вход в систему</h2>
                 <div class="form-group">
@@ -352,7 +316,6 @@
                 <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
             </div>
 
-            <!-- Регистрация -->
             <div id="view-register" class="auth-container hidden">
                 <h2 class="auth-title">Регистрация</h2>
                 
@@ -367,15 +330,23 @@
 
                 <div class="form-group">
                     <label>Гражданство</label>
-                    <div class="custom-select-wrapper" id="select-cit">
-                        <!-- Будет заполнено через JS -->
+                    <div class="custom-select-wrapper" id="select-cit-wrapper">
+                        <div class="custom-select" onclick="toggleDropdown('cit-options')">
+                            <img id="cit-selected-img" src="mimiland.png"><span id="cit-selected-text">Мимиляндия</span>
+                        </div>
+                        <div class="custom-options" id="cit-options">
+                            </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Страна проживания</label>
-                    <div class="custom-select-wrapper" id="select-res">
-                         <!-- Будет заполнено через JS -->
+                    <div class="custom-select-wrapper" id="select-res-wrapper">
+                        <div class="custom-select" onclick="toggleDropdown('res-options')">
+                            <img id="res-selected-img" src="mimiland.png"><span id="res-selected-text">Мимиляндия</span>
+                        </div>
+                        <div class="custom-options" id="res-options">
+                            </div>
                     </div>
                 </div>
 
@@ -388,7 +359,6 @@
                 <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
             </div>
 
-            <!-- Показ кода после регистрации -->
             <div id="view-code" class="auth-container hidden" style="text-align: center;">
                 <h2 class="auth-title">Ваш уникальный код</h2>
                 <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните этот код! Он потребуется для входа.</p>
@@ -396,18 +366,16 @@
                     XXXXXXXXXX
                 </div>
                 <p style="color: #ffb74d; margin-bottom: 30px; font-weight: 600;">Регистрация действительна ровно 24 часа.</p>
-                <button class="btn btn-primary" onclick="enterApp()">Понятно, войти</button>
+                <button class="btn btn-primary" onclick="enterAppFromCode()">Понятно, войти</button>
             </div>
         </div>
 
-        <!-- 3. Основное приложение -->
         <div id="main-app" class="screen">
             <header>
                 <h1>MDA</h1>
                 <p>Wiillkömen ind Das!</p>
             </header>
 
-            <!-- Вкладка HAUPT (Документ) -->
             <div id="tab-haupt" class="tab-content active">
                 <div class="section-title">Mëine Düks</div>
                 <div class="carousel-wrapper">
@@ -419,7 +387,7 @@
                             </div>
                             <div class="info-container">
                                 <h2 id="card-name">Имя Фамилия</h2>
-                                <p>Gedÿudat: 09/07/2026</p>
+                                <p id="card-date">Gedÿudat: 09/07/2026</p>
                                 <p id="card-cit">Geÿungorte: Mimiländ</p>
                                 <p id="card-res">Geÿungstatt: Simamia-City</p>
                             </div>
@@ -435,7 +403,6 @@
                 </div>
             </div>
 
-            <!-- Вкладка PRIPL (Профиль) -->
             <div id="tab-pripl" class="tab-content">
                 <div class="section-title">Информация (Prīpl)</div>
                 <div class="profile-container">
@@ -450,11 +417,96 @@
                         </div>
                         <div class="profile-item">
                             <div class="profile-label">Гражданство</div>
-                            <div class="profile-value" id="prof-cit">-</div>
+                            <div class="profile-value" id="prof-cit">
+                                <img id="prof-cit-img" src="" alt="">
+                                <span id="prof-cit-text">-</span>
+                            </div>
                         </div>
                         <div class="profile-item">
                             <div class="profile-label">Страна проживания</div>
-                            <div class="profile-value" id="prof-res">-</div>
+                            <div class="profile-value" id="prof-res">
+                                <img id="prof-res-img" src="" alt="">
+                                <span id="prof-res-text">-</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                    <label>Логин (маленькие буквы и цифры)</label>
+                    <input type="text" id="reg-login" class="form-input" placeholder="ivan123">
+                </div>
+
+                <button class="btn btn-primary" onclick="processRegistration()">Зарегистрироваться</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
+            </div>
+
+            <div id="view-code" class="auth-container hidden" style="text-align: center;">
+                <h2 class="auth-title">Ваш уникальный код</h2>
+                <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните этот код! Он потребуется для входа.</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 30px;" id="generated-code-display">
+                    XXXXXXXXXX
+                </div>
+                <p style="color: #ffb74d; margin-bottom: 30px; font-weight: 600;">Регистрация действительна ровно 24 часа.</p>
+                <button class="btn btn-primary" onclick="enterAppFromCode()">Понятно, войти</button>
+            </div>
+        </div>
+
+        <div id="main-app" class="screen">
+            <header>
+                <h1>MDA</h1>
+                <p>Wiillkömen ind Das!</p>
+            </header>
+
+            <div id="tab-haupt" class="tab-content active">
+                <div class="section-title">Mëine Düks</div>
+                <div class="carousel-wrapper">
+                    <div class="card-edge left"></div>
+                    <div class="document-card">
+                        <div class="card-top">
+                            <div class="photo-container">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="User">
+                            </div>
+                            <div class="info-container">
+                                <h2 id="card-name">Имя Фамилия</h2>
+                                <p id="card-date">Gedÿudat: 09/07/2026</p>
+                                <p id="card-cit">Geÿungorte: Mimiländ</p>
+                                <p id="card-res">Geÿungstatt: Simamia-City</p>
+                            </div>
+                        </div>
+                        <div class="id-number" id="card-id">Idäntenümmeer: XXXXXXXXXX</div>
+                        <div class="card-ribbon">Shlax-zu tixx Shlax-zu tixx Shlax-zu t</div>
+                        <div class="bottom-code">223829389292838HJ828</div>
+                    </div>
+                    <div class="card-edge right"></div>
+                </div>
+                <div class="pagination">
+                    <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+
+            <div id="tab-pripl" class="tab-content">
+                <div class="section-title">Информация (Prīpl)</div>
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-item">
+                            <div class="profile-label">Имя и Фамилия (Латиница)</div>
+                            <div class="profile-value" id="prof-name-lat">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Имя и Фамилия (Кириллица)</div>
+                            <div class="profile-value" id="prof-name-cyr">-</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Гражданство</div>
+                            <div class="profile-value" id="prof-cit">
+                                <img id="prof-cit-img" src="" alt="">
+                                <span id="prof-cit-text">-</span>
+                            </div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">Страна проживания</div>
+                            <div class="profile-value" id="prof-res">
+                                <img id="prof-res-img" src="" alt="">
+                                <span id="prof-res-text">-</span>
+                            </div>
                         </div>
                         <div class="profile-item">
                             <div class="profile-label">Логин</div>
@@ -470,7 +522,7 @@
                             <div class="timer-warning" id="prof-timer">Истекает через: 24:00:00</div>
                         </div>
                     </div>
-                                        <button class="btn btn-primary" onclick="alert('Выход')">Выйти</button>
+                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="logout()">Выйти из профиля</button>
                 </div>
             </div>
 
@@ -482,52 +534,250 @@
     </div>
 
     <script>
-        // 1. Таймер для экрана загрузки: через 2 секунды (2000 мс) переходим на экран авторизации
+        // --- ДАННЫЕ О СТРАНАХ ---
+        const countries = [
+            { name: 'Мимиляндия', flag: 'mimiland.png' },
+            { name: 'Инопланетяне', flag: 'aliens.png' },
+            { name: 'Эммария', flag: 'emmaria.png' },
+            { name: 'Королевство Пернии', flag: 'pernikingdom.png' },
+            { name: 'Орфия', flag: 'orphia.png' },
+            { name: 'Варландия', flag: 'varland.png' },
+            { name: 'Инсталяндия', flag: 'instaland.png' },
+            { name: 'Адастра', flag: 'adastra.png' }
+        ];
+
+        let countdownInterval;
+
+        // --- ИНИЦИАЛИЗАЦИЯ ---
         window.onload = function() {
+            populateSelects();
+
+            // Таймер сплэш-скрина (2 секунды)
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.remove('active');
                 document.getElementById('auth-wrapper').classList.add('active');
             }, 2000);
         };
 
-        // 2. Функция для переключения экранов внутри auth-wrapper (Вход / Регистрация)
-        function showView(viewId) {
-            // Скрываем все экраны
-            document.querySelectorAll('.auth-container').forEach(view => {
-                view.classList.add('hidden');
+        // Заполнение кастомных выпадающих списков
+        function populateSelects() {
+            const citOptions = document.getElementById('cit-options');
+            const resOptions = document.getElementById('res-options');
+            
+            let html = '';
+            countries.forEach(country => {
+                html += `
+                <div class="custom-option" onclick="selectOption(this, '${country.name}', '${country.flag}')">
+                    <img src="${country.flag}"> ${country.name}
+                </div>`;
             });
-            // Показываем нужный
+            
+            citOptions.innerHTML = html;
+            resOptions.innerHTML = html;
+        }
+
+        // Управление селектами
+        function toggleDropdown(id) {
+            document.getElementById(id).classList.toggle('show');
+        }
+
+        function selectOption(element, name, flag) {
+            // Находим родительский селект (Гражданство или Проживание)
+            const wrapper = element.closest('.custom-select-wrapper');
+            const imgEl = wrapper.querySelector('.custom-select img');
+            const textEl = wrapper.querySelector('.custom-select span');
+            
+            imgEl.src = flag;
+            textEl.innerText = name;
+            textEl.setAttribute('data-flag', flag); // Сохраняем путь к картинке
+            
+            // Прячем меню
+            wrapper.querySelector('.custom-options').classList.remove('show');
+        }
+
+        // Закрытие селекта при клике вне его
+        window.onclick = function(event) {
+            if (!event.target.closest('.custom-select-wrapper')) {
+                document.querySelectorAll('.custom-options').forEach(el => el.classList.remove('show'));
+            }
+        }
+
+        // --- ЛОГИКА ЭКРАНОВ АВТОРИЗАЦИИ ---
+        function showView(viewId) {
+            document.querySelectorAll('.auth-container').forEach(view => view.classList.add('hidden'));
             document.getElementById(viewId).classList.remove('hidden');
         }
 
-        // 3. Базовые заглушки для кнопок, чтобы они не вызывали ошибок
-        function processLogin() {
-            // Здесь должна быть логика проверки пароля
-            enterApp(); 
+        // Генерация случайного кода (10 символов: A-Z, 0-9)
+        function generateCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 10; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
         }
 
+        // Регистрация
         function processRegistration() {
-            // Здесь должна быть логика генерации кода
+            const nameLat = document.getElementById('reg-name-lat').value.trim();
+            const nameCyr = document.getElementById('reg-name-cyr').value.trim();
+            const login = document.getElementById('reg-login').value.trim();
+            
+            const citText = document.getElementById('cit-selected-text').innerText;
+            const citFlag = document.getElementById('cit-selected-text').getAttribute('data-flag') || 'mimiland.png';
+            
+            const resText = document.getElementById('res-selected-text').innerText;
+            const resFlag = document.getElementById('res-selected-text').getAttribute('data-flag') || 'mimiland.png';
+
+            if (!nameLat || !nameCyr || !login) {
+                alert("Заполните все поля!");
+                return;
+            }
+
+            // Валидация логина (только маленькие лат. буквы и цифры)
+            if (!/^[a-z0-9]+$/.test(login)) {
+                alert("Ошибка! Логин должен содержать только маленькие латинские буквы и цифры без пробелов.");
+                return;
+            }
+
+            const code = generateCode();
+            const timestamp = Date.now();
+
+            const userData = {
+                nameLat, nameCyr, login, code, timestamp,
+                cit: { name: citText, flag: citFlag },
+                res: { name: resText, flag: resFlag }
+            };
+
+            // Сохраняем в localStorage (сохраняется навсегда/до удаления)
+            localStorage.setItem('mdaUserData', JSON.stringify(userData));
+
+            // Показываем сгенерированный код
+            document.getElementById('generated-code-display').innerText = code;
             showView('view-code');
         }
 
-        function enterApp() {
-            // Скрываем экраны авторизации и показываем основное приложение
-            document.getElementById('auth-wrapper').classList.remove('active');
-            document.getElementById('main-app').classList.add('active');
+        // Вход через кнопку "Понятно, войти" после регистрации
+        function enterAppFromCode() {
+            const userData = JSON.parse(localStorage.getItem('mdaUserData'));
+            loadAppWithData(userData);
         }
 
-        // 4. Переключение нижних вкладок в основном приложении
+        // Вход по логину и коду
+        function processLogin() {
+            const loginInput = document.getElementById('login-input').value.trim();
+            const codeInput = document.getElementById('login-code').value.trim();
+            
+            const storedData = localStorage.getItem('mdaUserData');
+
+            if (!storedData) {
+                alert("Пользователь не найден. Пожалуйста, пройдите регистрацию.");
+                return;
+            }
+
+            const userData = JSON.parse(storedData);
+
+            if (userData.login !== loginInput || userData.code !== codeInput) {
+                alert("Неверный логин или код доступа!");
+                return;
+            }
+
+            // Проверка истечения 24 часов
+            const now = Date.now();
+            const timePassed = now - userData.timestamp;
+            if (timePassed > 24 * 60 * 60 * 1000) {
+                alert("Время вашей регистрации (24 часа) истекло. Пожалуйста, зарегистрируйтесь заново.");
+                localStorage.removeItem('mdaUserData'); // Удаляем старые данные
+                showView('view-register');
+                return;
+            }
+
+            loadAppWithData(userData);
+        }
+
+        // --- ВХОД В ОСНОВНОЕ ПРИЛОЖЕНИЕ ---
+        function loadAppWithData(userData) {
+            // Переключение экранов
+            document.getElementById('auth-wrapper').classList.remove('active');
+            document.getElementById('main-app').classList.add('active');
+
+            // Заполнение карточки (HAUPT)
+            document.getElementById('card-name').innerText = userData.nameLat.toUpperCase();
+            document.getElementById('card-cit').innerText = "Geÿungorte: " + userData.cit.name;
+            document.getElementById('card-res').innerText = "Geÿungstatt: " + userData.res.name;
+            document.getElementById('card-id').innerText = "Idäntenümmeer: " + userData.code;
+
+            // Заполнение профиля (PRĪPL)
+            document.getElementById('prof-name-lat').innerText = userData.nameLat;
+            document.getElementById('prof-name-cyr').innerText = userData.nameCyr;
+            
+            document.getElementById('prof-cit-text').innerText = userData.cit.name;
+            document.getElementById('prof-cit-img').src = userData.cit.flag;
+            
+            document.getElementById('prof-res-text').innerText = userData.res.name;
+            document.getElementById('prof-res-img').src = userData.res.flag;
+
+            document.getElementById('prof-login').innerText = userData.login;
+            document.getElementById('prof-code').innerText = userData.code;
+
+            // Запуск таймера
+            startTimer(userData.timestamp);
+        }
+
+        // Таймер на 24 часа
+        function startTimer(registrationTime) {
+            if(countdownInterval) clearInterval(countdownInterval);
+            
+            const timerEl = document.getElementById('prof-timer');
+            const duration = 24 * 60 * 60 * 1000;
+
+            countdownInterval = setInterval(() => {
+                const now = Date.now();
+                const timeLeft = (registrationTime + duration) - now;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    timerEl.innerText = "Регистрация истекла";
+                    timerEl.style.color = "#d32f2f";
+                    alert("Время действия вашей регистрации (24 часа) истекло. Система выполнит выход.");
+                    localStorage.removeItem('mdaUserData'); // Удаляем аккаунт
+                    logout();
+                } else {
+                    const h = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+                    const m = Math.floor((timeLeft / 1000 / 60) % 60);
+                    const s = Math.floor((timeLeft / 1000) % 60);
+                    timerEl.innerText = `Истекает через: ${pad(h)}:${pad(m)}:${pad(s)}`;
+                }
+            }, 1000);
+        }
+
+        function pad(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        // Выход из профиля
+        function logout() {
+            if(countdownInterval) clearInterval(countdownInterval);
+            
+            // Очищаем поля ввода
+            document.getElementById('login-input').value = '';
+            document.getElementById('login-code').value = '';
+            
+            // Возвращаемся на экран приветствия
+            document.getElementById('main-app').classList.remove('active');
+            document.getElementById('auth-wrapper').classList.add('active');
+            showView('view-welcome');
+        }
+
+        // Переключение нижних вкладок в приложении
         function switchTab(tabName, element) {
-            // Убираем класс active у всех вкладок и кнопок меню
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             
-            // Добавляем класс active выбранной вкладке и кнопке
             document.getElementById('tab-' + tabName).classList.add('active');
             element.classList.add('active');
         }
     </script>
 </body>
-</html>
-
+        </html>
