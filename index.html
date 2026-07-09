@@ -470,4 +470,64 @@
                             <div class="timer-warning" id="prof-timer">Истекает через: 24:00:00</div>
                         </div>
                     </div>
-                    <button c
+                                        <button class="btn btn-primary" onclick="alert('Выход')">Выйти</button>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="#" class="nav-item active" onclick="switchTab('haupt', this)"><i class="fa-solid fa-passport"></i>HAUPT</a>
+                <a href="#" class="nav-item" onclick="switchTab('pripl', this)"><i class="fa-solid fa-user"></i>PRĪPL</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Таймер для экрана загрузки: через 2 секунды (2000 мс) переходим на экран авторизации
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('splash-screen').classList.remove('active');
+                document.getElementById('auth-wrapper').classList.add('active');
+            }, 2000);
+        };
+
+        // 2. Функция для переключения экранов внутри auth-wrapper (Вход / Регистрация)
+        function showView(viewId) {
+            // Скрываем все экраны
+            document.querySelectorAll('.auth-container').forEach(view => {
+                view.classList.add('hidden');
+            });
+            // Показываем нужный
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        // 3. Базовые заглушки для кнопок, чтобы они не вызывали ошибок
+        function processLogin() {
+            // Здесь должна быть логика проверки пароля
+            enterApp(); 
+        }
+
+        function processRegistration() {
+            // Здесь должна быть логика генерации кода
+            showView('view-code');
+        }
+
+        function enterApp() {
+            // Скрываем экраны авторизации и показываем основное приложение
+            document.getElementById('auth-wrapper').classList.remove('active');
+            document.getElementById('main-app').classList.add('active');
+        }
+
+        // 4. Переключение нижних вкладок в основном приложении
+        function switchTab(tabName, element) {
+            // Убираем класс active у всех вкладок и кнопок меню
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            
+            // Добавляем класс active выбранной вкладке и кнопке
+            document.getElementById('tab-' + tabName).classList.add('active');
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
+
