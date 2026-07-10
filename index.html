@@ -22,223 +22,146 @@
             --input-border: rgba(255, 255, 255, 0.3);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
 
-        body {
-            background-color: #121212;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+        body { background-color: #121212; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
         /* Контейнер приложения */
         .app-container {
-            width: 100%;
-            max-width: 414px;
-            height: 100vh;
-            max-height: 896px;
+            width: 100%; max-width: 414px; height: 100vh; max-height: 896px;
             background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
-        @media (min-width: 415px) {
-            .app-container {
-                height: 850px;
-                border-radius: 40px;
-                border: 8px solid #000;
-            }
-        }
+        @media (min-width: 415px) { .app-container { height: 850px; border-radius: 40px; border: 8px solid #000; } }
 
-        /* --- ЭКРАНЫ --- */
+        /* Экраны */
         .screen {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            display: flex; flex-direction: column; z-index: 10;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; z-index: 10;
             background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
             transition: opacity 0.5s ease; opacity: 0; pointer-events: none;
         }
         .screen.active { opacity: 1; pointer-events: auto; }
 
-        /* Экран загрузки */
         #splash-screen { z-index: 100; justify-content: center; align-items: center; }
         .logo-box { text-align: center; color: white; animation: pulse 1.5s infinite; }
         .logo-box h1 { font-size: 5rem; font-weight: 800; letter-spacing: 2px; }
         .logo-box h2 { font-size: 3rem; font-weight: 800; }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-            50% { transform: scale(1.05); opacity: 0.8; text-shadow: 0 0 25px rgba(255,255,255,0.8); }
-            100% { transform: scale(1); opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* Авторизация и Формы */
-        .auth-container {
-            padding: 40px 30px; height: 100%; display: flex;
-            flex-direction: column; justify-content: center; overflow-y: auto;
-        }
-        .auth-title { color: white; text-align: center; font-size: 2rem; margin-bottom: 30px; font-weight: 700; }
-        
+        /* Формы */
+        .auth-container { padding: 30px 25px; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto; }
+        .auth-container::-webkit-scrollbar { display: none; }
+        .auth-title { color: white; text-align: center; font-size: 1.8rem; margin: 20px 0; font-weight: 700; }
         .form-group { margin-bottom: 15px; width: 100%; }
         .form-group label { display: block; color: #e0ecff; font-size: 0.8rem; margin-bottom: 5px; font-weight: 600; }
-        
-        .form-input {
-            width: 100%; padding: 12px 15px; border-radius: 12px;
-            border: 1px solid var(--input-border); background: var(--input-bg);
-            color: white; font-size: 1rem; outline: none; transition: 0.3s;
-        }
+        .form-input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: white; font-size: 1rem; outline: none; }
         .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.2); }
-        .form-input::placeholder { color: rgba(255,255,255,0.5); }
-        
-        /* Стили для Select полов */
         select.form-input { appearance: none; background-color: #2354b8; cursor: pointer; }
         select.form-input option { background-color: #091a3f; color: white; }
+        
+        /* Загрузка фото */
+        .photo-upload-wrapper { text-align: center; margin-bottom: 20px; }
+        .photo-upload-circle {
+            width: 100px; height: 100px; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.5);
+            margin: 0 auto 10px; display: flex; justify-content: center; align-items: center; cursor: pointer;
+            overflow: hidden; background: rgba(255,255,255,0.1); position: relative;
+        }
+        .photo-upload-circle img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .photo-upload-circle i { font-size: 2rem; color: rgba(255,255,255,0.5); }
+        .photo-upload-circle.has-image i { display: none; }
+        .photo-upload-circle.has-image img { display: block; }
+        input[type="file"] { display: none; }
 
         /* Кнопки */
-        .btn {
-            width: 100%; padding: 15px; border-radius: 12px; border: none;
-            font-size: 1.1rem; font-weight: 700; cursor: pointer;
-            margin-top: 10px; transition: 0.3s; text-align: center;
-        }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; text-align: center; }
         .btn-primary { background: white; color: var(--bg-gradient-top); }
         .btn-secondary { background: transparent; color: white; border: 2px solid white; }
-        .btn:active { transform: scale(0.98); }
 
         /* Кастомный Select */
-        .custom-select-wrapper { position: relative; user-select: none; width: 100%; }
-        .custom-select {
-            display: flex; align-items: center; padding: 12px 15px;
-            background: var(--input-bg); border: 1px solid var(--input-border);
-            border-radius: 12px; color: white; cursor: pointer; font-size: 0.9rem;
-        }
-        .custom-select img { width: 24px; height: 16px; margin-right: 10px; object-fit: cover; border-radius: 2px; }
-        .custom-options {
-            position: absolute; top: 100%; left: 0; right: 0; background: #1e3a8a;
-            border-radius: 12px; margin-top: 5px; max-height: 200px; overflow-y: auto;
-            z-index: 99; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
+        .custom-select-wrapper { position: relative; user-select: none; width: 100%; z-index: 10; }
+        .custom-select { display: flex; align-items: center; padding: 12px 15px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 12px; color: white; cursor: pointer; }
+        .custom-select img { width: 24px; height: 16px; margin-right: 10px; border-radius: 2px; }
+        .custom-options { position: absolute; top: 100%; left: 0; right: 0; background: #1e3a8a; border-radius: 12px; margin-top: 5px; max-height: 200px; overflow-y: auto; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .custom-options.show { display: block; }
-        .custom-option {
-            padding: 10px 15px; display: flex; align-items: center;
-            color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .custom-option:hover { background: rgba(255,255,255,0.1); }
-        .custom-option img { width: 24px; height: 16px; margin-right: 10px; object-fit: cover; border-radius: 2px; }
+        .custom-option { padding: 10px 15px; display: flex; align-items: center; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .custom-option img { width: 24px; height: 16px; margin-right: 10px; border-radius: 2px; }
 
-        /* --- ОСНОВНОЕ ПРИЛОЖЕНИЕ --- */
+        /* ОСНОВНОЕ ПРИЛОЖЕНИЕ */
         #main-app { z-index: 5; } 
-        header { text-align: center; padding: 40px 20px 10px; color: var(--text-main); }
-        header h1 { font-size: 3rem; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 5px; }
-        header p { font-size: 1rem; font-weight: 600; color: #e0ecff; }
-
-        .section-title {
-            text-align: center; color: var(--text-main); font-size: 1.4rem;
-            font-weight: 700; margin: 10px 0 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
+        header { text-align: center; padding: 30px 20px 10px; color: var(--text-main); }
+        header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
+        
+        .section-title { text-align: center; color: var(--text-main); font-size: 1.2rem; font-weight: 700; margin: 10px 0; }
 
         .tab-content { display: none; flex-grow: 1; flex-direction: column; overflow-y: auto; padding-bottom: 20px; }
         .tab-content.active { display: flex; }
 
         /* Карусель документов */
-        .carousel-container {
-            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-            scroll-behavior: smooth; gap: 20px; padding: 10px 20px 20px; width: 100%;
-        }
+        .carousel-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; gap: 20px; padding: 10px 20px 20px; width: 100%; align-items: center; }
         .carousel-container::-webkit-scrollbar { display: none; }
-        
-        .carousel-slide {
-            flex: 0 0 100%; scroll-snap-align: center; display: flex;
-            justify-content: center; align-items: center;
-        }
+        .carousel-slide { flex: 0 0 100%; scroll-snap-align: center; display: flex; justify-content: center; align-items: center; }
 
         .document-card {
-            width: 100%; max-width: 340px; background: var(--card-bg); border-radius: 24px;
+            width: 100%; max-width: 350px; background: var(--card-bg); border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255,255,255,0.8);
-            display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 2;
+            display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
-        .card-top { display: flex; padding: 25px 20px; gap: 15px; }
-        .photo-container {
-            width: 100px; height: 130px; border-radius: 12px; overflow: hidden;
-            border: 2px solid #b8cce0; background-color: #cbd5e1; flex-shrink: 0;
-        }
+        .passport-theme { background: linear-gradient(180deg, #fff3e0 0%, #ffcc80 100%); } /* Тема для паспорта */
+        
+        .card-top { display: flex; padding: 20px; gap: 15px; align-items: flex-start; }
+        .photo-container { width: 90px; height: 120px; border-radius: 12px; overflow: hidden; border: 2px solid #b8cce0; background-color: #cbd5e1; flex-shrink: 0; }
         .photo-container img { width: 100%; height: 100%; object-fit: cover; }
-        .info-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .info-container h2 { font-size: 1.1rem; color: var(--card-text); text-align: right; margin-bottom: 10px; font-weight: 800; line-height: 1.2; word-break: break-word;}
-        .info-container p { font-size: 0.70rem; color: #53647a; text-align: right; font-weight: 700; margin-bottom: 3px; }
-        .id-number { text-align: center; color: var(--accent-red); font-weight: 800; font-size: 1rem; margin-top: auto; padding: 10px 0; }
-        .card-ribbon {
-            background: linear-gradient(90deg, #2b1055 0%, #3b6fd4 50%, #2b1055 100%);
-            color: #fff; text-align: center; font-size: 0.85rem; font-weight: 600; padding: 6px 0;
-            white-space: nowrap; overflow: hidden; letter-spacing: 1px;
-        }
-        .bottom-code { background-color: #b0c0d1; color: #1e293b; text-align: center; font-family: monospace; font-size: 1.1rem; font-weight: 800; padding: 12px 0; letter-spacing: 2px; }
+        .info-container { flex-grow: 1; display: flex; flex-direction: column; }
+        .info-container h2 { font-size: 1rem; color: var(--card-text); margin-bottom: 8px; font-weight: 800; line-height: 1.2; word-break: break-word; }
+        .info-container p { font-size: 0.70rem; color: #53647a; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .info-container p span { color: #1e293b; font-weight: 800; text-align: right; }
+        
+        .id-number { text-align: center; color: var(--accent-red); font-weight: 800; font-size: 0.9rem; padding: 10px; background: rgba(255,255,255,0.5); }
+        .card-ribbon { background: linear-gradient(90deg, #2b1055 0%, #3b6fd4 50%, #2b1055 100%); color: #fff; text-align: center; font-size: 0.75rem; font-weight: 600; padding: 8px 0; text-transform: uppercase; }
+        .passport-theme .card-ribbon { background: linear-gradient(90deg, #b71c1c 0%, #e53935 50%, #b71c1c 100%); }
+        .bottom-code { background-color: #b0c0d1; color: #1e293b; text-align: center; font-family: monospace; font-size: 0.9rem; font-weight: 800; padding: 12px 5px; word-break: break-all; }
 
-        /* Карточка добавления (последний слайд) */
+        /* Карточка добавления */
         .add-doc-card {
-            width: 100%; max-width: 340px; height: 280px;
-            background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.5);
-            border-radius: 24px; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; color: white;
-            cursor: pointer; transition: 0.3s; text-align: center; padding: 20px;
+            width: 100%; max-width: 320px; height: 250px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.5);
+            border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; cursor: pointer; transition: 0.3s;
         }
         .add-doc-card:active { background: rgba(255,255,255,0.15); }
-        .add-doc-card i { font-size: 3.5rem; margin-bottom: 15px; color: #e0ecff; }
-        .add-doc-card p { font-size: 1.1rem; font-weight: 700; color: #e0ecff; }
+        .add-doc-card i { font-size: 3rem; margin-bottom: 15px; color: #e0ecff; }
 
-        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 5px; flex-grow: 0; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background-color: rgba(18, 50, 107, 0.4); transition: 0.3s; }
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 5px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.3); transition: 0.3s; }
         .dot.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255,255,255,0.8); }
 
-        /* Вкладка Профиля (ПРОФИЛЬ) */
+        /* Вкладка ПРОФИЛЬ */
         .profile-container { padding: 0 20px 20px; color: white; }
         .profile-card { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.2); }
-        .profile-item { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
-        .profile-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .profile-label { font-size: 0.75rem; color: #b0c0d1; margin-bottom: 4px; }
-        .profile-value { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        .profile-value img { width: 30px; height: 20px; object-fit: cover; border-radius: 4px; }
-        .status-badge { background: #4caf50; color: white; padding: 3px 8px; border-radius: 8px; font-size: 0.8rem; }
+        .profile-item { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;}
+        .profile-item:last-child { border-bottom: none; }
+        .profile-label { font-size: 0.75rem; color: #b0c0d1; }
+        .profile-value { font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 10px; text-align: right; }
+        .profile-value img { width: 25px; height: 15px; object-fit: cover; border-radius: 3px; }
+        
+        .profile-photo-mini { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid white; margin-bottom: 15px;}
 
         /* Нижнее меню */
-        .bottom-nav {
-            background-color: var(--nav-bg); display: flex; justify-content: space-around;
-            padding: 10px 15px 20px; margin-top: auto; border-top: 2px solid rgba(255,255,255,0.1); z-index: 10;
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; color: #8da6d1;
-            text-decoration: none; font-size: 0.75rem; font-weight: 600; gap: 6px; width: 70px;
-        }
+        .bottom-nav { background-color: var(--nav-bg); display: flex; justify-content: space-around; padding: 10px 15px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #8da6d1; text-decoration: none; font-size: 0.75rem; font-weight: 600; gap: 6px; width: 70px; }
         .nav-item i { font-size: 1.5rem; height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; border-radius: 10px; transition: 0.3s; }
         .nav-item.active { color: #ffffff; }
         .nav-item.active i { background-color: var(--nav-active); color: #ffffff; box-shadow: 0 0 15px rgba(59, 111, 212, 0.6); }
 
-        /* Модальное окно (Выбор документа) */
-        .modal {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.6); z-index: 1000; display: flex;
-            align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s ease;
-        }
+        /* Модальные окна */
+        .modal { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
         .modal.active { opacity: 1; pointer-events: auto; }
-        .modal-content {
-            background: var(--nav-bg); width: 100%; padding: 25px 20px 40px;
-            border-radius: 25px 25px 0 0; color: white; transform: translateY(100%); transition: 0.3s ease;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
-        }
-        .modal.active .modal-content { transform: translateY(0); }
+        .modal-content { background: var(--nav-bg); width: 90%; max-width: 350px; padding: 25px 20px; border-radius: 25px; color: white; transform: scale(0.9); transition: 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .modal.active .modal-content { transform: scale(1); }
         .modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
+        
         .doc-list { list-style: none; margin-bottom: 20px; }
-        .doc-list li {
-            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.08);
-            font-size: 1.05rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 15px;
-        }
+        .doc-list li { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 15px; }
         .doc-list li:active { background: rgba(255,255,255,0.1); }
         .doc-list li i { color: #8ab4f8; font-size: 1.2rem; width: 25px; text-align: center; }
         .doc-list li:last-child { border-bottom: none; }
@@ -249,69 +172,60 @@
 <body>
 
     <div class="app-container">
-        
         <div id="splash-screen" class="screen active">
-            <div class="logo-box">
-                <h1>MDA</h1>
-                <h2>INT</h2>
-            </div>
+            <div class="logo-box"><h1>MDA</h1><h2>INT</h2></div>
         </div>
 
         <div id="auth-wrapper" class="screen">
-            
-            <div id="view-welcome" class="auth-container">
-                <div class="logo-box" style="margin-bottom: 40px; animation: none;">
-                    <h1>MDA</h1><h2>INT</h2>
-                </div>
+            <div id="view-welcome" class="auth-container" style="justify-content: center;">
+                <div class="logo-box" style="margin-bottom: 40px; animation: none;"><h1>MDA</h1><h2>INT</h2></div>
                 <button class="btn btn-primary" onclick="showView('view-login')">Вход</button>
                 <button class="btn btn-secondary" onclick="showView('view-register')">Регистрация</button>
             </div>
 
-            <div id="view-login" class="auth-container hidden">
-                <h2 class="auth-title">Вход в систему</h2>
+            <div id="view-login" class="auth-container hidden" style="justify-content: center;">
+                <h2 class="auth-title">Вход</h2>
                 <div class="form-group">
                     <label>Логин</label>
                     <input type="text" id="login-input" class="form-input" placeholder="Только a-z и 0-9">
                 </div>
                 <div class="form-group">
                     <label>Код доступа</label>
-                    <input type="text" id="login-code" class="form-input" placeholder="10 символов">
+                    <input type="text" id="login-code" class="form-input" placeholder="Секретный код">
                 </div>
                 <button class="btn btn-primary" onclick="processLogin()">Войти</button>
                 <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
             </div>
 
             <div id="view-register" class="auth-container hidden">
-                <h2 class="auth-title">Регистрация</h2>
+                <h2 class="auth-title">Анкета гражданина</h2>
                 
-                <div class="form-group">
-                    <label>Имя и Фамилия (Латиница)</label>
-                    <input type="text" id="reg-name-lat" class="form-input" placeholder="Ivan Ivanov">
+                <div class="photo-upload-wrapper">
+                    <div class="photo-upload-circle" id="photo-preview-circle" onclick="document.getElementById('reg-photo').click()">
+                        <i class="fa-solid fa-camera"></i>
+                        <img id="photo-preview-img" src="">
+                    </div>
+                    <label style="color: #8ab4f8; font-size: 0.8rem; cursor:pointer;" onclick="document.getElementById('reg-photo').click()">Загрузить фото</label>
+                    <input type="file" id="reg-photo" accept="image/*" onchange="handlePhotoUpload(event)">
                 </div>
-                <div class="form-group">
-                    <label>Имя и Фамилия (Кириллица)</label>
-                    <input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов">
-                </div>
-                
-                <div class="form-group">
-                    <label>Дата рождения</label>
-                    <input type="date" id="reg-dob" class="form-input">
-                </div>
+
+                <div class="form-group"><label>Имя и Фамилия (Латиница)</label><input type="text" id="reg-name-lat" class="form-input" placeholder="Ivan Ivanov"></div>
+                <div class="form-group"><label>Имя и Фамилия (Кириллица)</label><input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов"></div>
+                <div class="form-group"><label>Дата рождения</label><input type="date" id="reg-dob" class="form-input"></div>
                 <div class="form-group">
                     <label>Пол</label>
                     <select id="reg-gender" class="form-input">
-                        <option value="" disabled selected>Выберите пол</option>
-                        <option value="Мужской">Мужской</option>
-                        <option value="Женский">Женский</option>
-                        <option value="Иной">Иной</option>
+                        <option value="M">Мужской</option>
+                        <option value="F">Женский</option>
+                        <option value="O">Иной</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Гражданство</label>
+                    <label>Гражданство (Страна рождения)</label>
                     <div class="custom-select-wrapper" id="select-cit-wrapper">
                         <div class="custom-select" onclick="toggleDropdown('cit-options')">
-                            <img id="cit-selected-img" src="mimiland.png"><span id="cit-selected-text">Мимиляндия</span>
+                            <img id="cit-selected-img" src="mimiland.png"><span id="cit-selected-text" data-code="1" data-abbr="ML">Мимиляндия</span>
                         </div>
                         <div class="custom-options" id="cit-options"></div>
                     </div>
@@ -327,354 +241,398 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Логин (маленькие лат. буквы и цифры)</label>
-                    <input type="text" id="reg-login" class="form-input" placeholder="ivan123">
-                </div>
+                <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="ivan123"></div>
 
-                <button class="btn btn-primary" onclick="processRegistration()">Зарегистрироваться</button>
-                <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
+                <button class="btn btn-primary" onclick="processRegistration()">Завершить</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')">Отмена</button>
             </div>
 
-            <div id="view-code" class="auth-container hidden" style="text-align: center;">
-                <h2 class="auth-title">Ваш уникальный код</h2>
-                <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните этот код! Он потребуется для входа.</p>
-                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 30px;" id="generated-code-display">
-                    XXXXXXXXXX
-                </div>
-                <p style="color: #4caf50; margin-bottom: 30px; font-weight: 600;">Регистрация теперь бессрочная.</p>
-                <button class="btn btn-primary" onclick="enterAppFromCode()">Понятно, войти</button>
+            <div id="view-code" class="auth-container hidden" style="justify-content: center; text-align: center;">
+                <h2 class="auth-title">Ваш код доступа</h2>
+                <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните код! Он потребуется для входа и получения документов.</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 30px;" id="generated-code-display"></div>
+                <button class="btn btn-primary" onclick="enterAppFromCode()">Войти в систему</button>
             </div>
         </div>
 
         <div id="main-app" class="screen">
             <header>
-                <h1>MDA</h1>
-                <p>Цифровые документы</p>
+                <h1>MDA</h1><p>Цифровые документы</p>
             </header>
 
             <div id="tab-haupt" class="tab-content active">
-                <div class="section-title">Мои документы</div>
-                
-                <div class="carousel-container" onscroll="updatePagination()">
-                    <div class="carousel-slide">
-                        <div class="document-card">
-                            <div class="card-top">
-                                <div class="photo-container">
-                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="User">
-                                </div>
-                                <div class="info-container">
-                                    <h2 id="card-name">Имя Фамилия</h2>
-                                    <p id="card-dob">Дата рожд.: 01.01.2000</p>
-                                    <p id="card-cit">Гражданство: Мимиляндия</p>
-                                    <p id="card-res">Проживание: Мимиляндия</p>
-                                </div>
-                            </div>
-                            <div class="id-number" id="card-id">ID: 0000 0000 0000</div>
-                            <div class="card-ribbon">ОФИЦИАЛЬНЫЙ ДОКУМЕНТ MDA</div>
-                            <div class="bottom-code" id="card-bottom-code">MDA<XXX<XXX</div>
-                        </div>
+                <div class="carousel-container" id="documents-carousel" onscroll="updatePagination()">
                     </div>
-
-                    <div class="carousel-slide">
-                        <div class="add-doc-card" onclick="openDocModal()">
-                            <i class="fa-solid fa-circle-plus"></i>
-                            <p>Добавить документ</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pagination" id=<"carousel-dots">
-                    <div class="dot active"></div>
-                    <div class="dot"></div>
-                </div>
+                <div class="pagination" id="carousel-dots"></div>
             </div>
 
             <div id="tab-pripl" class="tab-content">
-                <div class="section-title">Профиль пользователя</div>
                 <div class="profile-container">
-                    <div class="profile-card">
-                        <div class="profile-item">
-                            <div class="profile-label">Имя и Фамилия (Латиница)</div>
-                            <div class="profile-value" id="prof-name-lat">-</div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Имя и Фамилия (Кириллица)</div>
-                            <div class="profile-value" id="prof-name-cyr">-</div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Дата рождения</div>
-                            <div class="profile-value" id="prof-dob">-</div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Пол</div>
-                            <div class="profile-value" id="prof-gender">-</div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Гражданство</div>
-                            <div class="profile-value" id="prof-cit">
-                                <img id="prof-cit-img" src="" alt="">
-                                <span id="prof-cit-text">-</span>
-                            </div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Страна проживания</div>
-                            <div class="profile-value" id="prof-res">
-                                <img id="prof-res-img" src="" alt="">
-                                <span id="prof-res-text">-</span>
-                            </div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Логин</div>
-                            <div class="profile-value" id="prof-login" style="color: #8ab4f8;">-</div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Код доступа (Пароль)</div>
-                            <div class="profile-value" id="prof-code" style="font-family: monospace; letter-spacing: 2px; color: #ffe6a0;">-</div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Статус аккаунта</div>
-                            <div class="profile-value"><span class="status-badge">Активен (Бессрочно)</span></div>
-                        </div>
+                    <div style="text-align: center;">
+                        <img id="prof-photo" class="profile-photo-mini" src="">
                     </div>
-                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="logout()">Выйти из системы</button>
+                    <div class="profile-card">
+                        <div class="profile-item"><span class="profile-label">Латиница</span><span class="profile-value" id="prof-name-lat"></span></div>
+                        <div class="profile-item"><span class="profile-label">Кириллица</span><span class="profile-value" id="prof-name-cyr"></span></div>
+                        <div class="profile-item"><span class="profile-label">Дата рожд.</span><span class="profile-value" id="prof-dob"></span></div>
+                        <div class="profile-item"><span class="profile-label">Пол</span><span class="profile-value" id="prof-gender"></span></div>
+                        <div class="profile-item"><span class="profile-label">Гражданство</span><div class="profile-value"><img id="prof-cit-img"><span id="prof-cit-text"></span></div></div>
+                        <div class="profile-item"><span class="profile-label">Проживание</span><div class="profile-value"><img id="prof-res-img"><span id="prof-res-text"></span></div></div>
+                        <div class="profile-item"><span class="profile-label">Логин</span><span class="profile-value" id="prof-login" style="color: #8ab4f8;"></span></div>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="logout()">Выйти</button>
                 </div>
             </div>
 
             <div class="bottom-nav">
-                <a href="#" class="nav-item active" onclick="switchTab('haupt', this)"><i class="fa-solid fa-id-card"></i>ГЛАВНАЯ</a>
+                <a href="#" class="nav-item active" onclick="switchTab('haupt', this)"><i class="fa-solid fa-id-card"></i>ДОКУМЕНТЫ</a>
                 <a href="#" class="nav-item" onclick="switchTab('pripl', this)"><i class="fa-solid fa-user"></i>ПРОФИЛЬ</a>
             </div>
         </div>
 
-        <div id="add-doc-modal" class="modal">
+        <div id="modal-doc-menu" class="modal">
             <div class="modal-content">
-                <div class="modal-title">Выберите тип документа</div>
+                <div class="modal-title">Выберите документ</div>
                 <ul class="doc-list">
                     <li onclick="unavailableAlert()"><i class="fa-solid fa-passport"></i> Загранпаспорт</li>
                     <li onclick="unavailableAlert()"><i class="fa-solid fa-car"></i> Водительские права</li>
                     <li onclick="unavailableAlert()"><i class="fa-solid fa-graduation-cap"></i> Диплом</li>
-                    <li onclick="unavailableAlert()"><i class="fa-solid fa-house"></i> Документы на недвижимость</li>
-                    <li onclick="unavailableAlert()"><i class="fa-solid fa-address-card"></i> Паспорт гражданина</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-house"></i> Недвижимость</li>
+                    <li onclick="openVerifyModal()"><i class="fa-solid fa-address-card"></i> Паспорт гражданина</li>
                 </ul>
-                <button class="btn btn-secondary" onclick="closeDocModal()">Отмена</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-doc-menu')">Отмена</button>
             </div>
         </div>
+
+        <div id="modal-verify-code" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Подтверждение личности</div>
+                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Введите регистрационный код доступа для генерации паспорта.</p>
+                <input type="text" id="verify-code-input" class="form-input" placeholder="Код доступа" style="margin-bottom: 15px;">
+                <button class="btn btn-primary" onclick="verifyAndProceed()">Подтвердить</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-verify-code')">Отмена</button>
+            </div>
+        </div>
+
+        <div id="modal-region" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Укажите регион/землю</div>
+                <select id="region-select" class="form-input" style="margin-bottom: 15px;"></select>
+                <button class="btn btn-primary" onclick="generatePassport()">Создать паспорт</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-region')">Отмена</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        // ДАННЫЕ О СТРАНАХ
         const countries = [
-            { name: 'Мимиляндия', flag: 'mimiland.png' },
-            { name: 'Инопланетяне', flag: 'aliens.png' },
-            { name: 'Эммария', flag: 'emmaria.png' },
-            { name: 'Королевство Пернии', flag: 'pernikingdom.png' },
-            { name: 'Орфия', flag: 'orphia.png' },
-            { name: 'Варландия', flag: 'varland.png' },
-            { name: 'Инсталяндия', flag: 'instaland.png' },
-            { name: 'Адастра', flag: 'adastra.png' }
+            { name: 'Мимиляндия', flag: 'mimiland.png', code: '1', abbr: 'ML' },
+            { name: 'Эммария', flag: 'emmaria.png', code: '2', abbr: 'EM' },
+            { name: 'Королевство Пернии', flag: 'pernikingdom.png', code: '3', abbr: 'PK' },
+            { name: 'Орфия', flag: 'orphia.png', code: '4', abbr: 'OR' },
+            { name: 'Инопланетяне', flag: 'aliens.png', code: '5', abbr: 'AL' },
+            { name: 'Варландия', flag: 'varland.png', code: '6', abbr: 'VR' },
+            { name: 'Инсталяндия', flag: 'instaland.png', code: '7', abbr: 'IN' },
+            { name: 'Адастра', flag: 'adastra.png', code: '8', abbr: 'AD' }
         ];
 
+        let currentUser = null;
+        let base64Photo = "";
+
+        // Инициализация
         window.onload = function() {
             populateSelects();
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.remove('active');
                 document.getElementById('auth-wrapper').classList.add('active');
-            }, 2000);
+            }, 1500);
         };
 
+        // Заполнение селектов стран
         function populateSelects() {
             let html = '';
-            countries.forEach(country => {
-                html += `
-                <div class="custom-option" onclick="selectOption(this, '${country.name}', '${country.flag}')">
-                    <img src="${country.flag}"> ${country.name}
-                </div>`;
+            countries.forEach(c => {
+                html += `<div class="custom-option" onclick="selectOption(this, '${c.name}', '${c.flag}', '${c.code}', '${c.abbr}')">
+                            <img src="${c.flag}"> ${c.name}
+                         </div>`;
             });
             document.getElementById('cit-options').innerHTML = html;
             document.getElementById('res-options').innerHTML = html;
         }
-
         function toggleDropdown(id) { document.getElementById(id).classList.toggle('show'); }
-
-        function selectOption(element, name, flag) {
-            const wrapper = element.closest('.custom-select-wrapper');
+        function selectOption(el, name, flag, code, abbr) {
+            const wrapper = el.closest('.custom-select-wrapper');
             const imgEl = wrapper.querySelector('.custom-select img');
             const textEl = wrapper.querySelector('.custom-select span');
-            
-            imgEl.src = flag;
-            textEl.innerText = name;
-            textEl.setAttribute('data-flag', flag);
-            
+            imgEl.src = flag; textEl.innerText = name; textEl.dataset.flag = flag; textEl.dataset.code = code; textEl.dataset.abbr = abbr;
             wrapper.querySelector('.custom-options').classList.remove('show');
         }
 
-        window.onclick = function(event) {
-            if (!event.target.closest('.custom-select-wrapper')) {
-                document.querySelectorAll('.custom-options').forEach(el => el.classList.remove('show'));
-            }
+        // Загрузка и сжатие фото
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 300; // Сжимаем до 300px ширины
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    base64Photo = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    const circle = document.getElementById('photo-preview-circle');
+                    document.getElementById('photo-preview-img').src = base64Photo;
+                    circle.classList.add('has-image');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
-        function showView(viewId) {
-            document.querySelectorAll('.auth-container').forEach(view => view.classList.add('hidden'));
-            document.getElementById(viewId).classList.remove('hidden');
+        // Вспомогательные генераторы
+        function randNum(len) { return Array.from({length: len}, () => Math.floor(Math.random() * 10)).join(''); }
+        function randLetters(len) { 
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
+            return Array.from({length: len}, () => chars.charAt(Math.floor(Math.random() * chars.length))).join(''); 
         }
 
-        // Генерация кода доступа (логина) - 10 символов
-        function generateLoginCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let result = '';
-            for (let i = 0; i < 10; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
+        function showView(id) {
+            document.querySelectorAll('.auth-container').forEach(v => v.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
         }
 
-        // Генерация номера документа - 12 цифр
-        function generateDocumentId() {
-            let result = '';
-            for (let i = 0; i < 12; i++) {
-                result += Math.floor(Math.random() * 10);
-            }
-            return result.replace(/(\d{4})(?=\d)/g, '$1 '); // Формат: 0000 0000 0000
-        }
-
-        // Красивое форматирование даты (DD.MM.YYYY)
-        function formatDate(dateStr) {
-            if (!dateStr) return '';
-            const parts = dateStr.split('-');
-            return `${parts[2]}.${parts[1]}.${parts[0]}`;
-        }
-
+        // Регистрация
         function processRegistration() {
             const nameLat = document.getElementById('reg-name-lat').value.trim();
             const nameCyr = document.getElementById('reg-name-cyr').value.trim();
-            const login = document.getElementById('reg-login').value.trim();
             const dob = document.getElementById('reg-dob').value;
             const gender = document.getElementById('reg-gender').value;
-            
-            const citText = document.getElementById('cit-selected-text').innerText;
-            const citFlag = document.getElementById('cit-selected-text').getAttribute('data-flag') || 'mimiland.png';
-            
-            const resText = document.getElementById('res-selected-text').innerText;
-            const resFlag = document.getElementById('res-selected-text').getAttribute('data-flag') || 'mimiland.png';
+            const login = document.getElementById('reg-login').value.trim();
+            const citEl = document.getElementById('cit-selected-text');
+            const resEl = document.getElementById('res-selected-text');
 
-            if (!nameLat || !nameCyr || !login || !dob || !gender) {
-                alert("Пожалуйста, заполните все поля!");
-                return;
+            if (!nameLat || !nameCyr || !dob || !login || !base64Photo) {
+                alert("Заполните все поля и загрузите фото!"); return;
             }
-
             if (!/^[a-z0-9]+$/.test(login)) {
-                alert("Ошибка! Логин должен содержать только маленькие латинские буквы и цифры без пробелов.");
-                return;
+                alert("Логин: только маленькие лат. буквы и цифры."); return;
             }
 
-            const loginCode = generateLoginCode();
-            const documentId = generateDocumentId();
+            const loginCode = randLetters(5) + randNum(5); // 10 символов
 
-            const userData = {
-                nameLat, nameCyr, login, 
-                code: loginCode, 
-                docId: documentId,
-                dob: formatDate(dob),
-                gender,
-                cit: { name: citText, flag: citFlag },
-                res: { name: resText, flag: resFlag }
+            // Генерация системного ID: XNNNNNNNRRNNNKK
+            const X = citEl.dataset.code || '1';
+            const RR = citEl.dataset.abbr || 'ML';
+            const sysId = `${X}${randNum(7)}${RR}${randNum(3)}${randLetters(2)}`;
+
+            currentUser = {
+                nameLat, nameCyr, dob, gender, login, code: loginCode, photo: base64Photo,
+                cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RR },
+                res: { name: resEl.innerText, flag: resEl.dataset.flag },
+                hasPassport: false,
+                documents: [
+                    {
+                        type: 'system',
+                        title: 'SYSTEM ID - MDA',
+                        idNumber: sysId,
+                        theme: ''
+                    }
+                ]
             };
 
-            localStorage.setItem('mdaUserData', JSON.stringify(userData));
-
+            localStorage.setItem('mda_' + login, JSON.stringify(currentUser));
             document.getElementById('generated-code-display').innerText = loginCode;
             showView('view-code');
         }
 
-        function enterAppFromCode() {
-            const userData = JSON.parse(localStorage.getItem('mdaUserData'));
-            loadAppWithData(userData);
-        }
+        function enterAppFromCode() { startApp(); }
 
         function processLogin() {
-            const loginInput = document.getElementById('login-input').value.trim();
-            const codeInput = document.getElementById('login-code').value.trim();
-            const storedData = localStorage.getItem('mdaUserData');
+            const login = document.getElementById('login-input').value.trim();
+            const code = document.getElementById('login-code').value.trim();
+            const stored = localStorage.getItem('mda_' + login);
 
-            if (!storedData) {
-                alert("Пользователь не найден. Пожалуйста, пройдите регистрацию.");
-                return;
-            }
-
-            const userData = JSON.parse(storedData);
-
-            if (userData.login !== loginInput || userData.code !== codeInput) {
-                alert("Неверный логин или код доступа!");
-                return;
-            }
-
-            loadAppWithData(userData);
+            if (!stored) { alert("Пользователь не найден."); return; }
+            const userData = JSON.parse(stored);
+            if (userData.code !== code) { alert("Неверный код доступа."); return; }
+            
+            currentUser = userData;
+            startApp();
         }
 
-        function loadAppWithData(userData) {
+        function startApp() {
             document.getElementById('auth-wrapper').classList.remove('active');
             document.getElementById('main-app').classList.add('active');
-
-            // Карточка (Документ)
-            document.getElementById('card-name').innerText = userData.nameLat.toUpperCase();
-            document.getElementById('card-dob').innerText = "Дата рожд.: " + userData.dob;
-            document.getElementById('card-cit').innerText = "Гражданство: " + userData.cit.name;
-            document.getElementById('card-res').innerText = "Проживание: " + userData.res.name;
-            document.getElementById('card-id').innerText = "ID: " + userData.docId;
-            document.getElementById('card-bottom-code').innerText = `MDA<${userData.docId.replace(/\s/g, '')}<${userData.nameLat.substring(0,3).toUpperCase()}`;
-
-            // Профиль
-            document.getElementById('prof-name-lat').innerText = userData.nameLat;
-            document.getElementById('prof-name-cyr').innerText = userData.nameCyr;
-            document.getElementById('prof-dob').innerText = userData.dob;
-            document.getElementById('prof-gender').innerText = userData.gender;
             
-            document.getElementById('prof-cit-text').innerText = userData.cit.name;
-            document.getElementById('prof-cit-img').src = userData.cit.flag;
-            
-            document.getElementById('prof-res-text').innerText = userData.res.name;
-            document.getElementById('prof-res-img').src = userData.res.flag;
+            // Заполнение профиля
+            document.getElementById('prof-photo').src = currentUser.photo;
+            document.getElementById('prof-name-lat').innerText = currentUser.nameLat;
+            document.getElementById('prof-name-cyr').innerText = currentUser.nameCyr;
+            document.getElementById('prof-dob').innerText = currentUser.dob;
+            document.getElementById('prof-gender').innerText = currentUser.gender === 'M' ? 'Мужской' : (currentUser.gender === 'F' ? 'Женский' : 'Иной');
+            document.getElementById('prof-cit-text').innerText = currentUser.cit.name;
+            document.getElementById('prof-cit-img').src = currentUser.cit.flag;
+            document.getElementById('prof-res-text').innerText = currentUser.res.name;
+            document.getElementById('prof-res-img').src = currentUser.res.flag;
+            document.getElementById('prof-login').innerText = currentUser.login;
 
-            document.getElementById('prof-login').innerText = userData.login;
-            document.getElementById('prof-code').innerText = userData.code;
+            renderCarousel();
+        }
+
+        // Рендер карусели
+        function renderCarousel() {
+            const container = document.getElementById('documents-carousel');
+            let html = '';
+            
+            currentUser.documents.forEach(doc => {
+                const bottomStr = `${doc.idNumber}<${currentUser.nameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
+                const dobFmt = currentUser.dob.split('-').reverse().join('.');
+
+                html += `
+                <div class="carousel-slide">
+                    <div class="document-card ${doc.theme}">
+                        <div class="card-top">
+                            <div class="photo-container"><img src="${currentUser.photo}"></div>
+                            <div class="info-container">
+                                <h2>${currentUser.nameLat.toUpperCase()}</h2>
+                                <p>DOB: <span>${dobFmt}</span></p>
+                                <p>CIT: <span>${currentUser.cit.name}</span></p>
+                                <p>RES: <span>${currentUser.res.name}</span></p>
+                            </div>
+                        </div>
+                        <div class="id-number">${doc.idNumber}</div>
+                        <div class="card-ribbon">${doc.title}</div>
+                        <div class="bottom-code">${bottomStr}</div>
+                    </div>
+                </div>`;
+            });
+
+            // Кнопка добавления
+            html += `
+            <div class="carousel-slide">
+                <div class="add-doc-card" onclick="openModal('modal-doc-menu')">
+                    <i class="fa-solid fa-circle-plus"></i><p style="font-weight:700;">Новый документ</p>
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const container = document.getElementById('documents-carousel');
+            const total = currentUser.documents.length + 1;
+            const index = Math.round(container.scrollLeft / container.offsetWidth);
+            
+            let dotsHtml = '';
+            for(let i=0; i<total; i++) {
+                dotsHtml += `<div class="dot ${i === index ? 'active' : ''}"></div>`;
+            }
+            document.getElementById('carousel-dots').innerHTML = dotsHtml;
         }
 
         function logout() {
-            document.getElementById('login-input').value = '';
-            document.getElementById('login-code').value = '';
+            currentUser = null;
             document.getElementById('main-app').classList.remove('active');
             document.getElementById('auth-wrapper').classList.add('active');
             showView('view-welcome');
         }
 
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            
-            document.getElementById('tab-' + tabName).classList.add('active');
-            element.classList.add('active');
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            el.classList.add('active');
         }
 
-        // Обновление точек пагинации при скролле карусели
-        function updatePagination() {
-            const container = document.querySelector('.carousel-container');
-            const scrollLeft = container.scrollLeft;
-            const width = container.offsetWidth;
-            const index = Math.round(scrollLeft / width);
+        // МОДАЛКИ
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function unavailableAlert() { alert("Временно недоступно."); closeModal('modal-doc-menu'); }
+
+        // ПАСПОРТ ГРАЖДАНИНА - ЛОГИКА
+        function openVerifyModal() {
+            if (currentUser.hasPassport) { alert("Паспорт гражданина уже получен!"); return; }
+            closeModal('modal-doc-menu');
+            document.getElementById('verify-code-input').value = '';
+            openModal('modal-verify-code');
+        }
+
+        function verifyAndProceed() {
+            const code = document.getElementById('verify-code-input').value.trim();
+            if (code !== currentUser.code) { alert("Неверный код доступа!"); return; }
             
-            const dots = document.querySelectorAll('#carousel-dots .dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
+            closeModal('modal-verify-code');
+            const citName = currentUser.cit.name;
+            const sel = document.getElementById('region-select');
+
+            // Проверка на необходимость выбора региона
+            if (citName === 'Варландия') {
+                sel.innerHTML = `<option value="01">Бьоркпилс</option><option value="02">Аскенд</option><option value="03">Эзертальд</option><option value="04">Вальгард</option><option value="05">Гаал</option><option value="06">Брайнинг</option><option value="07">Одебург</option><option value="08">Риет-Ас-Квилле</option><option value="09">Кёнигланд</option><option value="10">Сольхейм</option><option value="11">Мительхене</option><option value="12">Налвага</option><option value="13">Таумапилс</option><option value="14">Де Гримвалд</option><option value="15">Торнланд</option><option value="16">Дзервените</option><option value="17">Аневежас</option>`;
+                openModal('modal-region');
+            } else if (citName === 'Инопланетяне') {
+                sel.innerHTML = `<option value="01">Нибирская</option><option value="02">Новахеймская</option><option value="03">Мунриджская</option><option value="58">Старфордская</option><option value="23">Лунская</option><option value="21">Дыркалэнд</option><option value="00">Аурасити</option><option value="89">Крайденская</option><option value="22">Ксанриджская</option><option value="68">Порт-Джалласская</option>`;
+                openModal('modal-region');
+            } else if (citName === 'Адастра') {
+                sel.innerHTML = `<option value="OC">Охема</option><option value="LU">Люпас</option><option value="AR">Ад Рота</option><option value="TR">Тричелли</option><option value="GE">Гебии</option><option value="LUX">Люкс</option><option value="LEX">Лекс</option><option value="AI">Остров Анкорис</option>`;
+                openModal('modal-region');
+            } else {
+                generatePassport(); // Сразу генерируем
+            }
+        }
+
+        function generatePassport() {
+            const cit = currentUser.cit.name;
+            const reg = document.getElementById('region-select').value;
+            const dobParts = currentUser.dob.split('-'); // [YYYY, MM, DD]
+            let passId = '';
+
+            if (cit === 'Мимиляндия') {
+                // ML + 13N + SC + 2K + 2N
+                passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
+            } else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) {
+                const P = cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P');
+                passId = `${randNum(9)}U${P}01${randNum(1)}`;
+            } else if (cit === 'Варландия') {
+                passId = `${reg}${randNum(5)}${currentUser.gender}${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}VAR`;
+            } else if (cit === 'Инсталяндия') {
+                const num = randNum(9);
+                const letters = "TRWAGMYFPDXBNJZSQVHLCKE";
+                passId = `${num}${letters[parseInt(num) % 23]}`;
+            } else if (cit === 'Инопланетяне') {
+                passId = `${dobParts[0]}.${dobParts[1]}.${dobParts[2]}${currentUser.gender}ALIREGION${reg}.${randLetters(5)}`;
+            } else if (cit === 'Адастра') {
+                const sx = currentUser.gender === 'M' ? 'Male' : (currentUser.gender === 'F' ? 'Female' : 'Other');
+                const fullName = (currentUser.nameLat).replace(/\s/g, '');
+                passId = `ASTreg${reg}/${fullName}/${dobParts[0]}/${sx}`;
+            }
+
+            closeModal('modal-region');
+
+            // Сохраняем
+            currentUser.documents.push({
+                type: 'passport',
+                title: 'ПАСПОРТ ГРАЖДАНИНА',
+                idNumber: passId,
+                theme: 'passport-theme'
             });
-        }
-
-        // Управление модальным окном добавления документа
-        function openDocModal() { document.getElementById('add-doc-modal').classList.add('active'); }
-        function closeDocModal() { document.getElementById('add-doc-modal').classList.remove('active'); }
-        function unavailableAlert() {
-            alert("Данный тип документа временно недоступен в вашей стране.");
-            closeDocModal();
+            currentUser.hasPassport = true;
+            localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
+            
+            renderCarousel();
+            
+            // Прокручиваем к новому документу (слайд перед кнопкой "добавить")
+            setTimeout(() => {
+                const cont = document.getElementById('documents-carousel');
+                cont.scrollLeft = cont.offsetWidth * (currentUser.documents.length - 1);
+            }, 100);
         }
     </script>
 </body>
