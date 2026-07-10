@@ -711,5 +711,30 @@
             }, 100);
         }
     </script>
+    <script>
+    // 1. Логика переключения экранов
+    function showView(viewId) {
+        document.querySelectorAll('.auth-container').forEach(el => el.classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    // 2. Пример функции входа
+    function processLogin() {
+        alert("Функция входа пока не реализована!");
+    }
+
+    // 3. Логика работы карусели (очень упрощенно)
+    // Чтобы карусель работала, нужно добавить скрипт, 
+    // который будет обрабатывать свайпы или клики по точкам (dots)
+    
+    // ПРИМЕР: инициализация (просто чтобы убрать экран загрузки через 2 секунды)
+    window.onload = function() {
+        setTimeout(() => {
+            document.getElementById('splash-screen').classList.remove('active');
+            document.getElementById('auth-wrapper').classList.add('active');
+        }, 2000);
+    }
+</script>
+
 </body>
 </html>
