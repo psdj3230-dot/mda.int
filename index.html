@@ -106,7 +106,7 @@
 
         /* Карусель документов */
         .carousel-container { 
-            display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
+            display: flex; overflow-x: scroll; scroll-snap-type: x mandatory; 
             -webkit-overflow-scrolling: touch; scroll-behavior: smooth; 
             touch-action: pan-x;
             width: 100%; padding-bottom: 10px;
@@ -171,8 +171,8 @@
         .nav-item.active i { background-color: var(--nav-active); color: #ffffff; box-shadow: 0 0 15px rgba(59, 111, 212, 0.6); }
 
         /* Модальные окна */
-        .modal { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
-        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; pointer-events: none; transition: 0.3s ease; }
+        .modal.active { opacity: 1; visibility: visible; pointer-events: auto; }
         .modal-content { background: var(--nav-bg); width: 90%; max-width: 350px; padding: 25px 20px; border-radius: 25px; color: white; transform: scale(0.9); transition: 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .modal.active .modal-content { transform: scale(1); }
         .modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
@@ -599,6 +599,16 @@
             </div>`;
 
             container.innerHTML = html;
+
+            // Рендерим точки строго один раз здесь, чтобы не триггерить рефлоу на скролле
+            const dotsContainer = document.getElementById('carousel-dots');
+            const total = currentUser.documents.length + 1;
+            let dotsHtml = '';
+            for(let i=0; i<total; i++) {
+                dotsHtml += `<div class="dot ${i === 0 ? 'active' : ''}"></div>`;
+            }
+            dotsContainer.innerHTML = dotsHtml;
+
             setTimeout(updatePagination, 50); 
         }
 
@@ -606,18 +616,19 @@
             if (!currentUser || !currentUser.documents) return;
 
             const container = document.getElementById('documents-carousel');
-            const total = currentUser.documents.length + 1;
-            
-            // Защита от деления на ноль
             if (container.offsetWidth === 0) return; 
 
             const index = Math.round(container.scrollLeft / container.offsetWidth);
             
-            let dotsHtml = '';
-            for(let i=0; i<total; i++) {
-                dotsHtml += `<div class="dot ${i === index ? 'active' : ''}"></div>`;
-            }
-            document.getElementById('carousel-dots').innerHTML = dotsHtml;
+            // Вместо innerHTML просто переключаем классы — это спасает скролл на мобилках!
+            const dots = document.querySelectorAll('#carousel-dots .dot');
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
         }
 
         function logout() {
@@ -715,7 +726,7 @@
             }, 100);
         }
 
-        // ПОДДЕРЖКА СКРОЛЛА КАРУСЕЛИ МЫШКОЙ (ДЛЯ ПК)
+        // НАДЕЖНЫЙ СКРИПТ ПЕРЕТАСКИВАНИЯ МЫШЬЮ (БЕЗ КОНФЛИКТА С CSS SNAP)
         const slider = document.getElementById('documents-carousel');
         let isDown = false;
         let startX;
@@ -723,20 +734,23 @@
 
         slider.addEventListener('mousedown', (e) => {
             isDown = true;
+            slider.style.scrollSnapType = 'none'; // Отключаем snap при хвате мыши
+            slider.style.scrollBehavior = 'auto';
             slider.style.cursor = 'grabbing';
             startX = e.pageX - slider.offsetLeft;
             scrollLeft = slider.scrollLeft;
         });
 
-        slider.addEventListener('mouseleave', () => {
+        function stopDragging() {
+            if (!isDown) return;
             isDown = false;
             slider.style.cursor = 'auto';
-        });
+            slider.style.scrollSnapType = 'x mandatory'; // Возвращаем обратно при отпускании
+            slider.style.scrollBehavior = 'smooth';
+        }
 
-        slider.addEventListener('mouseup', () => {
-            isDown = false;
-            slider.style.cursor = 'auto';
-        });
+        slider.addEventListener('mouseleave', stopDragging);
+        slider.addEventListener('mouseup', stopDragging);
 
         slider.addEventListener('mousemove', (e) => {
             if (!isDown) return;
