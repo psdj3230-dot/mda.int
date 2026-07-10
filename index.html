@@ -95,35 +95,31 @@
 
         /* ОСНОВНОЕ ПРИЛОЖЕНИЕ */
         #main-app { z-index: auto; } 
-        header { text-align: center; padding: 30px 20px 10px; color: var(--text-main); }
-        header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
+        header { text-align: center; padding: 25px 20px 5px; color: var(--text-main); }
+        header h1 { font-size: 2.3rem; font-weight: 800; margin-bottom: 2px; }
         
-        .section-title { text-align: center; color: var(--text-main); font-size: 1.2rem; font-weight: 700; margin: 10px 0; }
-        .swipe-hint { text-align: center; font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-bottom: 5px; }
+        .section-title { text-align: center; color: var(--text-main); font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; }
 
-        .tab-content { display: none; flex-grow: 1; flex-direction: column; overflow-y: auto; padding-bottom: 20px; }
+        .tab-content { display: none; flex-grow: 1; flex-direction: column; overflow: hidden; }
         .tab-content.active { display: flex; }
 
-        /* Карусель документов */
-        .carousel-container { 
-            display: flex; overflow-x: scroll; scroll-snap-type: x mandatory; 
-            -webkit-overflow-scrolling: touch; scroll-behavior: smooth; 
-            touch-action: pan-x;
-            width: 100%; padding-bottom: 10px;
+        /* Вертикальный список документов (Альтернатива карусели) */
+        .documents-list-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            overflow-y: auto; 
+            flex-grow: 1;
+            padding: 10px 24px 30px;
+            -webkit-overflow-scrolling: touch;
         }
-        .carousel-container::-webkit-scrollbar { display: none; }
-        
-        .carousel-slide { 
-            flex: 0 0 100%; min-width: 100%;
-            scroll-snap-align: center; display: flex; 
-            justify-content: center; align-items: center; 
-            padding: 10px 25px; box-sizing: border-box;
-        }
+        .documents-list-container::-webkit-scrollbar { display: none; }
 
         .document-card {
-            width: 100%; max-width: 350px; background: var(--card-bg); border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255,255,255,0.8);
+            width: 100%; background: var(--card-bg); border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), inset 0 2px 5px rgba(255,255,255,0.8);
             display: flex; flex-direction: column; overflow: hidden; position: relative;
+            flex-shrink: 0;
         }
         .passport-theme { background: linear-gradient(180deg, #fff3e0 0%, #ffcc80 100%); }
         
@@ -140,21 +136,18 @@
         .passport-theme .card-ribbon { background: linear-gradient(90deg, #b71c1c 0%, #e53935 50%, #b71c1c 100%); }
         .bottom-code { background-color: #b0c0d1; color: #1e293b; text-align: center; font-family: monospace; font-size: 0.9rem; font-weight: 800; padding: 12px 5px; word-break: break-all; }
 
-        /* Карточка добавления */
+        /* Компактная карта добавления в списке */
         .add-doc-card {
-            width: 100%; max-width: 350px; height: 250px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.5);
+            width: 100%; height: 100px; background: rgba(255,255,255,0.06); border: 2px dashed rgba(255,255,255,0.4);
             border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: white; cursor: pointer; transition: 0.3s;
+            color: white; cursor: pointer; transition: 0.3s; flex-shrink: 0; gap: 8px;
         }
         .add-doc-card:active { background: rgba(255,255,255,0.15); }
-        .add-doc-card i { font-size: 3rem; margin-bottom: 15px; color: #e0ecff; }
-
-        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 5px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.3); transition: 0.3s; }
-        .dot.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255,255,255,0.8); }
+        .add-doc-card i { font-size: 2rem; color: #e0ecff; }
 
         /* Вкладка ПРОФИЛЬ */
-        .profile-container { padding: 0 20px 20px; color: white; }
+        .profile-container { padding: 0 20px 20px; color: white; overflow-y: auto; flex-grow: 1; }
+        .profile-container::-webkit-scrollbar { display: none; }
         .profile-card { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.2); }
         .profile-item { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;}
         .profile-item:last-child { border-bottom: none; }
@@ -286,10 +279,10 @@
             </header>
 
             <div id="tab-haupt" class="tab-content active">
-                <p class="swipe-hint"><i class="fa-solid fa-arrows-left-right"></i> Листайте влево/вправо</p>
-                <div class="carousel-container" id="documents-carousel" onscroll="updatePagination()">
-                    </div>
-                <div class="pagination" id="carousel-dots"></div>
+                <div class="section-title">Мой Кошелёк</div>
+                <div class="documents-list-container" id="documents-list">
+                    <!-- Документы генерируются вертикально сюда -->
+                </div>
             </div>
 
             <div id="tab-pripl" class="tab-content">
@@ -523,24 +516,32 @@
             if (!stored) { alert("Пользователь не найден. Пройдите регистрацию."); return; }
             
             const userData = JSON.parse(stored);
-
-            // Проверка на устаревший аккаунт с ошибками
-            if (!userData.documents || !Array.isArray(userData.documents)) {
-                alert("Обнаружена устаревшая версия аккаунта. Пожалуйста, пройдите регистрацию заново.");
-                localStorage.removeItem('mda_' + login);
-                showView('view-register');
-                return;
-            }
-
-            if (userData.code !== code) { alert("Неверный логин или код доступа!"); return; }
-            
             currentUser = userData;
+
+            if (currentUser.code !== code) { alert("Неверный логин или код доступа!"); return; }
+            
             startApp();
         }
 
         function startApp() {
             document.getElementById('auth-wrapper').classList.remove('active');
             document.getElementById('main-app').classList.add('active');
+
+            // СИСТЕМА САМОЛЕЧЕНИЯ: Если документов почему-то нет, жестко создаем первичный SYSTEM ID
+            if (!currentUser.documents || !Array.isArray(currentUser.documents) || currentUser.documents.length === 0) {
+                const X = currentUser.cit?.code || '1';
+                const RR = currentUser.cit?.abbr || 'ML';
+                const sysId = `${X}${randNum(7)}${RR}${randNum(3)}${randLetters(2)}`;
+                currentUser.documents = [
+                    {
+                        type: 'system',
+                        title: 'SYSTEM ID - MDA',
+                        idNumber: sysId,
+                        theme: ''
+                    }
+                ];
+                localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
+            }
             
             // Заполнение профиля
             document.getElementById('prof-photo').src = currentUser.photo;
@@ -557,78 +558,46 @@
             document.getElementById('prof-res-img').src = currentUser.res.flag || 'mimiland.png';
             document.getElementById('prof-login').innerText = currentUser.login;
 
-            renderCarousel();
+            renderDocumentsList();
         }
 
-        // Рендер карусели
-        function renderCarousel() {
-            const container = document.getElementById('documents-carousel');
+        // Рендер вертикального списка документов вместо карусели
+        function renderDocumentsList() {
+            const container = document.getElementById('documents-list');
             let html = '';
             
             const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
             const safeNameLat = (currentUser.nameLat) ? String(currentUser.nameLat) : "USER";
 
+            // Выводим все документы по очереди сверху вниз
             currentUser.documents.forEach(doc => {
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
 
                 html += `
-                <div class="carousel-slide">
-                    <div class="document-card ${doc.theme}">
-                        <div class="card-top">
-                            <div class="photo-container"><img src="${currentUser.photo}"></div>
-                            <div class="info-container">
-                                <h2>${safeNameLat.toUpperCase()}</h2>
-                                <p>DOB: <span>${dobFmt}</span></p>
-                                <p>CIT: <span>${currentUser.cit.name}</span></p>
-                                <p>RES: <span>${currentUser.res.name}</span></p>
-                            </div>
+                <div class="document-card ${doc.theme}">
+                    <div class="card-top">
+                        <div class="photo-container"><img src="${currentUser.photo}"></div>
+                        <div class="info-container">
+                            <h2>${safeNameLat.toUpperCase()}</h2>
+                            <p>DOB: <span>${dobFmt}</span></p>
+                            <p>CIT: <span>${currentUser.cit.name}</span></p>
+                            <p>RES: <span>${currentUser.res.name}</span></p>
                         </div>
-                        <div class="id-number">${doc.idNumber}</div>
-                        <div class="card-ribbon">${doc.title}</div>
-                        <div class="bottom-code">${bottomStr}</div>
                     </div>
+                    <div class="id-number">${doc.idNumber}</div>
+                    <div class="card-ribbon">${doc.title}</div>
+                    <div class="bottom-code">${bottomStr}</div>
                 </div>`;
             });
 
-            // Кнопка добавления
+            // Кнопка добавления в самом низу списка
             html += `
-            <div class="carousel-slide">
-                <div class="add-doc-card" onclick="openModal('modal-doc-menu')">
-                    <i class="fa-solid fa-circle-plus"></i><p style="font-weight:700;">Новый документ</p>
-                </div>
+            <div class="add-doc-card" onclick="openModal('modal-doc-menu')">
+                <i class="fa-solid fa-circle-plus"></i>
+                <p style="font-weight:700; font-size:0.9rem;">Добавить новый документ</p>
             </div>`;
 
             container.innerHTML = html;
-
-            // Рендерим точки строго один раз здесь, чтобы не триггерить рефлоу на скролле
-            const dotsContainer = document.getElementById('carousel-dots');
-            const total = currentUser.documents.length + 1;
-            let dotsHtml = '';
-            for(let i=0; i<total; i++) {
-                dotsHtml += `<div class="dot ${i === 0 ? 'active' : ''}"></div>`;
-            }
-            dotsContainer.innerHTML = dotsHtml;
-
-            setTimeout(updatePagination, 50); 
-        }
-
-        function updatePagination() {
-            if (!currentUser || !currentUser.documents) return;
-
-            const container = document.getElementById('documents-carousel');
-            if (container.offsetWidth === 0) return; 
-
-            const index = Math.round(container.scrollLeft / container.offsetWidth);
-            
-            // Вместо innerHTML просто переключаем классы — это спасает скролл на мобилках!
-            const dots = document.querySelectorAll('#carousel-dots .dot');
-            dots.forEach((dot, i) => {
-                if (i === index) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
         }
 
         function logout() {
@@ -672,7 +641,7 @@
                 sel.innerHTML = `<option value="01">Бьоркпилс</option><option value="02">Аскенд</option><option value="03">Эзертальд</option><option value="04">Вальгард</option><option value="05">Гаал</option><option value="06">Брайнинг</option><option value="07">Одебург</option><option value="08">Риет-Ас-Квилле</option><option value="09">Кёнигланд</option><option value="10">Сольхейм</option><option value="11">Мительхене</option><option value="12">Налвага</option><option value="13">Таумапилс</option><option value="14">Де Гримвалд</option><option value="15">Торнланд</option><option value="16">Дзервените</option><option value="17">Аневежас</option>`;
                 openModal('modal-region');
             } else if (citName === 'Инопланетяне') {
-                sel.innerHTML = `<option value="01">Нибирская</option><option value="02">Новахеймская</option><option value="03">Мунриджская</option><option value="58">Старфордская</option><option value="23">Лунская</option><option value="21">Дыркалэнд</option><option value="00">Аурасити</option><option value="89">Крайденская</option><option value="22">Ксанриджская</option><option value="68">Порт-Джалласская</option>`;
+                sel.innerHTML = `<option value="01">Нибирская</option><option value="02">Новахеймская</option><option value="03">Мунриджская</option><option value="58">Starford</option><option value="23">Лунская</option><option value="21">Дыркалэнд</option><option value="00">Аурасити</option><option value="89">Крайденская</option><option value="22">Ксанриджская</option><option value="68">Порт-Джалласская</option>`;
                 openModal('modal-region');
             } else if (citName === 'Адастра') {
                 sel.innerHTML = `<option value="OC">Охема</option><option value="LU">Люпас</option><option value="AR">Ад Рота</option><option value="TR">Тричелли</option><option value="GE">Гебии</option><option value="LUX">Люкс</option><option value="LEX">Лекс</option><option value="AI">Остров Анкорис</option>`;
@@ -718,47 +687,14 @@
             currentUser.hasPassport = true;
             localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
             
-            renderCarousel();
+            renderDocumentsList();
             
+            // Плавно прокручиваем список вниз к новому документу
             setTimeout(() => {
-                const cont = document.getElementById('documents-carousel');
-                cont.scrollLeft = cont.offsetWidth * (currentUser.documents.length - 1);
+                const cont = document.getElementById('documents-list');
+                cont.scrollTop = cont.scrollHeight;
             }, 100);
         }
-
-        // НАДЕЖНЫЙ СКРИПТ ПЕРЕТАСКИВАНИЯ МЫШЬЮ (БЕЗ КОНФЛИКТА С CSS SNAP)
-        const slider = document.getElementById('documents-carousel');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            slider.style.scrollSnapType = 'none'; // Отключаем snap при хвате мыши
-            slider.style.scrollBehavior = 'auto';
-            slider.style.cursor = 'grabbing';
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-        });
-
-        function stopDragging() {
-            if (!isDown) return;
-            isDown = false;
-            slider.style.cursor = 'auto';
-            slider.style.scrollSnapType = 'x mandatory'; // Возвращаем обратно при отпускании
-            slider.style.scrollBehavior = 'smooth';
-        }
-
-        slider.addEventListener('mouseleave', stopDragging);
-        slider.addEventListener('mouseup', stopDragging);
-
-        slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 2; 
-            slider.scrollLeft = scrollLeft - walk;
-        });
     </script>
 </body>
 </html>
