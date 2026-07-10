@@ -74,9 +74,11 @@
         input[type="file"] { display: none; }
 
         /* Кнопки */
-        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; text-align: center; }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; text-align: center; transition: 0.2s; }
         .btn-primary { background: white; color: var(--bg-gradient-top); }
         .btn-secondary { background: transparent; color: white; border: 2px solid white; }
+        .btn-small { padding: 10px; font-size: 0.95rem; margin-top: 0; }
+        .btn:active { transform: scale(0.98); }
 
         /* Кастомный Select */
         .custom-select-wrapper { position: relative; user-select: none; width: 100%; z-index: 10; }
@@ -97,17 +99,26 @@
         .tab-content { display: none; flex-grow: 1; flex-direction: column; overflow-y: auto; padding-bottom: 20px; }
         .tab-content.active { display: flex; }
 
-        /* Карусель документов */
-        .carousel-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; gap: 20px; padding: 10px 20px 20px; width: 100%; align-items: center; }
+        /* Карусель документов - Изменена логика для корректного свайпа */
+        .carousel-container { 
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
+            scroll-behavior: smooth; gap: 15px; padding: 10px 5% 20px; 
+            width: 100%; align-items: center; 
+        }
         .carousel-container::-webkit-scrollbar { display: none; }
-        .carousel-slide { flex: 0 0 100%; scroll-snap-align: center; display: flex; justify-content: center; align-items: center; }
+        
+        .carousel-slide { 
+            flex: 0 0 90%; /* Оставляет 10% для краев соседних карточек */
+            scroll-snap-align: center; display: flex; 
+            justify-content: center; align-items: center; 
+        }
 
         .document-card {
             width: 100%; max-width: 350px; background: var(--card-bg); border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255,255,255,0.8);
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
-        .passport-theme { background: linear-gradient(180deg, #fff3e0 0%, #ffcc80 100%); } /* Тема для паспорта */
+        .passport-theme { background: linear-gradient(180deg, #fff3e0 0%, #ffcc80 100%); }
         
         .card-top { display: flex; padding: 20px; gap: 15px; align-items: flex-start; }
         .photo-container { width: 90px; height: 120px; border-radius: 12px; overflow: hidden; border: 2px solid #b8cce0; background-color: #cbd5e1; flex-shrink: 0; }
@@ -124,7 +135,7 @@
 
         /* Карточка добавления */
         .add-doc-card {
-            width: 100%; max-width: 320px; height: 250px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.5);
+            width: 100%; height: 250px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.5);
             border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
             color: white; cursor: pointer; transition: 0.3s;
         }
@@ -143,7 +154,6 @@
         .profile-label { font-size: 0.75rem; color: #b0c0d1; }
         .profile-value { font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 10px; text-align: right; }
         .profile-value img { width: 25px; height: 15px; object-fit: cover; border-radius: 3px; }
-        
         .profile-photo-mini { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid white; margin-bottom: 15px;}
 
         /* Нижнее меню */
@@ -250,7 +260,13 @@
             <div id="view-code" class="auth-container hidden" style="justify-content: center; text-align: center;">
                 <h2 class="auth-title">Ваш код доступа</h2>
                 <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните код! Он потребуется для входа и получения документов.</p>
-                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 30px;" id="generated-code-display"></div>
+                
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 15px;" id="generated-code-display"></div>
+                
+                <button class="btn btn-secondary btn-small" onclick="copyGeneratedCode()" style="margin-bottom: 30px;">
+                    <i class="fa-regular fa-copy"></i> Скопировать код
+                </button>
+                
                 <button class="btn btn-primary" onclick="enterAppFromCode()">Войти в систему</button>
             </div>
         </div>
@@ -379,7 +395,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 300; // Сжимаем до 300px ширины
+                    const MAX_WIDTH = 300; 
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
@@ -406,6 +422,16 @@
         function showView(id) {
             document.querySelectorAll('.auth-container').forEach(v => v.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
+        }
+
+        // Копирование кода
+        function copyGeneratedCode() {
+            const codeText = document.getElementById('generated-code-display').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert("Код успешно скопирован: " + codeText);
+            }).catch(() => {
+                alert("Не удалось скопировать. Пожалуйста, выделите и скопируйте код вручную.");
+            });
         }
 
         // Регистрация
@@ -475,7 +501,11 @@
             document.getElementById('prof-photo').src = currentUser.photo;
             document.getElementById('prof-name-lat').innerText = currentUser.nameLat;
             document.getElementById('prof-name-cyr').innerText = currentUser.nameCyr;
-            document.getElementById('prof-dob').innerText = currentUser.dob;
+            
+            // Защита от пустой даты на случай старых кешей
+            const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
+            document.getElementById('prof-dob').innerText = dobFmt;
+            
             document.getElementById('prof-gender').innerText = currentUser.gender === 'M' ? 'Мужской' : (currentUser.gender === 'F' ? 'Женский' : 'Иной');
             document.getElementById('prof-cit-text').innerText = currentUser.cit.name;
             document.getElementById('prof-cit-img').src = currentUser.cit.flag;
@@ -491,9 +521,11 @@
             const container = document.getElementById('documents-carousel');
             let html = '';
             
+            const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
+            const safeNameLat = currentUser.nameLat ? currentUser.nameLat : "USER";
+
             currentUser.documents.forEach(doc => {
-                const bottomStr = `${doc.idNumber}<${currentUser.nameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
-                const dobFmt = currentUser.dob.split('-').reverse().join('.');
+                const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
 
                 html += `
                 <div class="carousel-slide">
@@ -501,7 +533,7 @@
                         <div class="card-top">
                             <div class="photo-container"><img src="${currentUser.photo}"></div>
                             <div class="info-container">
-                                <h2>${currentUser.nameLat.toUpperCase()}</h2>
+                                <h2>${safeNameLat.toUpperCase()}</h2>
                                 <p>DOB: <span>${dobFmt}</span></p>
                                 <p>CIT: <span>${currentUser.cit.name}</span></p>
                                 <p>RES: <span>${currentUser.res.name}</span></p>
@@ -523,10 +555,15 @@
             </div>`;
 
             container.innerHTML = html;
-            updatePagination();
+            
+            // Принудительно обновляем пагинацию после рендера
+            setTimeout(updatePagination, 50); 
         }
 
         function updatePagination() {
+            // Безопасная проверка, чтобы не было ошибки при раннем скролле браузера
+            if (!currentUser || !currentUser.documents) return; 
+
             const container = document.getElementById('documents-carousel');
             const total = currentUser.documents.length + 1;
             const index = Math.round(container.scrollLeft / container.offsetWidth);
@@ -540,6 +577,8 @@
 
         function logout() {
             currentUser = null;
+            document.getElementById('login-input').value = '';
+            document.getElementById('login-code').value = '';
             document.getElementById('main-app').classList.remove('active');
             document.getElementById('auth-wrapper').classList.add('active');
             showView('view-welcome');
@@ -591,11 +630,10 @@
         function generatePassport() {
             const cit = currentUser.cit.name;
             const reg = document.getElementById('region-select').value;
-            const dobParts = currentUser.dob.split('-'); // [YYYY, MM, DD]
+            const dobParts = currentUser.dob.split('-'); 
             let passId = '';
 
             if (cit === 'Мимиляндия') {
-                // ML + 13N + SC + 2K + 2N
                 passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
             } else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) {
                 const P = cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P');
