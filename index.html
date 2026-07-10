@@ -37,13 +37,16 @@
 
         /* Экраны */
         .screen {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; z-index: 10;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; 
+            z-index: 1;
             background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
-            transition: opacity 0.5s ease; opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease, visibility 0.5s; opacity: 0; visibility: hidden; pointer-events: none;
         }
-        .screen.active { opacity: 1; pointer-events: auto; }
+        .screen.active { opacity: 1; visibility: visible; pointer-events: auto; z-index: 10 !important; }
 
-        #splash-screen { z-index: 100; justify-content: center; align-items: center; }
+        #splash-screen { justify-content: center; align-items: center; }
+        #splash-screen.active { z-index: 100 !important; }
+        
         .logo-box { text-align: center; color: white; animation: pulse 1.5s infinite; }
         .logo-box h1 { font-size: 5rem; font-weight: 800; letter-spacing: 2px; }
         .logo-box h2 { font-size: 3rem; font-weight: 800; }
@@ -91,7 +94,7 @@
         .custom-option img { width: 24px; height: 16px; margin-right: 10px; border-radius: 2px; }
 
         /* ОСНОВНОЕ ПРИЛОЖЕНИЕ */
-        #main-app { z-index: 5; } 
+        #main-app { z-index: auto; } 
         header { text-align: center; padding: 30px 20px 10px; color: var(--text-main); }
         header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
         
@@ -105,6 +108,7 @@
         .carousel-container { 
             display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
             -webkit-overflow-scrolling: touch; scroll-behavior: smooth; 
+            touch-action: pan-x;
             width: 100%; padding-bottom: 10px;
         }
         .carousel-container::-webkit-scrollbar { display: none; }
@@ -710,6 +714,37 @@
                 cont.scrollLeft = cont.offsetWidth * (currentUser.documents.length - 1);
             }, 100);
         }
+
+        // ПОДДЕРЖКА СКРОЛЛА КАРУСЕЛИ МЫШКОЙ (ДЛЯ ПК)
+        const slider = document.getElementById('documents-carousel');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.style.cursor = 'grabbing';
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.style.cursor = 'auto';
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.style.cursor = 'auto';
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2; 
+            slider.scrollLeft = scrollLeft - walk;
+        });
     </script>
 </body>
 </html>
