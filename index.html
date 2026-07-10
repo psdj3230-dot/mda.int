@@ -61,32 +61,16 @@
 
         /* --- ЭКРАНЫ --- */
         .screen {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; flex-direction: column; z-index: 10;
             background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
-            transition: opacity 0.5s ease;
-            opacity: 0;
-            pointer-events: none;
+            transition: opacity 0.5s ease; opacity: 0; pointer-events: none;
         }
-        .screen.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .screen.active { opacity: 1; pointer-events: auto; }
 
         /* Экран загрузки */
-        #splash-screen {
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-        }
-        .logo-box {
-            text-align: center;
-            color: white;
-            animation: pulse 1.5s infinite;
-        }
+        #splash-screen { z-index: 100; justify-content: center; align-items: center; }
+        .logo-box { text-align: center; color: white; animation: pulse 1.5s infinite; }
         .logo-box h1 { font-size: 5rem; font-weight: 800; letter-spacing: 2px; }
         .logo-box h2 { font-size: 3rem; font-weight: 800; }
         
@@ -98,110 +82,59 @@
 
         /* Авторизация и Формы */
         .auth-container {
-            padding: 40px 30px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow-y: auto;
+            padding: 40px 30px; height: 100%; display: flex;
+            flex-direction: column; justify-content: center; overflow-y: auto;
         }
-        .auth-title {
-            color: white;
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            width: 100%;
-        }
-        .form-group label {
-            display: block;
-            color: #e0ecff;
-            font-size: 0.8rem;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
+        .auth-title { color: white; text-align: center; font-size: 2rem; margin-bottom: 30px; font-weight: 700; }
+        
+        .form-group { margin-bottom: 15px; width: 100%; }
+        .form-group label { display: block; color: #e0ecff; font-size: 0.8rem; margin-bottom: 5px; font-weight: 600; }
+        
         .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 1px solid var(--input-border);
-            background: var(--input-bg);
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
+            width: 100%; padding: 12px 15px; border-radius: 12px;
+            border: 1px solid var(--input-border); background: var(--input-bg);
+            color: white; font-size: 1rem; outline: none; transition: 0.3s;
         }
-        .form-input:focus {
-            border-color: #fff;
-            background: rgba(255,255,255,0.2);
-        }
+        .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.2); }
         .form-input::placeholder { color: rgba(255,255,255,0.5); }
         
+        /* Стили для Select полов */
+        select.form-input { appearance: none; background-color: #2354b8; cursor: pointer; }
+        select.form-input option { background-color: #091a3f; color: white; }
+
         /* Кнопки */
         .btn {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.3s;
-            text-align: center;
+            width: 100%; padding: 15px; border-radius: 12px; border: none;
+            font-size: 1.1rem; font-weight: 700; cursor: pointer;
+            margin-top: 10px; transition: 0.3s; text-align: center;
         }
         .btn-primary { background: white; color: var(--bg-gradient-top); }
         .btn-secondary { background: transparent; color: white; border: 2px solid white; }
         .btn:active { transform: scale(0.98); }
 
         /* Кастомный Select */
-        .custom-select-wrapper {
-            position: relative;
-            user-select: none;
-            width: 100%;
-        }
+        .custom-select-wrapper { position: relative; user-select: none; width: 100%; }
         .custom-select {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            border-radius: 12px;
-            color: white;
-            cursor: pointer;
-            font-size: 0.9rem;
+            display: flex; align-items: center; padding: 12px 15px;
+            background: var(--input-bg); border: 1px solid var(--input-border);
+            border-radius: 12px; color: white; cursor: pointer; font-size: 0.9rem;
         }
         .custom-select img { width: 24px; height: 16px; margin-right: 10px; object-fit: cover; border-radius: 2px; }
         .custom-options {
-            position: absolute;
-            top: 100%; left: 0; right: 0;
-            background: #1e3a8a;
-            border-radius: 12px;
-            margin-top: 5px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 99;
-            display: none;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: absolute; top: 100%; left: 0; right: 0; background: #1e3a8a;
+            border-radius: 12px; margin-top: 5px; max-height: 200px; overflow-y: auto;
+            z-index: 99; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
         .custom-options.show { display: block; }
         .custom-option {
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            color: white;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 10px 15px; display: flex; align-items: center;
+            color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .custom-option:hover { background: rgba(255,255,255,0.1); }
         .custom-option img { width: 24px; height: 16px; margin-right: 10px; object-fit: cover; border-radius: 2px; }
 
         /* --- ОСНОВНОЕ ПРИЛОЖЕНИЕ --- */
         #main-app { z-index: 5; } 
-        
         header { text-align: center; padding: 40px 20px 10px; color: var(--text-main); }
         header h1 { font-size: 3rem; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 5px; }
         header p { font-size: 1rem; font-weight: 600; color: #e0ecff; }
@@ -214,69 +147,101 @@
         .tab-content { display: none; flex-grow: 1; flex-direction: column; overflow-y: auto; padding-bottom: 20px; }
         .tab-content.active { display: flex; }
 
-        /* Карточка документа */
-        .carousel-wrapper {
-            position: relative; display: flex; justify-content: center;
-            align-items: center; width: 100%; height: 400px; overflow: hidden;
+        /* Карусель документов */
+        .carousel-container {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            scroll-behavior: smooth; gap: 20px; padding: 10px 20px 20px; width: 100%;
         }
-        .card-edge {
-            position: absolute; width: 30px; height: 280px;
-            background: linear-gradient(to right, #b4c5d6, #e2eaf3);
-            border-radius: 20px; opacity: 0.8; box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        .carousel-container::-webkit-scrollbar { display: none; }
+        
+        .carousel-slide {
+            flex: 0 0 100%; scroll-snap-align: center; display: flex;
+            justify-content: center; align-items: center;
         }
-        .card-edge.left { left: -15px; }
-        .card-edge.right { right: -15px; }
 
         .document-card {
-            width: 85%; background: var(--card-bg); border-radius: 24px;
+            width: 100%; max-width: 340px; background: var(--card-bg); border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255,255,255,0.8);
             display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 2;
         }
         .card-top { display: flex; padding: 25px 20px; gap: 15px; }
         .photo-container {
-            width: 110px; height: 140px; border-radius: 12px; overflow: hidden;
+            width: 100px; height: 130px; border-radius: 12px; overflow: hidden;
             border: 2px solid #b8cce0; background-color: #cbd5e1; flex-shrink: 0;
         }
         .photo-container img { width: 100%; height: 100%; object-fit: cover; }
         .info-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .info-container h2 { font-size: 1.2rem; color: var(--card-text); text-align: right; margin-bottom: 10px; font-weight: 800; line-height: 1.1; }
+        .info-container h2 { font-size: 1.1rem; color: var(--card-text); text-align: right; margin-bottom: 10px; font-weight: 800; line-height: 1.2; word-break: break-word;}
         .info-container p { font-size: 0.70rem; color: #53647a; text-align: right; font-weight: 700; margin-bottom: 3px; }
-        .id-number { text-align: center; color: var(--accent-red); font-weight: 700; font-size: 0.9rem; margin-top: auto; padding: 10px 0; }
+        .id-number { text-align: center; color: var(--accent-red); font-weight: 800; font-size: 1rem; margin-top: auto; padding: 10px 0; }
         .card-ribbon {
             background: linear-gradient(90deg, #2b1055 0%, #3b6fd4 50%, #2b1055 100%);
             color: #fff; text-align: center; font-size: 0.85rem; font-weight: 600; padding: 6px 0;
-            white-space: nowrap; overflow: hidden;
+            white-space: nowrap; overflow: hidden; letter-spacing: 1px;
         }
-        .bottom-code { background-color: #b0c0d1; color: #1e293b; text-align: center; font-family: monospace; font-size: 1.2rem; font-weight: 800; padding: 12px 0; letter-spacing: 1.5px; }
-        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 15px; flex-grow: 1; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; background-color: rgba(18, 50, 107, 0.4); }
+        .bottom-code { background-color: #b0c0d1; color: #1e293b; text-align: center; font-family: monospace; font-size: 1.1rem; font-weight: 800; padding: 12px 0; letter-spacing: 2px; }
+
+        /* Карточка добавления (последний слайд) */
+        .add-doc-card {
+            width: 100%; max-width: 340px; height: 280px;
+            background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.5);
+            border-radius: 24px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white;
+            cursor: pointer; transition: 0.3s; text-align: center; padding: 20px;
+        }
+        .add-doc-card:active { background: rgba(255,255,255,0.15); }
+        .add-doc-card i { font-size: 3.5rem; margin-bottom: 15px; color: #e0ecff; }
+        .add-doc-card p { font-size: 1.1rem; font-weight: 700; color: #e0ecff; }
+
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 5px; flex-grow: 0; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background-color: rgba(18, 50, 107, 0.4); transition: 0.3s; }
         .dot.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255,255,255,0.8); }
 
-        /* Вкладка Профиля (Prīpl) */
-        .profile-container { padding: 20px; color: white; }
-        .profile-card {
-            background: rgba(255,255,255,0.1); border-radius: 20px;
-            padding: 20px; border: 1px solid rgba(255,255,255,0.2);
-        }
-        .profile-item { margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        /* Вкладка Профиля (ПРОФИЛЬ) */
+        .profile-container { padding: 0 20px 20px; color: white; }
+        .profile-card { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .profile-item { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
         .profile-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .profile-label { font-size: 0.8rem; color: #b0c0d1; margin-bottom: 5px; }
-        .profile-value { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .profile-label { font-size: 0.75rem; color: #b0c0d1; margin-bottom: 4px; }
+        .profile-value { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
         .profile-value img { width: 30px; height: 20px; object-fit: cover; border-radius: 4px; }
-        .timer-warning { color: #ffb74d; font-size: 0.85rem; margin-top: 5px; font-weight: 600; }
+        .status-badge { background: #4caf50; color: white; padding: 3px 8px; border-radius: 8px; font-size: 0.8rem; }
 
         /* Нижнее меню */
         .bottom-nav {
-            background-color: var(--nav-bg); display: flex; justify-content: space-between;
+            background-color: var(--nav-bg); display: flex; justify-content: space-around;
             padding: 10px 15px 20px; margin-top: auto; border-top: 2px solid rgba(255,255,255,0.1); z-index: 10;
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; color: #8da6d1;
-            text-decoration: none; font-size: 0.75rem; font-weight: 600; gap: 6px; width: 60px;
+            text-decoration: none; font-size: 0.75rem; font-weight: 600; gap: 6px; width: 70px;
         }
-        .nav-item i { font-size: 1.5rem; height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; border-radius: 10px; }
+        .nav-item i { font-size: 1.5rem; height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; border-radius: 10px; transition: 0.3s; }
         .nav-item.active { color: #ffffff; }
         .nav-item.active i { background-color: var(--nav-active); color: #ffffff; box-shadow: 0 0 15px rgba(59, 111, 212, 0.6); }
+
+        /* Модальное окно (Выбор документа) */
+        .modal {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); z-index: 1000; display: flex;
+            align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s ease;
+        }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: var(--nav-bg); width: 100%; padding: 25px 20px 40px;
+            border-radius: 25px 25px 0 0; color: white; transform: translateY(100%); transition: 0.3s ease;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+        }
+        .modal.active .modal-content { transform: translateY(0); }
+        .modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
+        .doc-list { list-style: none; margin-bottom: 20px; }
+        .doc-list li {
+            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 1.05rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 15px;
+        }
+        .doc-list li:active { background: rgba(255,255,255,0.1); }
+        .doc-list li i { color: #8ab4f8; font-size: 1.2rem; width: 25px; text-align: center; }
+        .doc-list li:last-child { border-bottom: none; }
 
         .hidden { display: none !important; }
     </style>
@@ -309,7 +274,7 @@
                     <input type="text" id="login-input" class="form-input" placeholder="Только a-z и 0-9">
                 </div>
                 <div class="form-group">
-                    <label>Секретный код</label>
+                    <label>Код доступа</label>
                     <input type="text" id="login-code" class="form-input" placeholder="10 символов">
                 </div>
                 <button class="btn btn-primary" onclick="processLogin()">Войти</button>
@@ -327,6 +292,20 @@
                     <label>Имя и Фамилия (Кириллица)</label>
                     <input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов">
                 </div>
+                
+                <div class="form-group">
+                    <label>Дата рождения</label>
+                    <input type="date" id="reg-dob" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Пол</label>
+                    <select id="reg-gender" class="form-input">
+                        <option value="" disabled selected>Выберите пол</option>
+                        <option value="Мужской">Мужской</option>
+                        <option value="Женский">Женский</option>
+                        <option value="Иной">Иной</option>
+                    </select>
+                </div>
 
                 <div class="form-group">
                     <label>Гражданство</label>
@@ -334,8 +313,7 @@
                         <div class="custom-select" onclick="toggleDropdown('cit-options')">
                             <img id="cit-selected-img" src="mimiland.png"><span id="cit-selected-text">Мимиляндия</span>
                         </div>
-                        <div class="custom-options" id="cit-options">
-                            </div>
+                        <div class="custom-options" id="cit-options"></div>
                     </div>
                 </div>
 
@@ -345,13 +323,12 @@
                         <div class="custom-select" onclick="toggleDropdown('res-options')">
                             <img id="res-selected-img" src="mimiland.png"><span id="res-selected-text">Мимиляндия</span>
                         </div>
-                        <div class="custom-options" id="res-options">
-                            </div>
+                        <div class="custom-options" id="res-options"></div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Логин (маленькие буквы и цифры)</label>
+                    <label>Логин (маленькие лат. буквы и цифры)</label>
                     <input type="text" id="reg-login" class="form-input" placeholder="ivan123">
                 </div>
 
@@ -365,7 +342,7 @@
                 <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 30px;" id="generated-code-display">
                     XXXXXXXXXX
                 </div>
-                <p style="color: #ffb74d; margin-bottom: 30px; font-weight: 600;">Регистрация действительна ровно 24 часа.</p>
+                <p style="color: #4caf50; margin-bottom: 30px; font-weight: 600;">Регистрация теперь бессрочная.</p>
                 <button class="btn btn-primary" onclick="enterAppFromCode()">Понятно, войти</button>
             </div>
         </div>
@@ -373,38 +350,48 @@
         <div id="main-app" class="screen">
             <header>
                 <h1>MDA</h1>
-                <p>Wiillkömen ind Das!</p>
+                <p>Цифровые документы</p>
             </header>
 
             <div id="tab-haupt" class="tab-content active">
-                <div class="section-title">Mëine Düks</div>
-                <div class="carousel-wrapper">
-                    <div class="card-edge left"></div>
-                    <div class="document-card">
-                        <div class="card-top">
-                            <div class="photo-container">
-                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="User">
+                <div class="section-title">Мои документы</div>
+                
+                <div class="carousel-container" onscroll="updatePagination()">
+                    <div class="carousel-slide">
+                        <div class="document-card">
+                            <div class="card-top">
+                                <div class="photo-container">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="User">
+                                </div>
+                                <div class="info-container">
+                                    <h2 id="card-name">Имя Фамилия</h2>
+                                    <p id="card-dob">Дата рожд.: 01.01.2000</p>
+                                    <p id="card-cit">Гражданство: Мимиляндия</p>
+                                    <p id="card-res">Проживание: Мимиляндия</p>
+                                </div>
                             </div>
-                            <div class="info-container">
-                                <h2 id="card-name">Имя Фамилия</h2>
-                                <p id="card-date">Gedÿudat: 09/07/2026</p>
-                                <p id="card-cit">Geÿungorte: Mimiländ</p>
-                                <p id="card-res">Geÿungstatt: Simamia-City</p>
-                            </div>
+                            <div class="id-number" id="card-id">ID: 0000 0000 0000</div>
+                            <div class="card-ribbon">ОФИЦИАЛЬНЫЙ ДОКУМЕНТ MDA</div>
+                            <div class="bottom-code" id="card-bottom-code">MDA<XXX<XXX</div>
                         </div>
-                        <div class="id-number" id="card-id">Idäntenümmeer: XXXXXXXXXX</div>
-                        <div class="card-ribbon">Shlax-zu tixx Shlax-zu tixx Shlax-zu t</div>
-                        <div class="bottom-code">223829389292838HJ828</div>
                     </div>
-                    <div class="card-edge right"></div>
+
+                    <div class="carousel-slide">
+                        <div class="add-doc-card" onclick="openDocModal()">
+                            <i class="fa-solid fa-circle-plus"></i>
+                            <p>Добавить документ</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="pagination">
-                    <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+
+                <div class="pagination" id=<"carousel-dots">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
                 </div>
             </div>
 
             <div id="tab-pripl" class="tab-content">
-                <div class="section-title">Информация (Prīpl)</div>
+                <div class="section-title">Профиль пользователя</div>
                 <div class="profile-container">
                     <div class="profile-card">
                         <div class="profile-item">
@@ -416,83 +403,12 @@
                             <div class="profile-value" id="prof-name-cyr">-</div>
                         </div>
                         <div class="profile-item">
-                            <div class="profile-label">Гражданство</div>
-                            <div class="profile-value" id="prof-cit">
-                                <img id="prof-cit-img" src="" alt="">
-                                <span id="prof-cit-text">-</span>
-                            </div>
+                            <div class="profile-label">Дата рождения</div>
+                            <div class="profile-value" id="prof-dob">-</div>
                         </div>
                         <div class="profile-item">
-                            <div class="profile-label">Страна проживания</div>
-                            <div class="profile-value" id="prof-res">
-                                <img id="prof-res-img" src="" alt="">
-                                <span id="prof-res-text">-</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                    <label>Логин (маленькие буквы и цифры)</label>
-                    <input type="text" id="reg-login" class="form-input" placeholder="ivan123">
-                </div>
-
-                <button class="btn btn-primary" onclick="processRegistration()">Зарегистрироваться</button>
-                <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
-            </div>
-
-            <div id="view-code" class="auth-container hidden" style="text-align: center;">
-                <h2 class="auth-title">Ваш уникальный код</h2>
-                <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните этот код! Он потребуется для входа.</p>
-                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 30px;" id="generated-code-display">
-                    XXXXXXXXXX
-                </div>
-                <p style="color: #ffb74d; margin-bottom: 30px; font-weight: 600;">Регистрация действительна ровно 24 часа.</p>
-                <button class="btn btn-primary" onclick="enterAppFromCode()">Понятно, войти</button>
-            </div>
-        </div>
-
-        <div id="main-app" class="screen">
-            <header>
-                <h1>MDA</h1>
-                <p>Wiillkömen ind Das!</p>
-            </header>
-
-            <div id="tab-haupt" class="tab-content active">
-                <div class="section-title">Mëine Düks</div>
-                <div class="carousel-wrapper">
-                    <div class="card-edge left"></div>
-                    <div class="document-card">
-                        <div class="card-top">
-                            <div class="photo-container">
-                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="User">
-                            </div>
-                            <div class="info-container">
-                                <h2 id="card-name">Имя Фамилия</h2>
-                                <p id="card-date">Gedÿudat: 09/07/2026</p>
-                                <p id="card-cit">Geÿungorte: Mimiländ</p>
-                                <p id="card-res">Geÿungstatt: Simamia-City</p>
-                            </div>
-                        </div>
-                        <div class="id-number" id="card-id">Idäntenümmeer: XXXXXXXXXX</div>
-                        <div class="card-ribbon">Shlax-zu tixx Shlax-zu tixx Shlax-zu t</div>
-                        <div class="bottom-code">223829389292838HJ828</div>
-                    </div>
-                    <div class="card-edge right"></div>
-                </div>
-                <div class="pagination">
-                    <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-                </div>
-            </div>
-
-            <div id="tab-pripl" class="tab-content">
-                <div class="section-title">Информация (Prīpl)</div>
-                <div class="profile-container">
-                    <div class="profile-card">
-                        <div class="profile-item">
-                            <div class="profile-label">Имя и Фамилия (Латиница)</div>
-                            <div class="profile-value" id="prof-name-lat">-</div>
-                        </div>
-                        <div class="profile-item">
-                            <div class="profile-label">Имя и Фамилия (Кириллица)</div>
-                            <div class="profile-value" id="prof-name-cyr">-</div>
+                            <div class="profile-label">Пол</div>
+                            <div class="profile-value" id="prof-gender">-</div>
                         </div>
                         <div class="profile-item">
                             <div class="profile-label">Гражданство</div>
@@ -513,28 +429,40 @@
                             <div class="profile-value" id="prof-login" style="color: #8ab4f8;">-</div>
                         </div>
                         <div class="profile-item">
-                            <div class="profile-label">Код доступа</div>
+                            <div class="profile-label">Код доступа (Пароль)</div>
                             <div class="profile-value" id="prof-code" style="font-family: monospace; letter-spacing: 2px; color: #ffe6a0;">-</div>
                         </div>
                         <div class="profile-item">
-                            <div class="profile-label">Статус регистрации</div>
-                            <div class="profile-value" style="color: #69f0ae;">Активна</div>
-                            <div class="timer-warning" id="prof-timer">Истекает через: 24:00:00</div>
+                            <div class="profile-label">Статус аккаунта</div>
+                            <div class="profile-value"><span class="status-badge">Активен (Бессрочно)</span></div>
                         </div>
                     </div>
-                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="logout()">Выйти из профиля</button>
+                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="logout()">Выйти из системы</button>
                 </div>
             </div>
 
             <div class="bottom-nav">
-                <a href="#" class="nav-item active" onclick="switchTab('haupt', this)"><i class="fa-solid fa-passport"></i>HAUPT</a>
-                <a href="#" class="nav-item" onclick="switchTab('pripl', this)"><i class="fa-solid fa-user"></i>PRĪPL</a>
+                <a href="#" class="nav-item active" onclick="switchTab('haupt', this)"><i class="fa-solid fa-id-card"></i>ГЛАВНАЯ</a>
+                <a href="#" class="nav-item" onclick="switchTab('pripl', this)"><i class="fa-solid fa-user"></i>ПРОФИЛЬ</a>
+            </div>
+        </div>
+
+        <div id="add-doc-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Выберите тип документа</div>
+                <ul class="doc-list">
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-passport"></i> Загранпаспорт</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-car"></i> Водительские права</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-graduation-cap"></i> Диплом</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-house"></i> Документы на недвижимость</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-address-card"></i> Паспорт гражданина</li>
+                </ul>
+                <button class="btn btn-secondary" onclick="closeDocModal()">Отмена</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- ДАННЫЕ О СТРАНАХ ---
         const countries = [
             { name: 'Мимиляндия', flag: 'mimiland.png' },
             { name: 'Инопланетяне', flag: 'aliens.png' },
@@ -546,24 +474,15 @@
             { name: 'Адастра', flag: 'adastra.png' }
         ];
 
-        let countdownInterval;
-
-        // --- ИНИЦИАЛИЗАЦИЯ ---
         window.onload = function() {
             populateSelects();
-
-            // Таймер сплэш-скрина (2 секунды)
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.remove('active');
                 document.getElementById('auth-wrapper').classList.add('active');
             }, 2000);
         };
 
-        // Заполнение кастомных выпадающих списков
         function populateSelects() {
-            const citOptions = document.getElementById('cit-options');
-            const resOptions = document.getElementById('res-options');
-            
             let html = '';
             countries.forEach(country => {
                 html += `
@@ -571,45 +490,37 @@
                     <img src="${country.flag}"> ${country.name}
                 </div>`;
             });
-            
-            citOptions.innerHTML = html;
-            resOptions.innerHTML = html;
+            document.getElementById('cit-options').innerHTML = html;
+            document.getElementById('res-options').innerHTML = html;
         }
 
-        // Управление селектами
-        function toggleDropdown(id) {
-            document.getElementById(id).classList.toggle('show');
-        }
+        function toggleDropdown(id) { document.getElementById(id).classList.toggle('show'); }
 
         function selectOption(element, name, flag) {
-            // Находим родительский селект (Гражданство или Проживание)
             const wrapper = element.closest('.custom-select-wrapper');
             const imgEl = wrapper.querySelector('.custom-select img');
             const textEl = wrapper.querySelector('.custom-select span');
             
             imgEl.src = flag;
             textEl.innerText = name;
-            textEl.setAttribute('data-flag', flag); // Сохраняем путь к картинке
+            textEl.setAttribute('data-flag', flag);
             
-            // Прячем меню
             wrapper.querySelector('.custom-options').classList.remove('show');
         }
 
-        // Закрытие селекта при клике вне его
         window.onclick = function(event) {
             if (!event.target.closest('.custom-select-wrapper')) {
                 document.querySelectorAll('.custom-options').forEach(el => el.classList.remove('show'));
             }
         }
 
-        // --- ЛОГИКА ЭКРАНОВ АВТОРИЗАЦИИ ---
         function showView(viewId) {
             document.querySelectorAll('.auth-container').forEach(view => view.classList.add('hidden'));
             document.getElementById(viewId).classList.remove('hidden');
         }
 
-        // Генерация случайного кода (10 символов: A-Z, 0-9)
-        function generateCode() {
+        // Генерация кода доступа (логина) - 10 символов
+        function generateLoginCode() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let result = '';
             for (let i = 0; i < 10; i++) {
@@ -618,11 +529,28 @@
             return result;
         }
 
-        // Регистрация
+        // Генерация номера документа - 12 цифр
+        function generateDocumentId() {
+            let result = '';
+            for (let i = 0; i < 12; i++) {
+                result += Math.floor(Math.random() * 10);
+            }
+            return result.replace(/(\d{4})(?=\d)/g, '$1 '); // Формат: 0000 0000 0000
+        }
+
+        // Красивое форматирование даты (DD.MM.YYYY)
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            return `${parts[2]}.${parts[1]}.${parts[0]}`;
+        }
+
         function processRegistration() {
             const nameLat = document.getElementById('reg-name-lat').value.trim();
             const nameCyr = document.getElementById('reg-name-cyr').value.trim();
             const login = document.getElementById('reg-login').value.trim();
+            const dob = document.getElementById('reg-dob').value;
+            const gender = document.getElementById('reg-gender').value;
             
             const citText = document.getElementById('cit-selected-text').innerText;
             const citFlag = document.getElementById('cit-selected-text').getAttribute('data-flag') || 'mimiland.png';
@@ -630,45 +558,43 @@
             const resText = document.getElementById('res-selected-text').innerText;
             const resFlag = document.getElementById('res-selected-text').getAttribute('data-flag') || 'mimiland.png';
 
-            if (!nameLat || !nameCyr || !login) {
-                alert("Заполните все поля!");
+            if (!nameLat || !nameCyr || !login || !dob || !gender) {
+                alert("Пожалуйста, заполните все поля!");
                 return;
             }
 
-            // Валидация логина (только маленькие лат. буквы и цифры)
             if (!/^[a-z0-9]+$/.test(login)) {
                 alert("Ошибка! Логин должен содержать только маленькие латинские буквы и цифры без пробелов.");
                 return;
             }
 
-            const code = generateCode();
-            const timestamp = Date.now();
+            const loginCode = generateLoginCode();
+            const documentId = generateDocumentId();
 
             const userData = {
-                nameLat, nameCyr, login, code, timestamp,
+                nameLat, nameCyr, login, 
+                code: loginCode, 
+                docId: documentId,
+                dob: formatDate(dob),
+                gender,
                 cit: { name: citText, flag: citFlag },
                 res: { name: resText, flag: resFlag }
             };
 
-            // Сохраняем в localStorage (сохраняется навсегда/до удаления)
             localStorage.setItem('mdaUserData', JSON.stringify(userData));
 
-            // Показываем сгенерированный код
-            document.getElementById('generated-code-display').innerText = code;
+            document.getElementById('generated-code-display').innerText = loginCode;
             showView('view-code');
         }
 
-        // Вход через кнопку "Понятно, войти" после регистрации
         function enterAppFromCode() {
             const userData = JSON.parse(localStorage.getItem('mdaUserData'));
             loadAppWithData(userData);
         }
 
-        // Вход по логину и коду
         function processLogin() {
             const loginInput = document.getElementById('login-input').value.trim();
             const codeInput = document.getElementById('login-code').value.trim();
-            
             const storedData = localStorage.getItem('mdaUserData');
 
             if (!storedData) {
@@ -683,34 +609,26 @@
                 return;
             }
 
-            // Проверка истечения 24 часов
-            const now = Date.now();
-            const timePassed = now - userData.timestamp;
-            if (timePassed > 24 * 60 * 60 * 1000) {
-                alert("Время вашей регистрации (24 часа) истекло. Пожалуйста, зарегистрируйтесь заново.");
-                localStorage.removeItem('mdaUserData'); // Удаляем старые данные
-                showView('view-register');
-                return;
-            }
-
             loadAppWithData(userData);
         }
 
-        // --- ВХОД В ОСНОВНОЕ ПРИЛОЖЕНИЕ ---
         function loadAppWithData(userData) {
-            // Переключение экранов
             document.getElementById('auth-wrapper').classList.remove('active');
             document.getElementById('main-app').classList.add('active');
 
-            // Заполнение карточки (HAUPT)
+            // Карточка (Документ)
             document.getElementById('card-name').innerText = userData.nameLat.toUpperCase();
-            document.getElementById('card-cit').innerText = "Geÿungorte: " + userData.cit.name;
-            document.getElementById('card-res').innerText = "Geÿungstatt: " + userData.res.name;
-            document.getElementById('card-id').innerText = "Idäntenümmeer: " + userData.code;
+            document.getElementById('card-dob').innerText = "Дата рожд.: " + userData.dob;
+            document.getElementById('card-cit').innerText = "Гражданство: " + userData.cit.name;
+            document.getElementById('card-res').innerText = "Проживание: " + userData.res.name;
+            document.getElementById('card-id').innerText = "ID: " + userData.docId;
+            document.getElementById('card-bottom-code').innerText = `MDA<${userData.docId.replace(/\s/g, '')}<${userData.nameLat.substring(0,3).toUpperCase()}`;
 
-            // Заполнение профиля (PRĪPL)
+            // Профиль
             document.getElementById('prof-name-lat').innerText = userData.nameLat;
             document.getElementById('prof-name-cyr').innerText = userData.nameCyr;
+            document.getElementById('prof-dob').innerText = userData.dob;
+            document.getElementById('prof-gender').innerText = userData.gender;
             
             document.getElementById('prof-cit-text').innerText = userData.cit.name;
             document.getElementById('prof-cit-img').src = userData.cit.flag;
@@ -720,57 +638,16 @@
 
             document.getElementById('prof-login').innerText = userData.login;
             document.getElementById('prof-code').innerText = userData.code;
-
-            // Запуск таймера
-            startTimer(userData.timestamp);
         }
 
-        // Таймер на 24 часа
-        function startTimer(registrationTime) {
-            if(countdownInterval) clearInterval(countdownInterval);
-            
-            const timerEl = document.getElementById('prof-timer');
-            const duration = 24 * 60 * 60 * 1000;
-
-            countdownInterval = setInterval(() => {
-                const now = Date.now();
-                const timeLeft = (registrationTime + duration) - now;
-
-                if (timeLeft <= 0) {
-                    clearInterval(countdownInterval);
-                    timerEl.innerText = "Регистрация истекла";
-                    timerEl.style.color = "#d32f2f";
-                    alert("Время действия вашей регистрации (24 часа) истекло. Система выполнит выход.");
-                    localStorage.removeItem('mdaUserData'); // Удаляем аккаунт
-                    logout();
-                } else {
-                    const h = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-                    const m = Math.floor((timeLeft / 1000 / 60) % 60);
-                    const s = Math.floor((timeLeft / 1000) % 60);
-                    timerEl.innerText = `Истекает через: ${pad(h)}:${pad(m)}:${pad(s)}`;
-                }
-            }, 1000);
-        }
-
-        function pad(num) {
-            return num.toString().padStart(2, '0');
-        }
-
-        // Выход из профиля
         function logout() {
-            if(countdownInterval) clearInterval(countdownInterval);
-            
-            // Очищаем поля ввода
             document.getElementById('login-input').value = '';
             document.getElementById('login-code').value = '';
-            
-            // Возвращаемся на экран приветствия
             document.getElementById('main-app').classList.remove('active');
             document.getElementById('auth-wrapper').classList.add('active');
             showView('view-welcome');
         }
 
-        // Переключение нижних вкладок в приложении
         function switchTab(tabName, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -778,6 +655,27 @@
             document.getElementById('tab-' + tabName).classList.add('active');
             element.classList.add('active');
         }
+
+        // Обновление точек пагинации при скролле карусели
+        function updatePagination() {
+            const container = document.querySelector('.carousel-container');
+            const scrollLeft = container.scrollLeft;
+            const width = container.offsetWidth;
+            const index = Math.round(scrollLeft / width);
+            
+            const dots = document.querySelectorAll('#carousel-dots .dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Управление модальным окном добавления документа
+        function openDocModal() { document.getElementById('add-doc-modal').classList.add('active'); }
+        function closeDocModal() { document.getElementById('add-doc-modal').classList.remove('active'); }
+        function unavailableAlert() {
+            alert("Данный тип документа временно недоступен в вашей стране.");
+            closeDocModal();
+        }
     </script>
 </body>
-        </html>
+</html>
