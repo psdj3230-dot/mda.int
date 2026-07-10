@@ -15,9 +15,7 @@
             --nav-bg: #091a3f;
             --nav-active: #2354b8;
             --text-main: #ffffff;
-            --card-bg: linear-gradient(180deg, #f8fbff 0%, #d4dfea 100%);
-            --card-text: #334155;
-            --accent-red: #d32f2f;
+            --accent-red: #ff4d4d;
             --input-bg: rgba(255, 255, 255, 0.1);
             --input-border: rgba(255, 255, 255, 0.3);
         }
@@ -103,47 +101,128 @@
         .tab-content { display: none; flex-grow: 1; flex-direction: column; overflow: hidden; }
         .tab-content.active { display: flex; }
 
-        /* Вертикальный список документов (Альтернатива карусели) */
+        /* Дизайн списка документов кошелька */
         .documents-list-container { 
             display: flex; 
             flex-direction: column; 
-            gap: 20px; 
+            gap: 32px; /* Увеличенный зазор исключает слияние документов */
             overflow-y: auto; 
             flex-grow: 1;
-            padding: 10px 24px 30px;
+            padding: 15px 24px 40px;
             -webkit-overflow-scrolling: touch;
         }
         .documents-list-container::-webkit-scrollbar { display: none; }
 
+        /* Базовый интерактивный премиум-дизайн карточки */
         .document-card {
-            width: 100%; background: var(--card-bg); border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), inset 0 2px 5px rgba(255,255,255,0.8);
+            width: 100%; 
+            border-radius: 28px;
             display: flex; flex-direction: column; overflow: hidden; position: relative;
             flex-shrink: 0;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            
+            /* Динамические переменные текста по умолчанию */
+            --card-text-main: #ffffff;
+            --card-text-sub: rgba(255, 255, 255, 0.7);
+            --card-ribbon-bg: rgba(255, 255, 255, 0.12);
+            --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.25);
+            --card-code-text: #e2e8f0;
+            --card-accent: #ff4d4d;
         }
-        .passport-theme { background: linear-gradient(180deg, #fff3e0 0%, #ffcc80 100%); }
-        
-        .card-top { display: flex; padding: 20px; gap: 15px; align-items: flex-start; }
-        .photo-container { width: 90px; height: 120px; border-radius: 12px; overflow: hidden; border: 2px solid #b8cce0; background-color: #cbd5e1; flex-shrink: 0; }
-        .photo-container img { width: 100%; height: 100%; object-fit: cover; }
-        .info-container { flex-grow: 1; display: flex; flex-direction: column; }
-        .info-container h2 { font-size: 1rem; color: var(--card-text); margin-bottom: 8px; font-weight: 800; line-height: 1.2; word-break: break-word; }
-        .info-container p { font-size: 0.70rem; color: #53647a; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
-        .info-container p span { color: #1e293b; font-weight: 800; text-align: right; }
-        
-        .id-number { text-align: center; color: var(--accent-red); font-weight: 800; font-size: 0.9rem; padding: 10px; background: rgba(255,255,255,0.5); }
-        .card-ribbon { background: linear-gradient(90deg, #2b1055 0%, #3b6fd4 50%, #2b1055 100%); color: #fff; text-align: center; font-size: 0.75rem; font-weight: 600; padding: 8px 0; text-transform: uppercase; }
-        .passport-theme .card-ribbon { background: linear-gradient(90deg, #b71c1c 0%, #e53935 50%, #b71c1c 100%); }
-        .bottom-code { background-color: #b0c0d1; color: #1e293b; text-align: center; font-family: monospace; font-size: 0.9rem; font-weight: 800; padding: 12px 5px; word-break: break-all; }
+        .document-card:active { transform: scale(0.98); }
 
-        /* Компактная карта добавления в списке */
-        .add-doc-card {
-            width: 100%; height: 100px; background: rgba(255,255,255,0.06); border: 2px dashed rgba(255,255,255,0.4);
-            border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: white; cursor: pointer; transition: 0.3s; flex-shrink: 0; gap: 8px;
+        /* ТЕМЫ ФЛАГОВ СТРАН ДЛЯ ПАСПОРТОВ */
+        .theme-system {
+            background: linear-gradient(135deg, #101f42 0%, #070d1c 100%);
+            box-shadow: 0 20px 35px rgba(5, 10, 25, 0.6), inset 0 1px 2px rgba(255,255,255,0.15);
+            border-color: rgba(59, 111, 212, 0.3);
         }
-        .add-doc-card:active { background: rgba(255,255,255,0.15); }
-        .add-doc-card i { font-size: 2rem; color: #e0ecff; }
+        .theme-mimiland { /* Флаг Мимиляндии: Нежно-розовый и зефирный */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --card-text-main: #3d0c23; --card-text-sub: #752d51;
+            --card-ribbon-bg: rgba(117, 45, 81, 0.15); --card-ribbon-text: #3d0c23;
+            --card-code-bg: rgba(117, 45, 81, 0.1); --card-code-text: #3d0c23;
+            --card-accent: #c2185b; border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 20px 35px rgba(244, 143, 177, 0.4);
+        }
+        .theme-emmaria { /* Флаг Эммарии: Изумруд, золото и белый */
+            background: linear-gradient(135deg, #022c22 0%, #059669 60%, #fbbf24 100%);
+            box-shadow: 0 20px 35px rgba(2, 44, 34, 0.5);
+            --card-accent: #fcd34d;
+        }
+        .theme-pernikingdom { /* Королевство Пернии: Императорский пурпур и золото */
+            background: linear-gradient(135deg, #4c1d95 0%, #2e1065 60%, #d97706 100%);
+            box-shadow: 0 20px 35px rgba(46, 16, 101, 0.5);
+            --card-accent: #fef08a;
+        }
+        .theme-orphia { /* Орфия: Полночный графит и неоновое пламя */
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #6d28d9 100%);
+            box-shadow: 0 20px 35px rgba(15, 23, 42, 0.6);
+            --card-accent: #a78bfa;
+        }
+        .theme-aliens { /* Инопланетяне: Бездна и Кислотный радар */
+            background: linear-gradient(135deg, #000000 0%, #111827 60%, #15803d 100%);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.7);
+            --card-text-main: #22c55e; --card-text-sub: #4ade80;
+            --card-accent: #22c55e; --card-code-text: #4ade80;
+        }
+        .theme-varland { /* Варландия: Скандинавский синий и Кровавый крест */
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 55%, #b91c1c 100%);
+            box-shadow: 0 20px 35px rgba(30, 58, 138, 0.5);
+            --card-accent: #fca5a5;
+        }
+        .theme-instaland { /* Инсталяндия: Яркий градиент заката */
+            background: linear-gradient(135deg, #f9ce34 0%, #ee2a7b 50%, #6228d7 100%);
+            box-shadow: 0 20px 35px rgba(238, 42, 123, 0.4);
+            --card-accent: #f9ce34;
+        }
+        .theme-adastra { /* Адастра: Глубокий космос и звёздное серебро */
+            background: linear-gradient(135deg, #030712 0%, #1f2937 60%, #9ca3af 100%);
+            box-shadow: 0 20px 35px rgba(3, 7, 18, 0.6);
+            --card-accent: #f3f4f6;
+        }
+
+        /* Наполнение карточки */
+        .card-top { display: flex; padding: 22px; gap: 18px; align-items: flex-start; position: relative; }
+        
+        /* Электронный чип на документе */
+        .card-chip {
+            position: absolute; top: 22px; right: 22px; font-size: 1.6rem;
+            color: var(--card-text-main); opacity: 0.25;
+        }
+
+        .photo-container { 
+            width: 95px; height: 125px; border-radius: 16px; overflow: hidden; 
+            border: 2px solid rgba(255,255,255,0.4); background-color: #cbd5e1; 
+            flex-shrink: 0; box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .photo-container img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .info-container { flex-grow: 1; display: flex; flex-direction: column; padding-top: 2px; }
+        .info-container h2 { font-size: 1.1rem; color: var(--card-text-main); margin-bottom: 10px; font-weight: 800; letter-spacing: 0.5px; line-height: 1.2; word-break: break-word; }
+        .info-container p { font-size: 0.72rem; color: var(--card-text-sub); font-weight: 600; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .info-container p span { color: var(--card-text-main); font-weight: 800; text-align: right; }
+        
+        .id-number { text-align: center; color: var(--card-accent); font-weight: 800; font-size: 0.95rem; padding: 10px; background: rgba(0,0,0,0.08); letter-spacing: 1px; }
+        .card-ribbon { background: var(--card-ribbon-bg); color: var(--card-ribbon-text); text-align: center; font-size: 0.75rem; font-weight: 700; padding: 9px 0; text-transform: uppercase; letter-spacing: 1.5px; }
+        .bottom-code { background-color: var(--card-code-bg); color: var(--card-code-text); text-align: center; font-family: monospace; font-size: 0.85rem; font-weight: 700; padding: 12px 5px; word-break: break-all; letter-spacing: 2px; opacity: 0.9; }
+
+        /* Декоративный водяной знак логотипа */
+        .card-watermark {
+            position: absolute; bottom: 40px; right: -10px; font-size: 6rem;
+            font-weight: 900; color: var(--card-text-main); opacity: 0.04; pointer-events: none;
+        }
+
+        /* Компактная карта добавления */
+        .add-doc-card {
+            width: 100%; height: 90px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; cursor: pointer; transition: 0.3s; flex-shrink: 0; gap: 6px; margin-top: 10px;
+        }
+        .add-doc-card:active { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.6); }
+        .add-doc-card i { font-size: 1.6rem; color: #e0ecff; }
 
         /* Вкладка ПРОФИЛЬ */
         .profile-container { padding: 0 20px 20px; color: white; overflow-y: auto; flex-grow: 1; }
@@ -431,7 +510,7 @@
             document.getElementById(id).classList.remove('hidden');
         }
 
-        // Универсальная функция копирования кода
+        // Копирование кода доступа
         function copyGeneratedCode() {
             const codeText = document.getElementById('generated-code-display').innerText;
             if (navigator.clipboard && window.isSecureContext) {
@@ -481,7 +560,7 @@
 
             const loginCode = randLetters(5) + randNum(5); 
 
-            // Генерация системного ID: XNNNNNNNRRNNNKK
+            // Генерация системного ID
             const X = citEl.dataset.code || '1';
             const RR = citEl.dataset.abbr || 'ML';
             const sysId = `${X}${randNum(7)}${RR}${randNum(3)}${randLetters(2)}`;
@@ -496,7 +575,7 @@
                         type: 'system',
                         title: 'SYSTEM ID - MDA',
                         idNumber: sysId,
-                        theme: ''
+                        theme: 'theme-system'
                     }
                 ]
             };
@@ -527,7 +606,7 @@
             document.getElementById('auth-wrapper').classList.remove('active');
             document.getElementById('main-app').classList.add('active');
 
-            // СИСТЕМА САМОЛЕЧЕНИЯ: Если документов почему-то нет, жестко создаем первичный SYSTEM ID
+            // Самолечение профиля
             if (!currentUser.documents || !Array.isArray(currentUser.documents) || currentUser.documents.length === 0) {
                 const X = currentUser.cit?.code || '1';
                 const RR = currentUser.cit?.abbr || 'ML';
@@ -537,7 +616,7 @@
                         type: 'system',
                         title: 'SYSTEM ID - MDA',
                         idNumber: sysId,
-                        theme: ''
+                        theme: 'theme-system'
                     }
                 ];
                 localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
@@ -561,7 +640,22 @@
             renderDocumentsList();
         }
 
-        // Рендер вертикального списка документов вместо карусели
+        // Хелпер сопоставления страны с ее CSS флаговым градиентом
+        function getCountryThemeClass(countryName) {
+            switch(countryName) {
+                case 'Мимиляндия': return 'theme-mimiland';
+                case 'Эммария': return 'theme-emmaria';
+                case 'Королевство Пернии': return 'theme-pernikingdom';
+                case 'Орфия': return 'theme-orphia';
+                case 'Инопланетяне': return 'theme-aliens';
+                case 'Варландия': return 'theme-varland';
+                case 'Инсталяндия': return 'theme-instaland';
+                case 'Адастра': return 'theme-adastra';
+                default: return 'theme-system';
+            }
+        }
+
+        // Рендер улучшенного вертикального кошелька документов
         function renderDocumentsList() {
             const container = document.getElementById('documents-list');
             let html = '';
@@ -569,12 +663,19 @@
             const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
             const safeNameLat = (currentUser.nameLat) ? String(currentUser.nameLat) : "USER";
 
-            // Выводим все документы по очереди сверху вниз
             currentUser.documents.forEach(doc => {
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
+                
+                // Подставляем класс флага, если тип документа - паспорт гражданства
+                let appliedTheme = doc.theme;
+                if (doc.type === 'passport') {
+                    appliedTheme = getCountryThemeClass(currentUser.cit.name);
+                }
 
                 html += `
-                <div class="document-card ${doc.theme}">
+                <div class="document-card ${appliedTheme}">
+                    <div class="card-chip"><i class="fa-solid fa-microchip"></i></div>
+                    <div class="card-watermark">MDA</div>
                     <div class="card-top">
                         <div class="photo-container"><img src="${currentUser.photo}"></div>
                         <div class="info-container">
@@ -593,8 +694,8 @@
             // Кнопка добавления в самом низу списка
             html += `
             <div class="add-doc-card" onclick="openModal('modal-doc-menu')">
-                <i class="fa-solid fa-circle-plus"></i>
-                <p style="font-weight:700; font-size:0.9rem;">Добавить новый документ</p>
+                <i class="fa-solid fa-square-plus"></i>
+                <p style="font-weight:700; font-size:0.85rem; letter-spacing: 0.5px;">Добавить новый документ</p>
             </div>`;
 
             container.innerHTML = html;
@@ -682,14 +783,13 @@
                 type: 'passport',
                 title: 'ПАСПОРТ ГРАЖДАНИНА',
                 idNumber: passId,
-                theme: 'passport-theme'
+                theme: '' // подхватится автоматически по имени страны
             });
             currentUser.hasPassport = true;
             localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
             
             renderDocumentsList();
             
-            // Плавно прокручиваем список вниз к новому документу
             setTimeout(() => {
                 const cont = document.getElementById('documents-list');
                 cont.scrollTop = cont.scrollHeight;
