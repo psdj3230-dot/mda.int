@@ -103,7 +103,6 @@
         }
         .documents-list-container::-webkit-scrollbar { display: none; }
 
-        /* ОБНОВЛЕНО: 3D-переворот карточек */
         .card-wrapper {
             perspective: 1200px;
             margin-bottom: 32px;
@@ -114,6 +113,7 @@
             width: 100%; 
             position: relative;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
         }
         .card-wrapper.flipped .document-card {
@@ -123,6 +123,7 @@
         .card-front, .card-back {
             width: 100%;
             border-radius: 28px;
+            -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             background: var(--card-bg, #333);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -135,7 +136,7 @@
         }
 
         .card-back {
-            position: absolute; top: 0; left: 0; height: 100%;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             transform: rotateY(180deg);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 1; padding: 20px; text-align: center;
@@ -206,7 +207,6 @@
             --card-accent: #DC2626;
         }
 
-        /* НОВЫЕ ГРАДИЕНТЫ ДЛЯ ВОДИТЕЛЬСКИХ ПРАВ */
         .theme-dl-blue {
             --card-bg: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
             --card-text-main: #ffffff; --card-text-sub: #e0f2fe;
@@ -346,7 +346,8 @@
                     <div class="custom-select-wrapper" id="select-cit-wrapper">
                         <div class="custom-select" onclick="toggleDropdown('cit-options')">
                             <img id="cit-selected-img" src="mimiland.png">
-                            <span id="cit-selected-text" data-code="1" data-abbr="ML" data-flag="mimiland.png">Мимиляндия</span>
+                            <!-- ОБНОВЛЕНО: Используем правильную аббревиатуру по умолчанию -->
+                            <span id="cit-selected-text" data-code="1" data-abbr="MML" data-flag="mimiland.png">Мимиляндия</span>
                         </div>
                         <div class="custom-options" id="cit-options"></div>
                     </div>
@@ -452,7 +453,6 @@
             </div>
         </div>
 
-        <!-- НОВОЕ МОДАЛЬНОЕ ОКНО ДЛЯ ВЫБОРА КАТЕГОРИИ ВОДИТЕЛЬСКИХ ПРАВ -->
         <div id="modal-category" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Категория прав</div>
@@ -472,20 +472,21 @@
     </div>
 
     <script>
+        // ОБНОВЛЕНО: Исправлен массив стран с правильными трехбуквенными аббревиатурами
         const countries = [
-            { name: 'Мимиляндия', flag: 'mimiland.png', code: '1', abbr: 'ML' },
-            { name: 'Эммария', flag: 'emmaria.png', code: '2', abbr: 'EM' },
-            { name: 'Королевство Пернии', flag: 'pernikingdom.png', code: '3', abbr: 'PK' },
-            { name: 'Орфия', flag: 'orphia.png', code: '4', abbr: 'OR' },
-            { name: 'Инопланетяне', flag: 'aliens.png', code: '5', abbr: 'AL' },
-            { name: 'Варландия', flag: 'varland.png', code: '6', abbr: 'VR' },
-            { name: 'Инсталяндия', flag: 'instaland.png', code: '7', abbr: 'IN' },
-            { name: 'Адастра', flag: 'adastra.png', code: '8', abbr: 'AD' }
+            { name: 'Мимиляндия', flag: 'mimiland.png', code: '1', abbr: 'MML' },
+            { name: 'Эммария', flag: 'emmaria.png', code: '2', abbr: 'EMM' },
+            { name: 'Королевство Пернии', flag: 'pernikingdom.png', code: '3', abbr: 'PRN' },
+            { name: 'Орфия', flag: 'orphia.png', code: '4', abbr: 'ORP' },
+            { name: 'Инопланетяне', flag: 'aliens.png', code: '5', abbr: 'ALI' },
+            { name: 'Варландия', flag: 'varland.png', code: '6', abbr: 'VRL' },
+            { name: 'Инсталяндия', flag: 'instaland.png', code: '7', abbr: 'INS' },
+            { name: 'Адастра', flag: 'adastra.png', code: '8', abbr: 'AST' }
         ];
 
         let currentUser = null;
         let base64Photo = "";
-        let currentVerifyTarget = ""; // Для отслеживания, какой документ пытаемся получить
+        let currentVerifyTarget = ""; 
 
         window.onload = function() {
             populateSelects();
@@ -603,13 +604,15 @@
             }
 
             const loginCode = randLetters(5) + randNum(5); 
+            
+            // ОБНОВЛЕНО: Формат системного ID: XNNNNNNNRRRNNNKK
             const X = citEl.dataset.code || '1';
-            const RR = citEl.dataset.abbr || 'ML';
-            const sysId = `${X}${randNum(7)}${RR}${randNum(3)}${randLetters(2)}`;
+            const RRR = citEl.dataset.abbr || 'MML';
+            const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
 
             currentUser = {
                 nameLat, nameCyr, dob, gender, login, code: loginCode, photo: base64Photo,
-                cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RR },
+                cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RRR },
                 res: { name: resEl.innerText, flag: resEl.dataset.flag },
                 hasPassport: false,
                 documents: [
@@ -649,9 +652,10 @@
             document.getElementById('main-app').classList.add('active');
 
             if (!currentUser.documents || !Array.isArray(currentUser.documents) || currentUser.documents.length === 0) {
+                // ОБНОВЛЕНО: Поддержка нового формата при резервном создании
                 const X = currentUser.cit?.code || '1';
-                const RR = currentUser.cit?.abbr || 'ML';
-                const sysId = `${X}${randNum(7)}${RR}${randNum(3)}${randLetters(2)}`;
+                const RRR = currentUser.cit?.abbr || 'MML';
+                const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
                 currentUser.documents = [{ type: 'system', title: 'SYSTEM ID - MDA', idNumber: sysId, theme: 'theme-system' }];
                 localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
             }
@@ -702,6 +706,9 @@
                     appliedTheme = getCountryThemeClass(currentUser.cit.name);
                 }
 
+                // ОБНОВЛЕНО: Шифрование номера в Base64 для QR-кода
+                const encryptedId = btoa(doc.idNumber);
+
                 html += `
                 <div class="card-wrapper" onclick="this.classList.toggle('flipped')">
                     <div class="document-card ${appliedTheme}">
@@ -723,7 +730,8 @@
                         </div>
                         <div class="card-back">
                             <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 15px; letter-spacing: 1px;">QR-КОД ДОКУМЕНТА</h3>
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(doc.idNumber)}" style="width: 150px; height: 150px; border-radius:12px; background:#fff; padding:6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                            <!-- ОБНОВЛЕНО: Используем QuickChart API (он стабильнее) и передаем зашифрованный ID -->
+                            <img src="https://quickchart.io/qr?text=${encodeURIComponent(encryptedId)}&size=150" style="width: 150px; height: 150px; border-radius:12px; background:#fff; padding:6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" alt="QR">
                             <p style="color:var(--card-text-main); margin-top: 20px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
                         </div>
                     </div>
@@ -759,7 +767,6 @@
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function unavailableAlert() { alert("Временно недоступно."); closeModal('modal-doc-menu'); }
 
-        // ОБНОВЛЕНО: Открытие проверки пароля с указанием типа требуемого документа
         function openVerifyModal(type) {
             if (!currentUser) return;
             currentVerifyTarget = type;
@@ -801,12 +808,10 @@
                     generatePassport(); 
                 }
             } else if (currentVerifyTarget === 'license') {
-                // Вместо генерации сразу, открываем окно выбора категории
                 openModal('modal-category');
             }
         }
 
-        // ОБНОВЛЕНО: Логика Водительских прав с выбором категории и случайной темой
         function generateDriverLicense() {
             if (!currentUser) return;
 
@@ -839,7 +844,6 @@
                 dlId = `${randLetters(2)}${randNum(8)}`; 
             }
 
-            // Случайный розовый или голубой градиент
             const randomThemeClass = Math.random() > 0.5 ? 'theme-dl-blue' : 'theme-dl-pink';
 
             currentUser.documents.push({
