@@ -7,11 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Подключаем Firebase SDK (v8 compat для удобной работы в одном файле) -->
+    <!-- Подключаем Firebase SDK (v8 compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    
-    <!-- ИЗМЕНЕНИЕ: Подключаем библиотеку JsBarcode для стабильной генерации штрих-кодов -->
+
+    <!-- ПОДКЛЮЧЕНО НОВОЕ: Библиотека для локальной генерации штрих-кодов -->
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
     <style>
@@ -674,13 +674,24 @@
             const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
             const safeNameLat = (currentUser.nameLat) ? String(currentUser.nameLat) : "USER";
 
-            currentUser.documents.forEach(doc => {
+            // МАССИВ ДЛЯ ХРАНЕНИЯ ДАННЫХ ШТРИХ-КОДОВ
+            let barcodesToRender = [];
+
+            currentUser.documents.forEach((doc, index) => {
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
                 let appliedTheme = doc.theme;
                 if (doc.type === 'passport') { appliedTheme = getCountryThemeClass(currentUser.cit.name); }
 
-                // ИЗМЕНЕНИЕ: Генерируем уникальный "другой" номер для отображения под штрих-кодом на основе хэша из Base64.
-                const barcodeDisplayNumber = "BC-" + btoa(doc.idNumber).replace(/[^A-Za-z0-9]/g, '').substring(0, 10).toUpperCase();
+                // Подготовка данных для штрих-кода
+                const barcodeId = `barcode-element-${index}`;
+                // Визуальный номер (который будет отображаться под штрих-кодом вместо реального idNumber)
+                const alternateVisualNumber = `${randLetters(3)}-${randNum(7)}`;
+                
+                barcodesToRender.push({
+                    id: barcodeId,
+                    realEncodeData: doc.idNumber,
+                    visualText: alternateVisualNumber
+                });
 
                 html += `
                 <div class="card-wrapper" onclick="this.classList.toggle('flipped')">
@@ -702,22 +713,14 @@
                             <div class="bottom-code">${bottomStr}</div>
                         </div>
                         <div class="card-back">
-                            <!-- ИЗМЕНЕНИЕ: Заменяем QR на Штрих-код -->
-                            <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 15px; letter-spacing: 1px;">ШТРИХ-КОД ДОКУМЕНТА</h3>
+                            <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 25px; letter-spacing: 1px;">ШТРИХ-КОД ДОКУМЕНТА</h3>
                             
-                            <svg class="barcode"
-                                jsbarcode-format="CODE128"
-                                jsbarcode-value="${doc.idNumber}"
-                                jsbarcode-text="${barcodeDisplayNumber}"
-                                jsbarcode-width="2"
-                                jsbarcode-height="60"
-                                jsbarcode-background="transparent"
-                                jsbarcode-linecolor="#ffffff"
-                                jsbarcode-textcolor="#ffffff"
-                                jsbarcode-margintop="10">
-                            </svg>
+                            <!-- НОВЫЙ БЛОК ШТРИХ-КОДА -->
+                            <div style="background: white; padding: 15px 10px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; width: 90%;">
+                                <svg id="${barcodeId}" style="max-width: 100%; height: auto;"></svg>
+                            </div>
                             
-                            <p style="color:var(--card-text-main); margin-top: 20px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
+                            <p style="color:var(--card-text-main); margin-top: 25px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
                         </div>
                     </div>
                 </div>`;
@@ -731,10 +734,25 @@
 
             container.innerHTML = html;
 
-            // ИЗМЕНЕНИЕ: Инициализация генерации штрих-кода после обновления DOM
-            if (typeof JsBarcode !== 'undefined') {
-                JsBarcode(".barcode").init();
-            }
+            // ГЕНЕРАЦИЯ ШТРИХ-КОДОВ ПОСЛЕ ЗАГРУЗКИ HTML В DOM
+            barcodesToRender.forEach(b => {
+                try {
+                    JsBarcode(`#${b.id}`, b.realEncodeData, {
+                        format: "CODE128", // Формат, поддерживающий буквы и цифры
+                        displayValue: true, 
+                        text: b.visualText, // Визуально выводит сгенерированный "альтернативный" текст
+                        width: 2.5,
+                        height: 60,
+                        margin: 0,
+                        fontSize: 16,
+                        fontOptions: "bold",
+                        lineColor: "#000000",
+                        background: "transparent"
+                    });
+                } catch (e) {
+                    console.error("Ошибка при создании штрих-кода:", e);
+                }
+            });
         }
 
         function logout() {
