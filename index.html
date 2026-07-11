@@ -7,12 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Подключаем Firebase SDK (v8 compat) -->
+    <!-- Подключаем Firebase SDK (v8 compat для удобной работы в одном файле) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
-    <!-- ПОДКЛЮЧЕНО НОВОЕ: Библиотека для локальной генерации штрих-кодов -->
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- Библиотека для генерации штрих-кода локально в браузере, без внешнего API -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/JsBarcode/3.11.5/JsBarcode.all.min.js"></script>
 
     <style>
         :root {
@@ -308,6 +307,7 @@
                 </div>
                 <div class="form-group">
                     <label>Пароль</label>
+                    <!-- ИЗМЕНЕНИЕ: Вход по паролю -->
                     <input type="password" id="login-password" class="form-input" placeholder="Ваш пароль">
                 </div>
                 <button class="btn btn-primary" onclick="processLogin()">Войти</button>
@@ -361,6 +361,7 @@
                 </div>
 
                 <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="Только латиница и цифры"></div>
+                <!-- ИЗМЕНЕНИЕ: Регистрация по паролю вместо кода -->
                 <div class="form-group"><label>Придумайте пароль</label><input type="password" id="reg-password" class="form-input" placeholder="Ваш пароль"></div>
 
                 <button class="btn btn-primary" onclick="processRegistration()">Завершить регистрацию</button>
@@ -421,6 +422,7 @@
         <div id="modal-verify-code" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Подтверждение личности</div>
+                <!-- ИЗМЕНЕНИЕ: Ввод пароля вместо кода для выдачи документов -->
                 <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Введите ваш пароль для подтверждения личности.</p>
                 <input type="password" id="verify-code-input" class="form-input" placeholder="Ваш пароль" style="margin-bottom: 15px;">
                 <button class="btn btn-primary" onclick="verifyAndProceed()">Подтвердить</button>
@@ -456,6 +458,8 @@
     </div>
 
     <script>
+        // ИНТЕГРАЦИЯ БАЗЫ ДАННЫХ FIREBASE
+        // ВАЖНО: Замените эти значения на данные из вашего проекта Firebase (Раздел: Project Settings)
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -474,6 +478,7 @@
             console.log("ОШИБКА: Firebase не настроен. Данные будут сохраняться только локально.");
         }
 
+        // Функция сохранения (сначала пытается в Firebase, затем локально)
         async function saveUser(user) {
             if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
                 try { await db.ref('users/' + user.login).set(user); } catch(e) { console.error("DB Error:", e); }
@@ -481,6 +486,7 @@
             localStorage.setItem('mda_' + user.login, JSON.stringify(user));
         }
 
+        // Функция загрузки (сначала пытается из Firebase, затем локально)
         async function loadUser(login) {
             if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
                 try {
@@ -571,6 +577,12 @@
             return Array.from({length: len}, () => chars.charAt(Math.floor(Math.random() * chars.length))).join(''); 
         }
 
+        // Отдельный серийный номер, который печатается под штрих-кодом.
+        // Не совпадает с номером документа (idNumber) — тот зашит внутри самого штрих-кода.
+        function generateBarcodeSerial() {
+            return `${randLetters(2)}${randNum(6)}${randLetters(1)}`;
+        }
+
         function showView(id) {
             document.querySelectorAll('.auth-container').forEach(v => v.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
@@ -582,7 +594,7 @@
             const dob = document.getElementById('reg-dob').value;
             const gender = document.getElementById('reg-gender').value;
             const login = document.getElementById('reg-login').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
+            const password = document.getElementById('reg-password').value.trim(); // ИЗМЕНЕНИЕ
             const citEl = document.getElementById('cit-selected-text');
             const resEl = document.getElementById('res-selected-text');
 
@@ -593,6 +605,7 @@
                 alert("Ошибка! Логин должен содержать только латинские буквы и цифры."); return;
             }
 
+            // Проверяем, свободен ли логин
             const existingUser = await loadUser(login);
             if (existingUser) {
                 alert("Этот логин уже занят!"); return;
@@ -603,7 +616,7 @@
             const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
 
             currentUser = {
-                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo,
+                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo, // Сохраняем придуманный пароль
                 cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RRR },
                 res: { name: resEl.innerText, flag: resEl.dataset.flag },
                 hasPassport: false,
@@ -612,7 +625,7 @@
 
             await saveUser(currentUser);
             alert("Регистрация успешна! Теперь вы можете войти, используя ваш пароль.");
-            showView('view-login');
+            showView('view-login'); // Отправляем на вход вместо показа сгенерированного кода
         }
 
         async function processLogin() {
@@ -624,7 +637,8 @@
             const userData = await loadUser(login);
             if (!userData) { alert("Пользователь не найден. Пройдите регистрацию."); return; }
             
-            if (userData.password !== pass && userData.code !== pass) {
+            // ИЗМЕНЕНИЕ: Сверка пароля вместо кода доступа
+            if (userData.password !== pass && userData.code !== pass) { // Оставил userData.code для совместимости со старыми профилями
                 alert("Неверный логин или пароль!"); return; 
             }
             
@@ -674,24 +688,17 @@
             const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
             const safeNameLat = (currentUser.nameLat) ? String(currentUser.nameLat) : "USER";
 
-            // МАССИВ ДЛЯ ХРАНЕНИЯ ДАННЫХ ШТРИХ-КОДОВ
-            let barcodesToRender = [];
+            // Совместимость со старыми документами: если серийного номера для штрих-кода ещё нет — создаём один раз и сохраняем
+            let needsSave = false;
+            currentUser.documents.forEach(doc => {
+                if (!doc.barcodeNumber) { doc.barcodeNumber = generateBarcodeSerial(); needsSave = true; }
+            });
+            if (needsSave) saveUser(currentUser);
 
-            currentUser.documents.forEach((doc, index) => {
+            currentUser.documents.forEach((doc, idx) => {
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
                 let appliedTheme = doc.theme;
                 if (doc.type === 'passport') { appliedTheme = getCountryThemeClass(currentUser.cit.name); }
-
-                // Подготовка данных для штрих-кода
-                const barcodeId = `barcode-element-${index}`;
-                // Визуальный номер (который будет отображаться под штрих-кодом вместо реального idNumber)
-                const alternateVisualNumber = `${randLetters(3)}-${randNum(7)}`;
-                
-                barcodesToRender.push({
-                    id: barcodeId,
-                    realEncodeData: doc.idNumber,
-                    visualText: alternateVisualNumber
-                });
 
                 html += `
                 <div class="card-wrapper" onclick="this.classList.toggle('flipped')">
@@ -713,14 +720,9 @@
                             <div class="bottom-code">${bottomStr}</div>
                         </div>
                         <div class="card-back">
-                            <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 25px; letter-spacing: 1px;">ШТРИХ-КОД ДОКУМЕНТА</h3>
-                            
-                            <!-- НОВЫЙ БЛОК ШТРИХ-КОДА -->
-                            <div style="background: white; padding: 15px 10px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; width: 90%;">
-                                <svg id="${barcodeId}" style="max-width: 100%; height: auto;"></svg>
-                            </div>
-                            
-                            <p style="color:var(--card-text-main); margin-top: 25px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
+                            <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 15px; letter-spacing: 1px;">ШТРИХ-КОД ДОКУМЕНТА</h3>
+                            <svg id="barcode-${idx}" style="background:#fff; border-radius:12px; padding:10px 14px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 100%;"></svg>
+                            <p style="color:var(--card-text-main); margin-top: 20px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
                         </div>
                     </div>
                 </div>`;
@@ -734,23 +736,24 @@
 
             container.innerHTML = html;
 
-            // ГЕНЕРАЦИЯ ШТРИХ-КОДОВ ПОСЛЕ ЗАГРУЗКИ HTML В DOM
-            barcodesToRender.forEach(b => {
+            // Отрисовываем штрих-коды, когда SVG-элементы уже есть в DOM.
+            // В сам штрих-код зашит настоящий номер документа (idNumber),
+            // а подпись под ним — отдельный серийный номер (barcodeNumber).
+            currentUser.documents.forEach((doc, idx) => {
                 try {
-                    JsBarcode(`#${b.id}`, b.realEncodeData, {
-                        format: "CODE128", // Формат, поддерживающий буквы и цифры
-                        displayValue: true, 
-                        text: b.visualText, // Визуально выводит сгенерированный "альтернативный" текст
-                        width: 2.5,
-                        height: 60,
-                        margin: 0,
-                        fontSize: 16,
-                        fontOptions: "bold",
-                        lineColor: "#000000",
-                        background: "transparent"
+                    JsBarcode(`#barcode-${idx}`, doc.idNumber, {
+                        format: "CODE128",
+                        lineColor: "#000",
+                        width: 2,
+                        height: 55,
+                        displayValue: true,
+                        text: doc.barcodeNumber,
+                        fontSize: 15,
+                        margin: 8,
+                        background: "#ffffff"
                     });
                 } catch (e) {
-                    console.error("Ошибка при создании штрих-кода:", e);
+                    console.error("Ошибка генерации штрих-кода:", e);
                 }
             });
         }
@@ -826,20 +829,24 @@
                 dlId = `${category.substring(0,1)}${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}${randNum(7)}`;
             } else if (cit === 'Варландия') {
                 dlId = `${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}${randNum(5)}`;
-            } else if (cit === 'Инсталяндия') {
+            } 
+            // ИЗМЕНЕНИЕ: Формат для Инсталяндии
+            else if (cit === 'Инсталяндия') {
                 dlId = `IDL-${randNum(9)}`;
-            } else if (cit === 'Инопланетяне') {
+            } 
+            // ИЗМЕНЕНИЕ: Формат для Инопланетян
+            else if (cit === 'Инопланетяне') {
                 const transType = (category === 'A' || category === 'M') ? 'M' : 'A';
-                const orderNum = randNum(7); 
-                const year = new Date().getFullYear().toString().slice(-2); 
-                const region = randNum(2); 
+                const orderNum = randNum(7); // XXXXXXX - Порядковый номер
+                const year = new Date().getFullYear().toString().slice(-2); // YY - Год выдачи
+                const region = randNum(2); // NN - Рандомный номер региона (если не выбирался)
                 dlId = `${transType}${orderNum}${year}${region}ALI`;
             } else {
                 dlId = `${randLetters(2)}${randNum(8)}`; 
             }
 
             const randomThemeClass = Math.random() > 0.5 ? 'theme-dl-blue' : 'theme-dl-pink';
-            currentUser.documents.push({ type: 'driver_license', title: `ВОДИТЕЛЬСКИЕ ПРАВА (${category})`, idNumber: dlId, theme: randomThemeClass });
+            currentUser.documents.push({ type: 'driver_license', title: `ВОДИТЕЛЬСКИЕ ПРАВА (${category})`, idNumber: dlId, theme: randomThemeClass, barcodeNumber: generateBarcodeSerial() });
 
             await saveUser(currentUser);
             renderDocumentsList();
@@ -860,7 +867,7 @@
             else if (cit === 'Адастра') passId = `ASTreg${reg}/${String(currentUser.nameLat).replace(/\s/g, '')}/${dobParts[0]}/${currentUser.gender === 'M' ? 'Male' : (currentUser.gender === 'F' ? 'Female' : 'Other')}`;
 
             closeModal('modal-region');
-            currentUser.documents.push({ type: 'passport', title: 'ПАСПОРТ ГРАЖДАНИНА', idNumber: passId, theme: '' });
+            currentUser.documents.push({ type: 'passport', title: 'ПАСПОРТ ГРАЖДАНИНА', idNumber: passId, theme: '', barcodeNumber: generateBarcodeSerial() });
             currentUser.hasPassport = true;
             
             await saveUser(currentUser);
