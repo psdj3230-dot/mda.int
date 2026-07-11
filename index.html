@@ -7,9 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Подключаем Firebase SDK (v8 compat для удобной работы в одном файле) -->
+    <!-- Подключаем Firebase SDK и библиотеку для локальной генерации штрих-кодов -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
     <style>
         :root {
@@ -141,7 +142,6 @@
             z-index: 1; padding: 20px; text-align: center;
         }
 
-        /* ИСПРАВЛЕНИЕ: Переключаем слои местами при перевороте карточки */
         .card-wrapper.flipped .card-front { z-index: 1; }
         .card-wrapper.flipped .card-back { z-index: 2; }
 
@@ -609,7 +609,7 @@
                 cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RRR },
                 res: { name: resEl.innerText, flag: resEl.dataset.flag },
                 hasPassport: false,
-                documents: [{ type: 'system', title: 'SYSTEM ID - MDA', idNumber: sysId, theme: 'theme-system' }]
+                documents: [{ type: 'system', title: 'SYSTEM ID - MDA', idNumber: sysId, theme: 'theme-system', barcodeNumber: "BC-" + randNum(8) }]
             };
 
             await saveUser(currentUser);
@@ -676,12 +676,10 @@
             const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
             const safeNameLat = (currentUser.nameLat) ? String(currentUser.nameLat) : "USER";
 
-            currentUser.documents.forEach(doc => {
+            currentUser.documents.forEach((doc, index) => {
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
                 let appliedTheme = doc.theme;
                 if (doc.type === 'passport') { appliedTheme = getCountryThemeClass(currentUser.cit.name); }
-
-                const encryptedId = btoa(doc.idNumber);
 
                 html += `
                 <div class="card-wrapper" onclick="this.classList.toggle('flipped')">
@@ -703,9 +701,12 @@
                             <div class="bottom-code">${bottomStr}</div>
                         </div>
                         <div class="card-back">
-                            <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 15px; letter-spacing: 1px;">QR-КОД ДОКУМЕНТА</h3>
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(encryptedId)}" style="width: 150px; height: 150px; border-radius:12px; background:#fff; padding:6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" alt="QR">
-                            <p style="color:var(--card-text-main); margin-top: 20px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
+                            <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 12px; letter-spacing: 1px;">ШТРИХ-КОД ДОКУМЕНТА</h3>
+                            <!-- Контейнер для штрих-кода -->
+                            <div style="background:#fff; padding:6px 12px; border-radius:14px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center; width:95%; max-width:280px;">
+                                <svg id="barcode-${index}"></svg>
+                            </div>
+                            <p style="color:rgba(255,255,255,0.5); margin-top: 15px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px;">Закодирован ID: ${doc.idNumber}</p>
                         </div>
                     </div>
                 </div>`;
@@ -718,6 +719,28 @@
             </div>`;
 
             container.innerHTML = html;
+
+            // ВТОРОЙ ПРОХОД: Рисуем штрих-коды локально с помощью JsBarcode
+            currentUser.documents.forEach((doc, index) => {
+                // Если номера штрих-кода в документе нет (старый профиль), вычисляем его постоянно по хешу
+                let hash = 0;
+                for (let i = 0; i < doc.idNumber.length; i++) {
+                    hash = doc.idNumber.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                const displayBarcodeNum = doc.barcodeNumber || ("BC-" + Math.abs(hash % 90000000 + 10000000));
+
+                JsBarcode(`#barcode-${index}`, doc.idNumber, {
+                    format: "CODE128",       // Формат, поддерживающий и буквы, и цифры
+                    text: displayBarcodeNum,  // Показываем под барами ДРУГОЙ номер
+                    width: 1.4,              // Толщина линий штрих-кода
+                    height: 50,              // Высота баров
+                    displayValue: true,      // Показывать текст под штрих-кодом
+                    fontSize: 13,
+                    font: "monospace",
+                    background: "#ffffff",
+                    lineColor: "#000000"
+                });
+            });
         }
 
         function logout() {
@@ -804,7 +827,13 @@
             }
 
             const randomThemeClass = Math.random() > 0.5 ? 'theme-dl-blue' : 'theme-dl-pink';
-            currentUser.documents.push({ type: 'driver_license', title: `ВОДИТЕЛЬСКИЕ ПРАВА (${category})`, idNumber: dlId, theme: randomThemeClass });
+            currentUser.documents.push({ 
+                type: 'driver_license', 
+                title: `ВОДИТЕЛЬСКИЕ ПРАВА (${category})`, 
+                idNumber: dlId, 
+                theme: randomThemeClass,
+                barcodeNumber: "BC-" + randNum(8)
+            });
 
             await saveUser(currentUser);
             renderDocumentsList();
@@ -825,7 +854,13 @@
             else if (cit === 'Адастра') passId = `ASTreg${reg}/${String(currentUser.nameLat).replace(/\s/g, '')}/${dobParts[0]}/${currentUser.gender === 'M' ? 'Male' : (currentUser.gender === 'F' ? 'Female' : 'Other')}`;
 
             closeModal('modal-region');
-            currentUser.documents.push({ type: 'passport', title: 'ПАСПОРТ ГРАЖДАНИНА', idNumber: passId, theme: '' });
+            currentUser.documents.push({ 
+                type: 'passport', 
+                title: 'ПАСПОРТ ГРАЖДАНИНА', 
+                idNumber: passId, 
+                theme: '',
+                barcodeNumber: "BC-" + randNum(8)
+            });
             currentUser.hasPassport = true;
             
             await saveUser(currentUser);
