@@ -7,9 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Подключаем Firebase SDK (v8 compat для удобной работы в одном файле) -->
+    <!-- Подключаем Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    
+    <!-- Подключаем надежную библиотеку для локальной генерации QR-кодов -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
     <style>
         :root {
@@ -57,9 +60,9 @@
         .auth-title { color: white; text-align: center; font-size: 1.8rem; margin: 20px 0; font-weight: 700; }
         .form-group { margin-bottom: 15px; width: 100%; }
         .form-group label { display: block; color: #e0ecff; font-size: 0.8rem; margin-bottom: 5px; font-weight: 600; }
-        .form-input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: white; font-size: 1rem; outline: none; }
+        .form-input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: inherit; font-size: 1rem; outline: none; }
         .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.2); }
-        select.form-input { appearance: none; background-color: #2354b8; cursor: pointer; }
+        select.form-input { appearance: none; background-color: #2354b8; cursor: pointer; color: white; }
         select.form-input option { background-color: #091a3f; color: white; }
         
         .photo-upload-wrapper { text-align: center; margin-bottom: 20px; }
@@ -74,7 +77,7 @@
         .photo-upload-circle.has-image img { display: block; }
         input[type="file"] { display: none; }
 
-        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; text-align: center; transition: 0.2s; }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; text-align: center; transition: 0.2s; text-transform: inherit;}
         .btn-primary { background: white; color: var(--bg-gradient-top); }
         .btn-secondary { background: transparent; color: white; border: 2px solid white; }
         .btn:active { transform: scale(0.98); }
@@ -82,7 +85,7 @@
         .custom-select-wrapper { position: relative; user-select: none; width: 100%; z-index: 10; }
         .custom-select { display: flex; align-items: center; padding: 12px 15px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 12px; color: white; cursor: pointer; }
         .custom-select img { width: 24px; height: 16px; margin-right: 10px; border-radius: 2px; }
-        .custom-options { position: absolute; top: 100%; left: 0; right: 0; background: #1e3a8a; border-radius: 12px; margin-top: 5px; max-height: 200px; overflow-y: auto; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 100; }
+        .custom-options { position: absolute; top: 100%; left: 0; right: 0; background: #1e3a8a; border-radius: 12px; margin-top: 5px; max-height: 200px; overflow-y: auto; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 100; text-transform: none !important;}
         .custom-options.show { display: block; }
         .custom-option { padding: 10px 15px; display: flex; align-items: center; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .custom-option img { width: 24px; height: 16px; margin-right: 10px; border-radius: 2px; }
@@ -141,84 +144,18 @@
             z-index: 1; padding: 20px; text-align: center;
         }
 
-        .theme-system {
-            --card-bg: linear-gradient(135deg, #101f42 0%, #070d1c 100%);
-            --card-text-main: #ffffff; --card-text-sub: rgba(255, 255, 255, 0.7);
-            --card-ribbon-bg: rgba(255, 255, 255, 0.12); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(0, 0, 0, 0.25); --card-code-text: #e2e8f0;
-            --card-accent: #ff4d4d;
-        }
-        .theme-mimiland { 
-            --card-bg: linear-gradient(135deg, #FACC15 0%, #8B4513 50%, #FFFFFF 100%);
-            --card-text-main: #ffffff; --card-text-sub: #fef08a;
-            --card-ribbon-bg: rgba(139, 69, 19, 0.4); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #3d1c04;
-            --card-accent: #8B4513;
-        }
-        .theme-emmaria { 
-            --card-bg: linear-gradient(135deg, #9333EA 0%, #EC4899 50%, #FFFFFF 100%);
-            --card-text-main: #ffffff; --card-text-sub: #fce7f3;
-            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #831843;
-            --card-accent: #FBCFE8;
-        }
-        .theme-pernikingdom { 
-            --card-bg: linear-gradient(135deg, #16A34A 0%, #FFFFFF 50%, #000000 100%);
-            --card-text-main: #ffffff; --card-text-sub: #dcfce7;
-            --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff;
-            --card-accent: #16A34A;
-        }
-        .theme-orphia { 
-            --card-bg: linear-gradient(135deg, #FF7F50 0%, #000000 50%, #FFFFFF 100%);
-            --card-text-main: #ffffff; --card-text-sub: #ffedd5;
-            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #000000;
-            --card-accent: #FF7F50;
-        }
-        .theme-varland { 
-            --card-bg: linear-gradient(135deg, #1E3A8A 0%, #14532D 100%);
-            --card-text-main: #ffffff; --card-text-sub: #bfdbfe;
-            --card-ribbon-bg: rgba(255, 255, 255, 0.1); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff;
-            --card-accent: #10B981;
-        }
-        .theme-instaland { 
-            --card-bg: linear-gradient(135deg, #9333EA 0%, #2563EB 33%, #FFFFFF 66%, #EAB308 100%);
-            --card-text-main: #ffffff; --card-text-sub: #e0e7ff;
-            --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(0, 0, 0, 0.1); --card-code-text: #422006;
-            --card-accent: #EAB308;
-        }
-        .theme-adastra { 
-            --card-bg: linear-gradient(135deg, #1E3A8A 0%, #FFFFFF 50%, #DC2626 100%);
-            --card-text-main: #ffffff; --card-text-sub: #d1d5db;
-            --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(255, 255, 255, 0.2); --card-code-text: #ffffff;
-            --card-accent: #DC2626;
-        }
-        .theme-aliens { 
-            --card-bg: linear-gradient(135deg, #38BDF8 0%, #22C55E 33%, #FFFFFF 66%, #DC2626 100%);
-            --card-text-main: #ffffff; --card-text-sub: #e0f2fe;
-            --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(255, 255, 255, 0.25); --card-code-text: #ffffff;
-            --card-accent: #DC2626;
-        }
-
-        .theme-dl-blue {
-            --card-bg: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-            --card-text-main: #ffffff; --card-text-sub: #e0f2fe;
-            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff;
-            --card-accent: #38bdf8;
-        }
-        .theme-dl-pink {
-            --card-bg: linear-gradient(135deg, #be185d 0%, #f472b6 100%);
-            --card-text-main: #ffffff; --card-text-sub: #fce7f3;
-            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
-            --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff;
-            --card-accent: #f472b6;
-        }
+        /* Темы карточек стран */
+        .theme-system { --card-bg: linear-gradient(135deg, #101f42 0%, #070d1c 100%); --card-text-main: #ffffff; --card-text-sub: rgba(255, 255, 255, 0.7); --card-ribbon-bg: rgba(255, 255, 255, 0.12); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.25); --card-code-text: #e2e8f0; --card-accent: #ff4d4d; }
+        .theme-mimiland { --card-bg: linear-gradient(135deg, #FACC15 0%, #8B4513 50%, #FFFFFF 100%); --card-text-main: #ffffff; --card-text-sub: #fef08a; --card-ribbon-bg: rgba(139, 69, 19, 0.4); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #3d1c04; --card-accent: #8B4513; }
+        .theme-emmaria { --card-bg: linear-gradient(135deg, #9333EA 0%, #EC4899 50%, #FFFFFF 100%); --card-text-main: #ffffff; --card-text-sub: #fce7f3; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #831843; --card-accent: #FBCFE8; }
+        .theme-pernikingdom { --card-bg: linear-gradient(135deg, #16A34A 0%, #FFFFFF 50%, #000000 100%); --card-text-main: #ffffff; --card-text-sub: #dcfce7; --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff; --card-accent: #16A34A; }
+        .theme-orphia { --card-bg: linear-gradient(135deg, #FF7F50 0%, #000000 50%, #FFFFFF 100%); --card-text-main: #ffffff; --card-text-sub: #ffedd5; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #000000; --card-accent: #FF7F50; }
+        .theme-varland { --card-bg: linear-gradient(135deg, #1E3A8A 0%, #14532D 100%); --card-text-main: #ffffff; --card-text-sub: #bfdbfe; --card-ribbon-bg: rgba(255, 255, 255, 0.1); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff; --card-accent: #10B981; }
+        .theme-instaland { --card-bg: linear-gradient(135deg, #9333EA 0%, #2563EB 33%, #FFFFFF 66%, #EAB308 100%); --card-text-main: #ffffff; --card-text-sub: #e0e7ff; --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.1); --card-code-text: #422006; --card-accent: #EAB308; }
+        .theme-adastra { --card-bg: linear-gradient(135deg, #1E3A8A 0%, #FFFFFF 50%, #DC2626 100%); --card-text-main: #ffffff; --card-text-sub: #d1d5db; --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.2); --card-code-text: #ffffff; --card-accent: #DC2626; }
+        .theme-aliens { --card-bg: linear-gradient(135deg, #38BDF8 0%, #22C55E 33%, #FFFFFF 66%, #DC2626 100%); --card-text-main: #ffffff; --card-text-sub: #e0f2fe; --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.25); --card-code-text: #ffffff; --card-accent: #DC2626; }
+        .theme-dl-blue { --card-bg: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); --card-text-main: #ffffff; --card-text-sub: #e0f2fe; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff; --card-accent: #38bdf8; }
+        .theme-dl-pink { --card-bg: linear-gradient(135deg, #be185d 0%, #f472b6 100%); --card-text-main: #ffffff; --card-text-sub: #fce7f3; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff; --card-accent: #f472b6; }
 
         .card-top { display: flex; padding: 22px; gap: 18px; align-items: flex-start; position: relative; }
         .card-chip { position: absolute; top: 22px; right: 22px; font-size: 1.6rem; color: var(--card-text-main); opacity: 0.25; }
@@ -281,6 +218,16 @@
         .doc-list li:last-child { border-bottom: none; }
 
         .hidden { display: none !important; }
+
+        /* Выбор языка UI */
+        #lang-selector-container {
+            position: absolute; top: 15px; right: 15px; z-index: 100;
+        }
+        #app-lang-select {
+            background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); 
+            border-radius: 8px; padding: 6px; outline: none; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+        }
+        #app-lang-select option { color: black; }
     </style>
 </head>
 <body>
@@ -291,53 +238,68 @@
         </div>
 
         <div id="auth-wrapper" class="screen">
+            <!-- ВЫБОР ЯЗЫКА -->
+            <div id="lang-selector-container">
+                <select id="app-lang-select" onchange="changeLang()">
+                    <option value="ru">Мимский (Мимиляндия)</option>
+                    <option value="per">Пернийский (Королевство Пернии)</option>
+                    <option value="ru">Эммарский (Эммария)</option>
+                    <option value="ru">Орфийский (Орфия)</option>
+                    <option value="es">Испанский</option>
+                    <option value="fr">Французский</option>
+                    <option value="it">Итальянский</option>
+                    <option value="ru">Инопланетянский (Инопланетянине)</option>
+                    <option value="ru">Варландский (Варландия)</option>
+                    <option value="ru">Олинский (Инсталяндия)</option>
+                </select>
+            </div>
+
             <div id="view-welcome" class="auth-container" style="justify-content: center;">
                 <div class="logo-box" style="margin-bottom: 40px; animation: none;"><h1>MDA</h1><h2>INT</h2></div>
-                <button class="btn btn-primary" onclick="showView('view-login')">Вход</button>
-                <button class="btn btn-secondary" onclick="showView('view-register')">Регистрация</button>
+                <button class="btn btn-primary" onclick="showView('view-login')" data-i18n="btn_login">Вход</button>
+                <button class="btn btn-secondary" onclick="showView('view-register')" data-i18n="btn_reg">Регистрация</button>
             </div>
 
             <div id="view-login" class="auth-container hidden" style="justify-content: center;">
-                <h2 class="auth-title">Вход</h2>
+                <h2 class="auth-title" data-i18n="title_login">Вход</h2>
                 <div class="form-group">
-                    <label>Логин</label>
-                    <input type="text" id="login-input" class="form-input" placeholder="Ваш логин">
+                    <label data-i18n="lbl_login">Логин</label>
+                    <input type="text" id="login-input" class="form-input" data-i18n="ph_login" placeholder="Ваш логин">
                 </div>
                 <div class="form-group">
-                    <label>Пароль</label>
-                    <!-- ИЗМЕНЕНИЕ: Вход по паролю -->
-                    <input type="password" id="login-password" class="form-input" placeholder="Ваш пароль">
+                    <label data-i18n="lbl_pass">Пароль</label>
+                    <input type="password" id="login-password" class="form-input" data-i18n="ph_pass" placeholder="Ваш пароль">
                 </div>
-                <button class="btn btn-primary" onclick="processLogin()">Войти</button>
-                <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
+                <button class="btn btn-primary" onclick="processLogin()" data-i18n="btn_enter">Войти</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')" data-i18n="btn_back">Назад</button>
             </div>
 
             <div id="view-register" class="auth-container hidden">
-                <h2 class="auth-title">Анкета гражданина</h2>
+                <h2 class="auth-title" data-i18n="title_reg">Анкета гражданина</h2>
                 
                 <div class="photo-upload-wrapper">
                     <div class="photo-upload-circle" id="photo-preview-circle" onclick="document.getElementById('reg-photo').click()">
                         <i class="fa-solid fa-camera"></i>
                         <img id="photo-preview-img" src="">
                     </div>
-                    <label style="color: #8ab4f8; font-size: 0.8rem; cursor:pointer;" onclick="document.getElementById('reg-photo').click()">Загрузить фото</label>
+                    <label style="color: #8ab4f8; font-size: 0.8rem; cursor:pointer;" onclick="document.getElementById('reg-photo').click()" data-i18n="lbl_photo">Загрузить фото</label>
                     <input type="file" id="reg-photo" accept="image/*" onchange="handlePhotoUpload(event)">
                 </div>
 
-                <div class="form-group"><label>Имя и Фамилия (Латиница)</label><input type="text" id="reg-name-lat" class="form-input" placeholder="Ivan Ivanov"></div>
-                <div class="form-group"><label>Имя и Фамилия (Кириллица)</label><input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов"></div>
-                <div class="form-group"><label>Дата рождения</label><input type="date" id="reg-dob" class="form-input"></div>
+                <div class="form-group"><label data-i18n="lbl_name_lat">Имя и Фамилия (Латиница)</label><input type="text" id="reg-name-lat" class="form-input" placeholder="Ivan Ivanov"></div>
+                <div class="form-group"><label data-i18n="lbl_name_cyr">Имя и Фамилия (Кириллица)</label><input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов"></div>
+                <div class="form-group"><label data-i18n="lbl_dob">Дата рождения</label><input type="date" id="reg-dob" class="form-input"></div>
                 <div class="form-group">
-                    <label>Пол</label>
+                    <label data-i18n="lbl_gender">Пол</label>
                     <select id="reg-gender" class="form-input">
-                        <option value="M">Мужской</option>
-                        <option value="F">Женский</option>
-                        <option value="O">Иной</option>
+                        <option value="M" data-i18n="opt_m">Мужской</option>
+                        <option value="F" data-i18n="opt_f">Женский</option>
+                        <option value="O" data-i18n="opt_o">Иной</option>
                     </select>
                 </div>
 
                 <div class="form-group" style="position: relative; z-index: 20;">
-                    <label>Гражданство (Страна рождения)</label>
+                    <label data-i18n="lbl_cit">Гражданство (Страна рождения)</label>
                     <div class="custom-select-wrapper" id="select-cit-wrapper">
                         <div class="custom-select" onclick="toggleDropdown('cit-options')">
                             <img id="cit-selected-img" src="mimiland.png">
@@ -348,7 +310,7 @@
                 </div>
 
                 <div class="form-group" style="position: relative; z-index: 10;">
-                    <label>Страна проживания</label>
+                    <label data-i18n="lbl_res">Страна проживания</label>
                     <div class="custom-select-wrapper" id="select-res-wrapper">
                         <div class="custom-select" onclick="toggleDropdown('res-options')">
                             <img id="res-selected-img" src="mimiland.png">
@@ -358,12 +320,11 @@
                     </div>
                 </div>
 
-                <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="Только латиница и цифры"></div>
-                <!-- ИЗМЕНЕНИЕ: Регистрация по паролю вместо кода -->
-                <div class="form-group"><label>Придумайте пароль</label><input type="password" id="reg-password" class="form-input" placeholder="Ваш пароль"></div>
+                <div class="form-group"><label data-i18n="lbl_login">Логин</label><input type="text" id="reg-login" class="form-input" data-i18n="ph_login_reg" placeholder="Только латиница и цифры"></div>
+                <div class="form-group"><label data-i18n="lbl_pass_reg">Придумайте пароль</label><input type="password" id="reg-password" class="form-input" data-i18n="ph_pass" placeholder="Ваш пароль"></div>
 
-                <button class="btn btn-primary" onclick="processRegistration()">Завершить регистрацию</button>
-                <button class="btn btn-secondary" onclick="showView('view-welcome')">Отмена</button>
+                <button class="btn btn-primary" onclick="processRegistration()" data-i18n="btn_finish_reg">Завершить регистрацию</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')" data-i18n="btn_cancel">Отмена</button>
             </div>
         </div>
 
@@ -374,9 +335,7 @@
 
             <div id="tab-haupt" class="tab-content active">
                 <div class="section-title">Мой Кошелёк</div>
-                <div class="documents-list-container" id="documents-list">
-                    <!-- Документы генерируются сюда -->
-                </div>
+                <div class="documents-list-container" id="documents-list"></div>
             </div>
 
             <div id="tab-pripl" class="tab-content">
@@ -403,6 +362,7 @@
             </div>
         </div>
 
+        <!-- Модальные окна -->
         <div id="modal-doc-menu" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Выберите документ</div>
@@ -420,7 +380,6 @@
         <div id="modal-verify-code" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Подтверждение личности</div>
-                <!-- ИЗМЕНЕНИЕ: Ввод пароля вместо кода для выдачи документов -->
                 <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Введите ваш пароль для подтверждения личности.</p>
                 <input type="password" id="verify-code-input" class="form-input" placeholder="Ваш пароль" style="margin-bottom: 15px;">
                 <button class="btn btn-primary" onclick="verifyAndProceed()">Подтвердить</button>
@@ -440,7 +399,7 @@
         <div id="modal-category" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Категория прав</div>
-                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Выберите разрешенную категорию транспортных средств.</p>
+                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Выберите разрешенную категорию.</p>
                 <select id="dl-category-select" class="form-input" style="margin-bottom: 15px;">
                     <option value="A">Категория A (Мотоциклы)</option>
                     <option value="B">Категория B (Легковые авто)</option>
@@ -456,8 +415,57 @@
     </div>
 
     <script>
-        // ИНТЕГРАЦИЯ БАЗЫ ДАННЫХ FIREBASE
-        // ВАЖНО: Замените эти значения на данные из вашего проекта Firebase (Раздел: Project Settings)
+        // --- СЛОВАРЬ ПЕРЕВОДОВ ---
+        const translations = {
+            'btn_login': { es: 'Entrar', fr: 'Connexion', it: 'Accedi', default: 'Вход' },
+            'btn_reg': { es: 'Registro', fr: 'Inscription', it: 'Registrati', default: 'Регистрация' },
+            'title_login': { es: 'Iniciar sesión', fr: 'S\'identifier', it: 'Accedi', default: 'Вход' },
+            'lbl_login': { es: 'Usuario', fr: 'Identifiant', it: 'Nome utente', default: 'Логин' },
+            'ph_login': { es: 'Su usuario', fr: 'Votre identifiant', it: 'Il tuo nome utente', default: 'Ваш логин' },
+            'lbl_pass': { es: 'Contraseña', fr: 'Mot de passe', it: 'Password', default: 'Пароль' },
+            'ph_pass': { es: 'Su contraseña', fr: 'Votre mot de passe', it: 'La tua password', default: 'Ваш пароль' },
+            'btn_enter': { es: 'Entrar', fr: 'Entrer', it: 'Accedi', default: 'Войти' },
+            'btn_back': { es: 'Atrás', fr: 'Retour', it: 'Indietro', default: 'Назад' },
+            'title_reg': { es: 'Cuestionario del ciudadano', fr: 'Questionnaire citoyen', it: 'Questionario del cittadino', default: 'Анкета гражданина' },
+            'lbl_photo': { es: 'Subir foto', fr: 'Télécharger une photo', it: 'Carica foto', default: 'Загрузить фото' },
+            'lbl_name_lat': { es: 'Nombre y Apellido (Latín)', fr: 'Nom et prénom (Latin)', it: 'Nome e Cognome (Latino)', default: 'Имя и Фамилия (Латиница)' },
+            'lbl_name_cyr': { es: 'Nombre y Apellido (Cirílico)', fr: 'Nom et prénom (Cyrillique)', it: 'Nome e Cognome (Cirillico)', default: 'Имя и Фамилия (Кириллица)' },
+            'lbl_dob': { es: 'Fecha de nacimiento', fr: 'Date de naissance', it: 'Data di nascita', default: 'Дата рождения' },
+            'lbl_gender': { es: 'Género', fr: 'Genre', it: 'Genere', default: 'Пол' },
+            'lbl_cit': { es: 'Ciudadanía (País)', fr: 'Citoyenneté (Pays)', it: 'Cittadinanza (Paese)', default: 'Гражданство (Страна рождения)' },
+            'lbl_res': { es: 'País de residencia', fr: 'Pays de résidence', it: 'Paese di residenza', default: 'Страна проживания' },
+            'ph_login_reg': { es: 'Solo letras y números', fr: 'Lettres et chiffres', it: 'Solo lettere e numeri', default: 'Только латиница и цифры' },
+            'lbl_pass_reg': { es: 'Crear contraseña', fr: 'Créer un mot de passe', it: 'Crea password', default: 'Придумайте пароль' },
+            'btn_finish_reg': { es: 'Completar registro', fr: 'Terminer l\'inscription', it: 'Completa registrazione', default: 'Завершить регистрацию' },
+            'btn_cancel': { es: 'Cancelar', fr: 'Annuler', it: 'Annulla', default: 'Отмена' },
+            'opt_m': { es: 'Masculino', fr: 'Masculin', it: 'Maschio', default: 'Мужской' },
+            'opt_f': { es: 'Femenino', fr: 'Féminin', it: 'Femmina', default: 'Женский' },
+            'opt_o': { es: 'Otro', fr: 'Autre', it: 'Altro', default: 'Иной' }
+        };
+
+        function changeLang() {
+            const lang = document.getElementById('app-lang-select').value;
+            const isPernian = (lang === 'per');
+            
+            // Пернийский язык - делаем все заглавными
+            document.getElementById('auth-wrapper').style.textTransform = isPernian ? 'uppercase' : 'none';
+
+            // Применяем переводы
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                let text = translations[key][lang] || translations[key]['default'];
+                
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = text;
+                } else if (el.tagName === 'OPTION') {
+                    el.innerText = text;
+                } else {
+                    el.innerText = text;
+                }
+            });
+        }
+
+        // FIREBASE КОНФИГ
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -472,25 +480,21 @@
         try {
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
-        } catch(e) {
-            console.log("ОШИБКА: Firebase не настроен. Данные будут сохраняться только локально.");
-        }
+        } catch(e) { console.log("Firebase отключен. Данные сохраняются локально."); }
 
-        // Функция сохранения (сначала пытается в Firebase, затем локально)
         async function saveUser(user) {
             if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-                try { await db.ref('users/' + user.login).set(user); } catch(e) { console.error("DB Error:", e); }
+                try { await db.ref('users/' + user.login).set(user); } catch(e) {}
             }
             localStorage.setItem('mda_' + user.login, JSON.stringify(user));
         }
 
-        // Функция загрузки (сначала пытается из Firebase, затем локально)
         async function loadUser(login) {
             if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
                 try {
                     const snapshot = await db.ref('users/' + login).once('value');
                     if (snapshot.exists()) return snapshot.val();
-                } catch(e) { console.error("DB Error:", e); }
+                } catch(e) {}
             }
             const stored = localStorage.getItem('mda_' + login);
             return stored ? JSON.parse(stored) : null;
@@ -516,6 +520,7 @@
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.remove('active');
                 document.getElementById('auth-wrapper').classList.add('active');
+                changeLang(); // Инициализация языка
             }, 1500);
         };
 
@@ -586,7 +591,7 @@
             const dob = document.getElementById('reg-dob').value;
             const gender = document.getElementById('reg-gender').value;
             const login = document.getElementById('reg-login').value.trim();
-            const password = document.getElementById('reg-password').value.trim(); // ИЗМЕНЕНИЕ
+            const password = document.getElementById('reg-password').value.trim();
             const citEl = document.getElementById('cit-selected-text');
             const resEl = document.getElementById('res-selected-text');
 
@@ -597,18 +602,15 @@
                 alert("Ошибка! Логин должен содержать только латинские буквы и цифры."); return;
             }
 
-            // Проверяем, свободен ли логин
             const existingUser = await loadUser(login);
-            if (existingUser) {
-                alert("Этот логин уже занят!"); return;
-            }
+            if (existingUser) { alert("Этот логин уже занят!"); return; }
 
             const X = citEl.dataset.code || '1';
             const RRR = citEl.dataset.abbr || 'MML';
             const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
 
             currentUser = {
-                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo, // Сохраняем придуманный пароль
+                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo,
                 cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RRR },
                 res: { name: resEl.innerText, flag: resEl.dataset.flag },
                 hasPassport: false,
@@ -617,7 +619,7 @@
 
             await saveUser(currentUser);
             alert("Регистрация успешна! Теперь вы можете войти, используя ваш пароль.");
-            showView('view-login'); // Отправляем на вход вместо показа сгенерированного кода
+            showView('view-login'); 
         }
 
         async function processLogin() {
@@ -629,8 +631,7 @@
             const userData = await loadUser(login);
             if (!userData) { alert("Пользователь не найден. Пройдите регистрацию."); return; }
             
-            // ИЗМЕНЕНИЕ: Сверка пароля вместо кода доступа
-            if (userData.password !== pass && userData.code !== pass) { // Оставил userData.code для совместимости со старыми профилями
+            if (userData.password !== pass && userData.code !== pass) { 
                 alert("Неверный логин или пароль!"); return; 
             }
             
@@ -684,8 +685,9 @@
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
                 let appliedTheme = doc.theme;
                 if (doc.type === 'passport') { appliedTheme = getCountryThemeClass(currentUser.cit.name); }
-
-                const encryptedId = btoa(doc.idNumber);
+                
+                // Создаем безопасный ID для canvas, убирая спецсимволы (напр. слэши Адастры)
+                const safeCanvasId = `qr-${doc.idNumber.replace(/[^a-zA-Z0-9]/g, '')}`;
 
                 html += `
                 <div class="card-wrapper" onclick="this.classList.toggle('flipped')">
@@ -708,8 +710,8 @@
                         </div>
                         <div class="card-back">
                             <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 15px; letter-spacing: 1px;">QR-КОД ДОКУМЕНТА</h3>
-                            <!-- ИЗМЕНЕНИЕ: Используем стабильный и безотказный API (qrserver.com) -->
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(encryptedId)}" style="width: 150px; height: 150px; border-radius:12px; background:#fff; padding:6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" alt="QR">
+                            <!-- Здесь будет отрисован локальный безотказный QR-код -->
+                            <canvas id="${safeCanvasId}" style="width: 150px; height: 150px; border-radius:12px; background:#fff; padding:6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);"></canvas>
                             <p style="color:var(--card-text-main); margin-top: 20px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
                         </div>
                     </div>
@@ -723,6 +725,23 @@
             </div>`;
 
             container.innerHTML = html;
+
+            // Запускаем отрисовку QR-кодов после добавления элементов в DOM
+            setTimeout(() => {
+                currentUser.documents.forEach(doc => {
+                    const canvasId = `qr-${doc.idNumber.replace(/[^a-zA-Z0-9]/g, '')}`;
+                    const canvasEl = document.getElementById(canvasId);
+                    if(canvasEl) {
+                        new QRious({
+                            element: canvasEl,
+                            value: btoa(doc.idNumber), // Кодируем в Base64 для сканера
+                            size: 300, // Генерируем в хорошем разрешении
+                            background: '#ffffff',
+                            foreground: '#000000'
+                        });
+                    }
+                });
+            }, 100);
         }
 
         function logout() {
@@ -796,18 +815,21 @@
                 dlId = `${category.substring(0,1)}${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}${randNum(7)}`;
             } else if (cit === 'Варландия') {
                 dlId = `${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}${randNum(5)}`;
-            } 
-            // ИЗМЕНЕНИЕ: Формат для Инсталяндии
-            else if (cit === 'Инсталяндия') {
+            } else if (cit === 'Инсталяндия') {
                 dlId = `IDL-${randNum(9)}`;
-            } 
-            // ИЗМЕНЕНИЕ: Формат для Инопланетян
-            else if (cit === 'Инопланетяне') {
+            } else if (cit === 'Инопланетяне') {
                 const transType = (category === 'A' || category === 'M') ? 'M' : 'A';
-                const orderNum = randNum(7); // XXXXXXX - Порядковый номер
-                const year = new Date().getFullYear().toString().slice(-2); // YY - Год выдачи
-                const region = randNum(2); // NN - Рандомный номер региона (если не выбирался)
+                const orderNum = randNum(7); 
+                const year = new Date().getFullYear().toString().slice(-2); 
+                const region = randNum(2); 
                 dlId = `${transType}${orderNum}${year}${region}ALI`;
+            } else if (cit === 'Адастра') {
+                // ИЗМЕНЕНИЕ: Формат для водительских прав Адастры
+                const adastraRegions = ['OC', 'LU', 'AR', 'TR', 'GE', 'LUX', 'LEX', 'AI'];
+                const randomReg = adastraRegions[Math.floor(Math.random() * adastraRegions.length)];
+                const safeName = String(currentUser.nameLat).replace(/\s/g, ''); // NameSurname слитно
+                const carNum = randNum(4); // ХХХХ
+                dlId = `ASTreg${randomReg}/DL/class${category}/${safeName}/${carNum}`;
             } else {
                 dlId = `${randLetters(2)}${randNum(8)}`; 
             }
@@ -844,4 +866,3 @@
     </script>
 </body>
 </html>
-
