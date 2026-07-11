@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Подключаем Firebase SDK (v8 compat для удобной работы в одном файле) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --bg-gradient-top: #153c8a;
@@ -73,8 +77,6 @@
         .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; text-align: center; transition: 0.2s; }
         .btn-primary { background: white; color: var(--bg-gradient-top); }
         .btn-secondary { background: transparent; color: white; border: 2px solid white; }
-        .btn-copy { background: transparent; color: #ffe6a0; border: 2px dashed #ffe6a0; font-size: 1rem; padding: 12px; margin-bottom: 20px; }
-        .btn-copy:active { background: rgba(255, 230, 160, 0.2); }
         .btn:active { transform: scale(0.98); }
 
         .custom-select-wrapper { position: relative; user-select: none; width: 100%; z-index: 10; }
@@ -131,10 +133,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
-        .card-front {
-            display: flex; flex-direction: column; position: relative; z-index: 2;
-        }
-
+        .card-front { display: flex; flex-direction: column; position: relative; z-index: 2; }
         .card-back {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             transform: rotateY(180deg);
@@ -142,7 +141,6 @@
             z-index: 1; padding: 20px; text-align: center;
         }
 
-        /* Системные переменные цветов для тем */
         .theme-system {
             --card-bg: linear-gradient(135deg, #101f42 0%, #070d1c 100%);
             --card-text-main: #ffffff; --card-text-sub: rgba(255, 255, 255, 0.7);
@@ -223,11 +221,7 @@
         }
 
         .card-top { display: flex; padding: 22px; gap: 18px; align-items: flex-start; position: relative; }
-        
-        .card-chip {
-            position: absolute; top: 22px; right: 22px; font-size: 1.6rem;
-            color: var(--card-text-main); opacity: 0.25;
-        }
+        .card-chip { position: absolute; top: 22px; right: 22px; font-size: 1.6rem; color: var(--card-text-main); opacity: 0.25; }
 
         .photo-container { 
             width: 95px; height: 125px; border-radius: 16px; overflow: hidden; 
@@ -307,11 +301,12 @@
                 <h2 class="auth-title">Вход</h2>
                 <div class="form-group">
                     <label>Логин</label>
-                    <input type="text" id="login-input" class="form-input" placeholder="Только a-z и 0-9">
+                    <input type="text" id="login-input" class="form-input" placeholder="Ваш логин">
                 </div>
                 <div class="form-group">
-                    <label>Код доступа</label>
-                    <input type="text" id="login-code" class="form-input" placeholder="Секретный код">
+                    <label>Пароль</label>
+                    <!-- ИЗМЕНЕНИЕ: Вход по паролю -->
+                    <input type="password" id="login-password" class="form-input" placeholder="Ваш пароль">
                 </div>
                 <button class="btn btn-primary" onclick="processLogin()">Войти</button>
                 <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
@@ -346,7 +341,6 @@
                     <div class="custom-select-wrapper" id="select-cit-wrapper">
                         <div class="custom-select" onclick="toggleDropdown('cit-options')">
                             <img id="cit-selected-img" src="mimiland.png">
-                            <!-- ОБНОВЛЕНО: Используем правильную аббревиатуру по умолчанию -->
                             <span id="cit-selected-text" data-code="1" data-abbr="MML" data-flag="mimiland.png">Мимиляндия</span>
                         </div>
                         <div class="custom-options" id="cit-options"></div>
@@ -364,23 +358,12 @@
                     </div>
                 </div>
 
-                <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="ivan123"></div>
+                <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="Только латиница и цифры"></div>
+                <!-- ИЗМЕНЕНИЕ: Регистрация по паролю вместо кода -->
+                <div class="form-group"><label>Придумайте пароль</label><input type="password" id="reg-password" class="form-input" placeholder="Ваш пароль"></div>
 
-                <button class="btn btn-primary" onclick="processRegistration()">Завершить</button>
+                <button class="btn btn-primary" onclick="processRegistration()">Завершить регистрацию</button>
                 <button class="btn btn-secondary" onclick="showView('view-welcome')">Отмена</button>
-            </div>
-
-            <div id="view-code" class="auth-container hidden" style="justify-content: center; text-align: center;">
-                <h2 class="auth-title">Ваш код доступа</h2>
-                <p style="color: #e0ecff; margin-bottom: 20px;">Обязательно сохраните код! Он потребуется для входа и получения документов.</p>
-                
-                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-size: 2rem; letter-spacing: 3px; font-weight: 800; color: #ffe6a0; margin-bottom: 20px;" id="generated-code-display"></div>
-                
-                <button class="btn btn-copy" onclick="copyGeneratedCode()">
-                    <i class="fa-regular fa-copy"></i> Скопировать код
-                </button>
-                
-                <button class="btn btn-primary" onclick="enterAppFromCode()">Войти в систему</button>
             </div>
         </div>
 
@@ -437,8 +420,9 @@
         <div id="modal-verify-code" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Подтверждение личности</div>
-                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Введите регистрационный код доступа.</p>
-                <input type="text" id="verify-code-input" class="form-input" placeholder="Код доступа" style="margin-bottom: 15px;">
+                <!-- ИЗМЕНЕНИЕ: Ввод пароля вместо кода для выдачи документов -->
+                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Введите ваш пароль для подтверждения личности.</p>
+                <input type="password" id="verify-code-input" class="form-input" placeholder="Ваш пароль" style="margin-bottom: 15px;">
                 <button class="btn btn-primary" onclick="verifyAndProceed()">Подтвердить</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-verify-code')">Отмена</button>
             </div>
@@ -472,7 +456,46 @@
     </div>
 
     <script>
-        // ОБНОВЛЕНО: Исправлен массив стран с правильными трехбуквенными аббревиатурами
+        // ИНТЕГРАЦИЯ БАЗЫ ДАННЫХ FIREBASE
+        // ВАЖНО: Замените эти значения на данные из вашего проекта Firebase (Раздел: Project Settings)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "SENDER_ID",
+            appId: "APP_ID"
+        };
+
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+        } catch(e) {
+            console.log("ОШИБКА: Firebase не настроен. Данные будут сохраняться только локально.");
+        }
+
+        // Функция сохранения (сначала пытается в Firebase, затем локально)
+        async function saveUser(user) {
+            if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                try { await db.ref('users/' + user.login).set(user); } catch(e) { console.error("DB Error:", e); }
+            }
+            localStorage.setItem('mda_' + user.login, JSON.stringify(user));
+        }
+
+        // Функция загрузки (сначала пытается из Firebase, затем локально)
+        async function loadUser(login) {
+            if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                try {
+                    const snapshot = await db.ref('users/' + login).once('value');
+                    if (snapshot.exists()) return snapshot.val();
+                } catch(e) { console.error("DB Error:", e); }
+            }
+            const stored = localStorage.getItem('mda_' + login);
+            return stored ? JSON.parse(stored) : null;
+        }
+
         const countries = [
             { name: 'Мимиляндия', flag: 'mimiland.png', code: '1', abbr: 'MML' },
             { name: 'Эммария', flag: 'emmaria.png', code: '2', abbr: 'EMM' },
@@ -557,108 +580,67 @@
             document.getElementById(id).classList.remove('hidden');
         }
 
-        function copyGeneratedCode() {
-            const codeText = document.getElementById('generated-code-display').innerText;
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(codeText).then(() => {
-                    alert("Код успешно скопирован!");
-                }).catch(() => {
-                    fallbackCopyTextToClipboard(codeText);
-                });
-            } else {
-                fallbackCopyTextToClipboard(codeText);
-            }
-        }
-
-        function fallbackCopyTextToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-999999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                alert("Код успешно скопирован!");
-            } catch (err) {
-                alert("Не удалось скопировать код автоматически.");
-            }
-            document.body.removeChild(textArea);
-        }
-
-        function processRegistration() {
+        async function processRegistration() {
             const nameLat = document.getElementById('reg-name-lat').value.trim();
             const nameCyr = document.getElementById('reg-name-cyr').value.trim();
             const dob = document.getElementById('reg-dob').value;
             const gender = document.getElementById('reg-gender').value;
             const login = document.getElementById('reg-login').value.trim();
+            const password = document.getElementById('reg-password').value.trim(); // ИЗМЕНЕНИЕ
             const citEl = document.getElementById('cit-selected-text');
             const resEl = document.getElementById('res-selected-text');
 
-            if (!nameLat || !nameCyr || !dob || !login || !base64Photo) {
+            if (!nameLat || !nameCyr || !dob || !login || !password || !base64Photo) {
                 alert("Пожалуйста, заполните все поля и загрузите фото!"); return;
             }
-            if (!/^[a-z0-9]+$/.test(login)) {
-                alert("Ошибка! Логин должен содержать только маленькие латинские буквы и цифры."); return;
+            if (!/^[a-zA-Z0-9]+$/.test(login)) {
+                alert("Ошибка! Логин должен содержать только латинские буквы и цифры."); return;
             }
 
-            const loginCode = randLetters(5) + randNum(5); 
-            
-            // ОБНОВЛЕНО: Формат системного ID: XNNNNNNNRRRNNNKK
+            // Проверяем, свободен ли логин
+            const existingUser = await loadUser(login);
+            if (existingUser) {
+                alert("Этот логин уже занят!"); return;
+            }
+
             const X = citEl.dataset.code || '1';
             const RRR = citEl.dataset.abbr || 'MML';
             const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
 
             currentUser = {
-                nameLat, nameCyr, dob, gender, login, code: loginCode, photo: base64Photo,
+                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo, // Сохраняем придуманный пароль
                 cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RRR },
                 res: { name: resEl.innerText, flag: resEl.dataset.flag },
                 hasPassport: false,
-                documents: [
-                    {
-                        type: 'system',
-                        title: 'SYSTEM ID - MDA',
-                        idNumber: sysId,
-                        theme: 'theme-system'
-                    }
-                ]
+                documents: [{ type: 'system', title: 'SYSTEM ID - MDA', idNumber: sysId, theme: 'theme-system' }]
             };
 
-            localStorage.setItem('mda_' + login, JSON.stringify(currentUser));
-            document.getElementById('generated-code-display').innerText = loginCode;
-            showView('view-code');
+            await saveUser(currentUser);
+            alert("Регистрация успешна! Теперь вы можете войти, используя ваш пароль.");
+            showView('view-login'); // Отправляем на вход вместо показа сгенерированного кода
         }
 
-        function enterAppFromCode() { startApp(); }
-
-        function processLogin() {
+        async function processLogin() {
             const login = document.getElementById('login-input').value.trim();
-            const code = document.getElementById('login-code').value.trim();
-            const stored = localStorage.getItem('mda_' + login);
-
-            if (!stored) { alert("Пользователь не найден. Пройдите регистрацию."); return; }
+            const pass = document.getElementById('login-password').value.trim();
             
-            const userData = JSON.parse(stored);
+            if(!login || !pass) { alert("Введите логин и пароль"); return; }
+
+            const userData = await loadUser(login);
+            if (!userData) { alert("Пользователь не найден. Пройдите регистрацию."); return; }
+            
+            // ИЗМЕНЕНИЕ: Сверка пароля вместо кода доступа
+            if (userData.password !== pass && userData.code !== pass) { // Оставил userData.code для совместимости со старыми профилями
+                alert("Неверный логин или пароль!"); return; 
+            }
+            
             currentUser = userData;
-
-            if (currentUser.code !== code) { alert("Неверный логин или код доступа!"); return; }
-            
             startApp();
         }
 
         function startApp() {
             document.getElementById('auth-wrapper').classList.remove('active');
             document.getElementById('main-app').classList.add('active');
-
-            if (!currentUser.documents || !Array.isArray(currentUser.documents) || currentUser.documents.length === 0) {
-                // ОБНОВЛЕНО: Поддержка нового формата при резервном создании
-                const X = currentUser.cit?.code || '1';
-                const RRR = currentUser.cit?.abbr || 'MML';
-                const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
-                currentUser.documents = [{ type: 'system', title: 'SYSTEM ID - MDA', idNumber: sysId, theme: 'theme-system' }];
-                localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
-            }
             
             document.getElementById('prof-photo').src = currentUser.photo;
             document.getElementById('prof-name-lat').innerText = String(currentUser.nameLat);
@@ -700,13 +682,9 @@
 
             currentUser.documents.forEach(doc => {
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
-                
                 let appliedTheme = doc.theme;
-                if (doc.type === 'passport') {
-                    appliedTheme = getCountryThemeClass(currentUser.cit.name);
-                }
+                if (doc.type === 'passport') { appliedTheme = getCountryThemeClass(currentUser.cit.name); }
 
-                // ОБНОВЛЕНО: Шифрование номера в Base64 для QR-кода
                 const encryptedId = btoa(doc.idNumber);
 
                 html += `
@@ -730,8 +708,8 @@
                         </div>
                         <div class="card-back">
                             <h3 style="color:var(--card-text-main); font-size: 0.9rem; margin-bottom: 15px; letter-spacing: 1px;">QR-КОД ДОКУМЕНТА</h3>
-                            <!-- ОБНОВЛЕНО: Используем QuickChart API (он стабильнее) и передаем зашифрованный ID -->
-                            <img src="https://quickchart.io/qr?text=${encodeURIComponent(encryptedId)}&size=150" style="width: 150px; height: 150px; border-radius:12px; background:#fff; padding:6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" alt="QR">
+                            <!-- ИЗМЕНЕНИЕ: Используем стабильный и безотказный API (qrserver.com) -->
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(encryptedId)}" style="width: 150px; height: 150px; border-radius:12px; background:#fff; padding:6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" alt="QR">
                             <p style="color:var(--card-text-main); margin-top: 20px; font-weight: 800; font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;">${doc.idNumber}</p>
                         </div>
                     </div>
@@ -749,8 +727,7 @@
 
         function logout() {
             currentUser = null;
-            document.getElementById('login-input').value = '';
-            document.getElementById('login-code').value = '';
+            document.getElementById('login-password').value = '';
             document.getElementById('main-app').classList.remove('active');
             document.getElementById('auth-wrapper').classList.add('active');
             showView('view-welcome');
@@ -771,14 +748,8 @@
             if (!currentUser) return;
             currentVerifyTarget = type;
             
-            if (type === 'passport' && currentUser.hasPassport) { 
-                alert("Паспорт гражданина уже получен!"); 
-                return; 
-            }
-            if (type === 'license' && currentUser.documents.some(d => d.type === 'driver_license')) { 
-                alert("Водительские права уже получены!"); 
-                return; 
-            }
+            if (type === 'passport' && currentUser.hasPassport) { alert("Паспорт гражданина уже получен!"); return; }
+            if (type === 'license' && currentUser.documents.some(d => d.type === 'driver_license')) { alert("Водительские права уже получены!"); return; }
             
             closeModal('modal-doc-menu');
             document.getElementById('verify-code-input').value = '';
@@ -786,8 +757,8 @@
         }
 
         function verifyAndProceed() {
-            const code = document.getElementById('verify-code-input').value.trim();
-            if (code !== currentUser.code) { alert("Неверный код доступа!"); return; }
+            const pass = document.getElementById('verify-code-input').value.trim();
+            if (pass !== currentUser.password && pass !== currentUser.code) { alert("Неверный пароль!"); return; }
             
             closeModal('modal-verify-code');
 
@@ -804,17 +775,14 @@
                 } else if (citName === 'Адастра') {
                     sel.innerHTML = `<option value="OC">Охема</option><option value="LU">Люпас</option><option value="AR">Ад Рота</option><option value="TR">Тричелли</option><option value="GE">Гебии</option><option value="LUX">Люкс</option><option value="LEX">Лекс</option><option value="AI">Остров Анкорис</option>`;
                     openModal('modal-region');
-                } else {
-                    generatePassport(); 
-                }
+                } else { generatePassport(); }
             } else if (currentVerifyTarget === 'license') {
                 openModal('modal-category');
             }
         }
 
-        function generateDriverLicense() {
+        async function generateDriverLicense() {
             if (!currentUser) return;
-
             const category = document.getElementById('dl-category-select').value;
             closeModal('modal-category');
 
@@ -823,88 +791,57 @@
             let dlId = '';
 
             if (cit === 'Мимиляндия') {
-                const catNum = Math.floor(Math.random() * 9) + 1;
-                const n6 = randNum(6); 
-                const k2 = randNum(2); 
-                const n1 = randNum(1); 
-                const l2 = randLetters(2);
-                dlId = `${catNum}${n6}${k2}${n1}${l2}`;
+                dlId = `${Math.floor(Math.random() * 9) + 1}${randNum(6)}${randNum(2)}${randNum(1)}${randLetters(2)}`;
+            } else if (['Эммария', 'Королевство Пернии', 'Орфия'].includes(cit)) {
+                dlId = `${category.substring(0,1)}${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}${randNum(7)}`;
+            } else if (cit === 'Варландия') {
+                dlId = `${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}${randNum(5)}`;
             } 
-            else if (['Эммария', 'Королевство Пернии', 'Орфия'].includes(cit)) {
-                const issuer = cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P'); 
-                dlId = `${category.substring(0,1)}${issuer}${randNum(7)}`;
-            }
-            else if (cit === 'Варландия') {
-                const d = dobParts[2];
-                const m = dobParts[1];
-                const y = dobParts[0].substring(2);
-                dlId = `${d}${m}${y}${randNum(5)}`;
-            }
-            else {
+            // ИЗМЕНЕНИЕ: Формат для Инсталяндии
+            else if (cit === 'Инсталяндия') {
+                dlId = `IDL-${randNum(9)}`;
+            } 
+            // ИЗМЕНЕНИЕ: Формат для Инопланетян
+            else if (cit === 'Инопланетяне') {
+                const transType = (category === 'A' || category === 'M') ? 'M' : 'A';
+                const orderNum = randNum(7); // XXXXXXX - Порядковый номер
+                const year = new Date().getFullYear().toString().slice(-2); // YY - Год выдачи
+                const region = randNum(2); // NN - Рандомный номер региона (если не выбирался)
+                dlId = `${transType}${orderNum}${year}${region}ALI`;
+            } else {
                 dlId = `${randLetters(2)}${randNum(8)}`; 
             }
 
             const randomThemeClass = Math.random() > 0.5 ? 'theme-dl-blue' : 'theme-dl-pink';
+            currentUser.documents.push({ type: 'driver_license', title: `ВОДИТЕЛЬСКИЕ ПРАВА (${category})`, idNumber: dlId, theme: randomThemeClass });
 
-            currentUser.documents.push({
-                type: 'driver_license',
-                title: `ВОДИТЕЛЬСКИЕ ПРАВА (${category})`,
-                idNumber: dlId,
-                theme: randomThemeClass 
-            });
-
-            localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
+            await saveUser(currentUser);
             renderDocumentsList();
-
-            setTimeout(() => {
-                const cont = document.getElementById('documents-list');
-                cont.scrollTop = cont.scrollHeight;
-            }, 100);
+            setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
 
-        function generatePassport() {
+        async function generatePassport() {
             const cit = currentUser.cit.name;
             const reg = document.getElementById('region-select').value;
             const dobParts = currentUser.dob.split('-'); 
             let passId = '';
 
-            if (cit === 'Мимиляндия') {
-                passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
-            } else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) {
-                const P = cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P');
-                passId = `${randNum(9)}U${P}01${randNum(1)}`;
-            } else if (cit === 'Варландия') {
-                passId = `${reg}${randNum(5)}${currentUser.gender}${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}VAR`;
-            } else if (cit === 'Инсталяндия') {
-                const num = randNum(9);
-                const letters = "TRWAGMYFPDXBNJZSQVHLCKE";
-                passId = `${num}${letters[parseInt(num) % 23]}`;
-            } else if (cit === 'Инопланетяне') {
-                passId = `${dobParts[0]}.${dobParts[1]}.${dobParts[2]}${currentUser.gender}ALIREGION${reg}.${randLetters(5)}`;
-            } else if (cit === 'Адастра') {
-                const sx = currentUser.gender === 'M' ? 'Male' : (currentUser.gender === 'F' ? 'Female' : 'Other');
-                const fullName = String(currentUser.nameLat).replace(/\s/g, '');
-                passId = `ASTreg${reg}/${fullName}/${dobParts[0]}/${sx}`;
-            }
+            if (cit === 'Мимиляндия') passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
+            else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) passId = `${randNum(9)}U${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}01${randNum(1)}`;
+            else if (cit === 'Варландия') passId = `${reg}${randNum(5)}${currentUser.gender}${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}VAR`;
+            else if (cit === 'Инсталяндия') passId = `${randNum(9)}${"TRWAGMYFPDXBNJZSQVHLCKE"[parseInt(randNum(9)) % 23]}`;
+            else if (cit === 'Инопланетяне') passId = `${dobParts[0]}.${dobParts[1]}.${dobParts[2]}${currentUser.gender}ALIREGION${reg}.${randLetters(5)}`;
+            else if (cit === 'Адастра') passId = `ASTreg${reg}/${String(currentUser.nameLat).replace(/\s/g, '')}/${dobParts[0]}/${currentUser.gender === 'M' ? 'Male' : (currentUser.gender === 'F' ? 'Female' : 'Other')}`;
 
             closeModal('modal-region');
-
-            currentUser.documents.push({
-                type: 'passport',
-                title: 'ПАСПОРТ ГРАЖДАНИНА',
-                idNumber: passId,
-                theme: '' 
-            });
+            currentUser.documents.push({ type: 'passport', title: 'ПАСПОРТ ГРАЖДАНИНА', idNumber: passId, theme: '' });
             currentUser.hasPassport = true;
-            localStorage.setItem('mda_' + currentUser.login, JSON.stringify(currentUser));
             
+            await saveUser(currentUser);
             renderDocumentsList();
-            
-            setTimeout(() => {
-                const cont = document.getElementById('documents-list');
-                cont.scrollTop = cont.scrollHeight;
-            }, 100);
+            setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
     </script>
 </body>
 </html>
+
