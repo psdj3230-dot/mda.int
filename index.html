@@ -242,6 +242,18 @@
             font-weight: 900; color: var(--card-text-main); opacity: 0.04; pointer-events: none;
         }
 
+        /* ДИНАМИЧЕСКАЯ ПОДПИСЬ НА ДОКУМЕНТЕ */
+        .card-signature-overlay {
+            position: absolute;
+            right: 15px;
+            bottom: 145px;
+            width: 75px;
+            height: 35px;
+            object-fit: contain;
+            pointer-events: none;
+            z-index: 10;
+        }
+
         .add-doc-card {
             width: 100%; height: 90px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.3);
             border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -333,6 +345,15 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label>Язык документов</label>
+                    <select id="reg-lang" class="form-input">
+                        <option value="RU">Русский</option>
+                        <option value="EN">English</option>
+                        <option value="LA">Латинский</option>
+                    </select>
+                </div>
+
                 <div class="form-group" style="position: relative; z-index: 20;">
                     <label>Гражданство (Страна рождения)</label>
                     <div class="custom-select-wrapper" id="select-cit-wrapper">
@@ -353,6 +374,13 @@
                         </div>
                         <div class="custom-options" id="res-options"></div>
                     </div>
+                </div>
+
+                <!-- ЭКРАН ДЛЯ РИСОВАНИЯ ПОДПИСИ -->
+                <div class="form-group">
+                    <label>Личная подпись (нарисуйте на экране)</label>
+                    <canvas id="signature-pad" width="360" height="120" style="border: 1px solid var(--input-border); background: rgba(255,255,255,0.05); border-radius: 12px; width: 100%; display: block; cursor: crosshair;"></canvas>
+                    <button type="button" class="btn btn-secondary" style="padding: 6px; font-size: 0.8rem; margin-top: 5px; border-radius: 8px;" onclick="clearSignature()">Очистить холст</button>
                 </div>
 
                 <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="Только латиница и цифры"></div>
@@ -385,6 +413,7 @@
                         <div class="profile-item"><span class="profile-label">Кириллица</span><span class="profile-value" id="prof-name-cyr"></span></div>
                         <div class="profile-item"><span class="profile-label">Дата рожд.</span><span class="profile-value" id="prof-dob"></span></div>
                         <div class="profile-item"><span class="profile-label">Пол</span><span class="profile-value" id="prof-gender"></span></div>
+                        <div class="profile-item"><span class="profile-label">Язык док.</span><span class="profile-value" id="prof-lang"></span></div>
                         <div class="profile-item"><span class="profile-label">Гражданство</span><div class="profile-value"><img id="prof-cit-img"><span id="prof-cit-text"></span></div></div>
                         <div class="profile-item"><span class="profile-label">Проживание</span><div class="profile-value"><img id="prof-res-img"><span id="prof-res-text"></span></div></div>
                         <div class="profile-item"><span class="profile-label">Логин</span><span class="profile-value" id="prof-login" style="color: #8ab4f8;"></span></div>
@@ -403,8 +432,10 @@
             <div class="modal-content">
                 <div class="modal-title">Выберите документ</div>
                 <ul class="doc-list">
-                    <li onclick="unavailableAlert()"><i class="fa-solid fa-passport"></i> Загранпаспорт</li>
+                    <li onclick="openVerifyModal('foreign_passport')"><i class="fa-solid fa-passport"></i> Загранпаспорт</li>
                     <li onclick="openVerifyModal('license')"><i class="fa-solid fa-car"></i> Водительские права</li>
+                    <li onclick="openVerifyModal('criminal_record')"><i class="fa-solid fa-file-shield"></i> Справка о несудимости</li>
+                    <li onclick="openVerifyModal('single_status')"><i class="fa-solid fa-heart-crack"></i> Справка о семейном положении</li>
                     <li onclick="unavailableAlert()"><i class="fa-solid fa-graduation-cap"></i> Диплом</li>
                     <li onclick="unavailableAlert()"><i class="fa-solid fa-house"></i> Недвижимость</li>
                     <li onclick="openVerifyModal('passport')"><i class="fa-solid fa-address-card"></i> Паспорт гражданина</li>
@@ -502,14 +533,49 @@
         let currentUser = null;
         let base64Photo = "";
         let currentVerifyTarget = ""; 
+        let sigCanvas, sigCtx, isDrawingSig = false;
 
         window.onload = function() {
             populateSelects();
+            initSignatureCanvas();
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.remove('active');
                 document.getElementById('auth-wrapper').classList.add('active');
             }, 1500);
         };
+
+        // ЛОГИКА СЕНСОРНОЙ/МЫШИНОЙ ПОДПИСИ
+        function initSignatureCanvas() {
+            sigCanvas = document.getElementById('signature-pad');
+            if (!sigCanvas) return;
+            sigCtx = sigCanvas.getContext('2d');
+            sigCtx.strokeStyle = '#ffffff';
+            sigCtx.lineWidth = 2.5;
+
+            function getPos(e) {
+                let rect = sigCanvas.getBoundingClientRect();
+                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+
+            function start(e) { isDrawingSig = true; sigCtx.beginPath(); let p = getPos(e); sigCtx.moveTo(p.x, p.y); }
+            function move(e) { if (!isDrawingSig) return; let p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); e.preventDefault(); }
+            function stop() { isDrawingSig = false; }
+
+            sigCanvas.addEventListener('mousedown', start);
+            sigCanvas.addEventListener('mousemove', move);
+            sigCanvas.addEventListener('mouseup', stop);
+            sigCanvas.addEventListener('mouseleave', stop);
+
+            sigCanvas.addEventListener('touchstart', start, {passive: false});
+            sigCanvas.addEventListener('touchmove', move, {passive: false});
+            sigCanvas.addEventListener('touchend', stop);
+        }
+
+        function clearSignature() {
+            if (sigCtx && sigCanvas) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+        }
 
         function populateSelects() {
             let html = '';
@@ -577,6 +643,7 @@
             const nameCyr = document.getElementById('reg-name-cyr').value.trim();
             const dob = document.getElementById('reg-dob').value;
             const gender = document.getElementById('reg-gender').value;
+            const lang = document.getElementById('reg-lang').value;
             const login = document.getElementById('reg-login').value.trim();
             const password = document.getElementById('reg-password').value.trim();
             const citEl = document.getElementById('cit-selected-text');
@@ -597,9 +664,10 @@
             const X = citEl.dataset.code || '1';
             const RRR = citEl.dataset.abbr || 'MML';
             const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
+            const signatureData = sigCanvas.toDataURL(); // Экспорт подписи в base64
 
             currentUser = {
-                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo,
+                nameLat, nameCyr, dob, gender, lang, login, password, photo: base64Photo, signature: signatureData,
                 cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RRR },
                 res: { name: resEl.innerText, flag: resEl.dataset.flag },
                 hasPassport: false,
@@ -640,6 +708,7 @@
             document.getElementById('prof-dob').innerText = dobFmt;
             
             document.getElementById('prof-gender').innerText = currentUser.gender === 'M' ? 'Мужской' : (currentUser.gender === 'F' ? 'Женский' : 'Иной');
+            document.getElementById('prof-lang').innerText = currentUser.lang || 'RU';
             document.getElementById('prof-cit-text').innerText = currentUser.cit.name;
             document.getElementById('prof-cit-img').src = currentUser.cit.flag || 'mimiland.png';
             document.getElementById('prof-res-text').innerText = currentUser.res.name;
@@ -673,7 +742,12 @@
             currentUser.documents.forEach(doc => {
                 const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
                 let appliedTheme = doc.theme;
-                if (doc.type === 'passport') { appliedTheme = getCountryThemeClass(currentUser.cit.name); }
+                if (['passport', 'foreign_passport', 'criminal_record', 'single_status'].includes(doc.type)) { 
+                    appliedTheme = getCountryThemeClass(currentUser.cit.name); 
+                }
+
+                // Рендерим подпись только там, где она не перекрывает текст (в свободной правой нижней зоне карточки)
+                const signatureImgHtml = currentUser.signature ? `<img src="${currentUser.signature}" class="card-signature-overlay">` : '';
 
                 html += `
                 <div class="card-wrapper">
@@ -694,6 +768,9 @@
                             <div class="card-ribbon">${doc.title}</div>
                             <div class="bottom-code">${bottomStr}</div>
                             
+                            <!-- Вывод подписи из холста -->
+                            ${signatureImgHtml}
+
                             <!-- ШТРИХ-КОД В САМОМ НИЗУ -->
                             <div class="front-barcode-wrapper">
                                 <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(doc.idNumber)}&scale=3&height=12&includetext=false" alt="Barcode">
@@ -736,7 +813,10 @@
             currentVerifyTarget = type;
             
             if (type === 'passport' && currentUser.hasPassport) { alert("Паспорт гражданина уже получен!"); return; }
+            if (type === 'foreign_passport' && currentUser.documents.some(d => d.type === 'foreign_passport')) { alert("Загранпаспорт уже получен!"); return; }
             if (type === 'license' && currentUser.documents.some(d => d.type === 'driver_license')) { alert("Водительские права уже получены!"); return; }
+            if (type === 'criminal_record' && currentUser.documents.some(d => d.type === 'criminal_record')) { alert("Справка о несудимости уже получена!"); return; }
+            if (type === 'single_status' && currentUser.documents.some(d => d.type === 'single_status')) { alert("Справка о семейном положении уже получена!"); return; }
             
             closeModal('modal-doc-menu');
             document.getElementById('verify-code-input').value = '';
@@ -765,6 +845,12 @@
                 } else { generatePassport(); }
             } else if (currentVerifyTarget === 'license') {
                 openModal('modal-category');
+            } else if (currentVerifyTarget === 'foreign_passport') {
+                generateForeignPassport();
+            } else if (currentVerifyTarget === 'criminal_record') {
+                generateCriminalRecord();
+            } else if (currentVerifyTarget === 'single_status') {
+                generateSingleStatus();
             }
         }
 
@@ -805,6 +891,38 @@
             setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
 
+        // ГЕНЕРАЦИЯ ЗАГРАНПАСПОРТОВ ПО МЕЖДУНАРОДНОМУ СТАНДАРТУ (2 БУКВЫ СТРАНЫ + 7 ЦИФР)
+        async function generateForeignPassport() {
+            if (!currentUser) return;
+            const countryAbbr = (currentUser.cit.abbr || 'XX').substring(0, 2).toUpperCase();
+            const fpId = `${countryAbbr}${randNum(7)}`;
+
+            currentUser.documents.push({ type: 'foreign_passport', title: 'ЗАГРАНИЧНЫЙ ПАСПОРТ', idNumber: fpId, theme: '' });
+            await saveUser(currentUser);
+            renderDocumentsList();
+            setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
+        }
+
+        // ГЕНЕРАЦИЯ СПРАВКИ О НЕСУДИМОСТИ
+        async function generateCriminalRecord() {
+            if (!currentUser) return;
+            const crId = `CR-${currentUser.cit.abbr}-${randNum(8)}`;
+            currentUser.documents.push({ type: 'criminal_record', title: 'СПРАВКА О НЕСУДИМОСТИ', idNumber: crId, theme: '' });
+            await saveUser(currentUser);
+            renderDocumentsList();
+            setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
+        }
+
+        // ГЕНЕРАЦИЯ СЕРТИФИКАТА НЕЖЕНАТОГО / НЕЗАМУЖНЕЙ
+        async function generateSingleStatus() {
+            if (!currentUser) return;
+            const ssId = `SS-${currentUser.cit.abbr}-${randNum(8)}`;
+            currentUser.documents.push({ type: 'single_status', title: 'СЕРТИФИКАТ СЕМЕЙНОГО ПОЛОЖЕНИЯ', idNumber: ssId, theme: '' });
+            await saveUser(currentUser);
+            renderDocumentsList();
+            setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
+        }
+
         async function generatePassport() {
             const cit = currentUser.cit.name;
             const reg = document.getElementById('region-select').value;
@@ -814,7 +932,19 @@
             if (cit === 'Мимиляндия') passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
             else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) passId = `${randNum(9)}U${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}01${randNum(1)}`;
             else if (cit === 'Варландия') passId = `${reg}${randNum(5)}${currentUser.gender}${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}VAR`;
-            else if (cit === 'Инсталяндия') passId = `${randNum(9)}${"TRWAGMYFPDXBNJZSQVHLCKE"[parseInt(randNum(9)) % 23]}`;
+            
+            // ИСПРАВЛЕННЫЙ АЛГОРИТМ ДЛЯ ИНСТАЛЯНДИИ
+            else if (cit === 'Инсталяндия') {
+                const baseNumStr = randNum(9);
+                const initialNum = parseInt(baseNumStr);
+                const divided = Math.floor(initialNum / 23);
+                const multiplied = divided * 23;
+                const resultIndex = Math.abs(multiplied - initialNum); // Чистая разница (0-22)
+                
+                const alphabet = "TRWAGMYFPDXBNJZSQVHLCKE";
+                const checkLetter = alphabet.charAt(resultIndex);
+                passId = `${baseNumStr}${checkLetter}`;
+            }
             else if (cit === 'Инопланетяне') passId = `${dobParts[0]}.${dobParts[1]}.${dobParts[2]}${currentUser.gender}ALIREGION${reg}.${randLetters(5)}`;
             else if (cit === 'Адастра') passId = `ASTreg${reg}/${String(currentUser.nameLat).replace(/\s/g, '')}/${dobParts[0]}/${currentUser.gender === 'M' ? 'Male' : (currentUser.gender === 'F' ? 'Female' : 'Other')}`;
 
