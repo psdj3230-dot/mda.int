@@ -108,14 +108,8 @@
         }
         .documents-list-container::-webkit-scrollbar { display: none; }
 
-        .card-wrapper {
-            margin-bottom: 32px;
-            width: 100%;
-        }
-        .document-card {
-            width: 100%; 
-            position: relative;
-        }
+        .card-wrapper { margin-bottom: 32px; width: 100%; }
+        .document-card { width: 100%; position: relative; }
 
         .card-front {
             width: 100%;
@@ -224,7 +218,6 @@
         .card-ribbon { background: var(--card-ribbon-bg); color: var(--card-ribbon-text); text-align: center; font-size: 0.75rem; font-weight: 700; padding: 9px 0; text-transform: uppercase; letter-spacing: 1.5px; }
         .bottom-code { background-color: var(--card-code-bg); color: var(--card-code-text); text-align: center; font-family: monospace; font-size: 0.85rem; font-weight: 700; padding: 12px 5px; word-break: break-all; letter-spacing: 2px; opacity: 0.9; }
 
-        /* СТИЛЬ ШТРИХ-КОДА НА ЛИЦЕВОЙ СТОРОНЕ */
         .front-barcode-wrapper {
             background-color: white;
             padding: 12px 10px;
@@ -245,16 +238,9 @@
             font-weight: 900; color: var(--card-text-main); opacity: 0.04; pointer-events: none;
         }
 
-        /* ДИНАМИЧЕСКАЯ ПОДПИСЬ НА ДОКУМЕНТЕ */
         .card-signature-overlay {
-            position: absolute;
-            right: 15px;
-            bottom: 145px;
-            width: 75px;
-            height: 35px;
-            object-fit: contain;
-            pointer-events: none;
-            z-index: 10;
+            position: absolute; right: 15px; bottom: 145px; width: 75px; height: 35px;
+            object-fit: contain; pointer-events: none; z-index: 10;
         }
 
         .add-doc-card {
@@ -306,11 +292,11 @@
     <!-- 1. БЛОКИРУЮЩИЙ ЭКРАН ВЫБОРА ЯЗЫКА -->
     <div id="language-screen">
         <h1 style="font-size: 3rem; margin-bottom: 5px; font-weight: 800; letter-spacing: 2px;">MDA-INT</h1>
-        <p style="margin-bottom: 30px; font-weight: 600;">Выберите язык / Select language</p>
+        <p style="margin-bottom: 30px; font-weight: 600;" data-i18n="lang_sel">Выберите язык / Select language</p>
         <div style="width: 90%; max-width: 400px; text-align: center;">
-            <h3 style="font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">Языки реального мира</h3>
+            <h3 style="font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;" data-i18n="lang_real">Языки реального мира</h3>
             <div id="real-langs" style="display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 25px;"></div>
-            <h3 style="font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">Пользовательские языки</h3>
+            <h3 style="font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;" data-i18n="lang_custom">Пользовательские языки</h3>
             <div id="custom-langs" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
         </div>
     </div>
@@ -323,50 +309,50 @@
         <div id="auth-wrapper" class="screen">
             <div id="view-welcome" class="auth-container" style="justify-content: center;">
                 <div class="logo-box" style="margin-bottom: 40px; animation: none;"><h1>MDA</h1><h2>INT</h2></div>
-                <button class="btn btn-primary" onclick="showView('view-login')">Вход</button>
-                <button class="btn btn-secondary" onclick="showView('view-register')">Регистрация</button>
+                <button class="btn btn-primary" onclick="showView('view-login')" data-i18n="login">Вход</button>
+                <button class="btn btn-secondary" onclick="showView('view-register')" data-i18n="reg">Регистрация</button>
             </div>
 
             <div id="view-login" class="auth-container hidden" style="justify-content: center;">
-                <h2 class="auth-title">Вход</h2>
+                <h2 class="auth-title" data-i18n="login">Вход</h2>
                 <div class="form-group">
-                    <label>Логин</label>
-                    <input type="text" id="login-input" class="form-input" placeholder="Ваш логин">
+                    <label data-i18n="lbl_login">Логин</label>
+                    <input type="text" id="login-input" class="form-input" data-i18n-ph="ph_log" placeholder="Ваш логин">
                 </div>
                 <div class="form-group">
-                    <label>Пароль</label>
-                    <input type="password" id="login-password" class="form-input" placeholder="Ваш пароль">
+                    <label data-i18n="lbl_pass">Пароль</label>
+                    <input type="password" id="login-password" class="form-input" data-i18n-ph="ph_pass" placeholder="Ваш пароль">
                 </div>
-                <button class="btn btn-primary" onclick="processLogin()">Войти</button>
-                <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
+                <button class="btn btn-primary" onclick="processLogin()" data-i18n="btn_enter">Войти</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')" data-i18n="btn_back">Назад</button>
             </div>
 
             <div id="view-register" class="auth-container hidden">
-                <h2 class="auth-title">Анкета гражданина</h2>
+                <h2 class="auth-title" data-i18n="reg_title">Анкета гражданина</h2>
                 
                 <div class="photo-upload-wrapper">
                     <div class="photo-upload-circle" id="photo-preview-circle" onclick="document.getElementById('reg-photo').click()">
                         <i class="fa-solid fa-camera"></i>
                         <img id="photo-preview-img" src="">
                     </div>
-                    <label style="color: #8ab4f8; font-size: 0.8rem; cursor:pointer;" onclick="document.getElementById('reg-photo').click()">Загрузить фото</label>
+                    <label style="color: #8ab4f8; font-size: 0.8rem; cursor:pointer;" onclick="document.getElementById('reg-photo').click()" data-i18n="up_photo">Загрузить фото</label>
                     <input type="file" id="reg-photo" accept="image/*" onchange="handlePhotoUpload(event)">
                 </div>
 
-                <div class="form-group"><label>Имя и Фамилия (Латиница)</label><input type="text" id="reg-name-lat" class="form-input" placeholder="Ivan Ivanov"></div>
-                <div class="form-group"><label>Имя и Фамилия (Кириллица)</label><input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов"></div>
-                <div class="form-group"><label>Дата рождения</label><input type="date" id="reg-dob" class="form-input"></div>
+                <div class="form-group"><label data-i18n="name_lat">Имя и Фамилия (Латиница)</label><input type="text" id="reg-name-lat" class="form-input" placeholder="Ivan Ivanov"></div>
+                <div class="form-group"><label data-i18n="name_cyr">Имя и Фамилия (Кириллица)</label><input type="text" id="reg-name-cyr" class="form-input" placeholder="Иван Иванов"></div>
+                <div class="form-group"><label data-i18n="dob">Дата рождения</label><input type="date" id="reg-dob" class="form-input"></div>
                 <div class="form-group">
-                    <label>Пол</label>
+                    <label data-i18n="gender">Пол</label>
                     <select id="reg-gender" class="form-input">
-                        <option value="M">Мужской</option>
-                        <option value="F">Женский</option>
-                        <option value="O">Иной</option>
+                        <option value="M" data-i18n="gen_m">Мужской</option>
+                        <option value="F" data-i18n="gen_f">Женский</option>
+                        <option value="O" data-i18n="gen_o">Иной</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Язык документов</label>
+                    <label data-i18n="doc_lang">Язык документов</label>
                     <select id="reg-lang" class="form-input">
                         <option value="RU">Русский</option>
                         <option value="EN">English</option>
@@ -375,7 +361,7 @@
                 </div>
 
                 <div class="form-group" style="position: relative; z-index: 20;">
-                    <label>Гражданство (Страна рождения)</label>
+                    <label data-i18n="cit">Гражданство (Страна рождения)</label>
                     <div class="custom-select-wrapper" id="select-cit-wrapper">
                         <div class="custom-select" onclick="toggleDropdown('cit-options')">
                             <img id="cit-selected-img" src="mimiland.png">
@@ -386,7 +372,7 @@
                 </div>
 
                 <div class="form-group" style="position: relative; z-index: 10;">
-                    <label>Страна проживания</label>
+                    <label data-i18n="res">Страна проживания</label>
                     <div class="custom-select-wrapper" id="select-res-wrapper">
                         <div class="custom-select" onclick="toggleDropdown('res-options')">
                             <img id="res-selected-img" src="mimiland.png">
@@ -398,26 +384,26 @@
 
                 <!-- ЭКРАН ДЛЯ РИСОВАНИЯ ПОДПИСИ -->
                 <div class="form-group">
-                    <label>Личная подпись (нарисуйте на экране)</label>
+                    <label data-i18n="sig">Личная подпись (нарисуйте на экране)</label>
                     <canvas id="signature-pad" width="360" height="120" style="border: 1px solid var(--input-border); background: rgba(255,255,255,0.05); border-radius: 12px; width: 100%; display: block; cursor: crosshair;"></canvas>
-                    <button type="button" class="btn btn-secondary" style="padding: 6px; font-size: 0.8rem; margin-top: 5px; border-radius: 8px;" onclick="clearSignature()">Очистить холст</button>
+                    <button type="button" class="btn btn-secondary" style="padding: 6px; font-size: 0.8rem; margin-top: 5px; border-radius: 8px;" onclick="clearSignature()" data-i18n="clear_sig">Очистить холст</button>
                 </div>
 
-                <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="Только латиница и цифры"></div>
-                <div class="form-group"><label>Придумайте пароль</label><input type="password" id="reg-password" class="form-input" placeholder="Ваш пароль"></div>
+                <div class="form-group"><label data-i18n="lbl_login">Логин</label><input type="text" id="reg-login" class="form-input" placeholder="..."></div>
+                <div class="form-group"><label data-i18n="lbl_create_pass">Придумайте пароль</label><input type="password" id="reg-password" class="form-input" data-i18n-ph="ph_pass" placeholder="Ваш пароль"></div>
 
-                <button class="btn btn-primary" onclick="processRegistration()">Завершить регистрацию</button>
-                <button class="btn btn-secondary" onclick="showView('view-welcome')">Отмена</button>
+                <button class="btn btn-primary" onclick="processRegistration()" data-i18n="fin_reg">Завершить регистрацию</button>
+                <button class="btn btn-secondary" onclick="showView('view-welcome')" data-i18n="cancel">Отмена</button>
             </div>
         </div>
 
         <div id="main-app" class="screen">
             <header>
-                <h1>MDA</h1><p>Цифровые документы</p>
+                <h1>MDA</h1><p data-i18n="app_title">Цифровые документы</p>
             </header>
 
             <div id="tab-haupt" class="tab-content active">
-                <div class="section-title">Мой Кошелёк</div>
+                <div class="section-title" data-i18n="wallet">Мой Кошелёк</div>
                 <div class="documents-list-container" id="documents-list">
                     <!-- Документы генерируются сюда -->
                 </div>
@@ -429,74 +415,74 @@
                         <img id="prof-photo" class="profile-photo-mini" src="">
                     </div>
                     <div class="profile-card">
-                        <div class="profile-item"><span class="profile-label">Латиница</span><span class="profile-value" id="prof-name-lat"></span></div>
-                        <div class="profile-item"><span class="profile-label">Кириллица</span><span class="profile-value" id="prof-name-cyr"></span></div>
-                        <div class="profile-item"><span class="profile-label">Дата рожд.</span><span class="profile-value" id="prof-dob"></span></div>
-                        <div class="profile-item"><span class="profile-label">Пол</span><span class="profile-value" id="prof-gender"></span></div>
-                        <div class="profile-item"><span class="profile-label">Язык док.</span><span class="profile-value" id="prof-lang"></span></div>
-                        <div class="profile-item"><span class="profile-label">Гражданство</span><div class="profile-value"><img id="prof-cit-img"><span id="prof-cit-text"></span></div></div>
-                        <div class="profile-item"><span class="profile-label">Проживание</span><div class="profile-value"><img id="prof-res-img"><span id="prof-res-text"></span></div></div>
-                        <div class="profile-item"><span class="profile-label">Логин</span><span class="profile-value" id="prof-login" style="color: #8ab4f8;"></span></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="prof_lat">Латиница</span><span class="profile-value" id="prof-name-lat"></span></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="prof_cyr">Кириллица</span><span class="profile-value" id="prof-name-cyr"></span></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="prof_dob">Дата рожд.</span><span class="profile-value" id="prof-dob"></span></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="prof_gender">Пол</span><span class="profile-value" id="prof-gender"></span></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="prof_lang">Язык док.</span><span class="profile-value" id="prof-lang"></span></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="prof_cit">Гражданство</span><div class="profile-value"><img id="prof-cit-img"><span id="prof-cit-text"></span></div></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="prof_res">Проживание</span><div class="profile-value"><img id="prof-res-img"><span id="prof-res-text"></span></div></div>
+                        <div class="profile-item"><span class="profile-label" data-i18n="lbl_login">Логин</span><span class="profile-value" id="prof-login" style="color: #8ab4f8;"></span></div>
                     </div>
-                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="logout()">Выйти</button>
+                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="logout()" data-i18n="logout">Выйти</button>
                 </div>
             </div>
 
             <div class="bottom-nav">
-                <a href="#" class="nav-item active" onclick="switchTab('haupt', this)"><i class="fa-solid fa-id-card"></i>ДОКУМЕНТЫ</a>
-                <a href="#" class="nav-item" onclick="switchTab('pripl', this)"><i class="fa-solid fa-user"></i>ПРОФИЛЬ</a>
+                <a href="#" class="nav-item active" onclick="switchTab('haupt', this)"><i class="fa-solid fa-id-card"></i><span data-i18n="nav_doc">ДОКУМЕНТЫ</span></a>
+                <a href="#" class="nav-item" onclick="switchTab('pripl', this)"><i class="fa-solid fa-user"></i><span data-i18n="nav_prof">ПРОФИЛЬ</span></a>
             </div>
         </div>
 
         <div id="modal-doc-menu" class="modal">
             <div class="modal-content">
-                <div class="modal-title">Выберите документ</div>
+                <div class="modal-title" data-i18n="mod_doc">Выберите документ</div>
                 <ul class="doc-list">
-                    <li onclick="openVerifyModal('foreign_passport')"><i class="fa-solid fa-passport"></i> Загранпаспорт</li>
-                    <li onclick="openVerifyModal('license')"><i class="fa-solid fa-car"></i> Водительские права</li>
-                    <li onclick="openVerifyModal('criminal_record')"><i class="fa-solid fa-file-shield"></i> Справка о несудимости</li>
-                    <li onclick="openVerifyModal('single_status')"><i class="fa-solid fa-heart-crack"></i> Справка о семейном положении</li>
-                    <li onclick="unavailableAlert()"><i class="fa-solid fa-graduation-cap"></i> Диплом</li>
-                    <li onclick="unavailableAlert()"><i class="fa-solid fa-house"></i> Недвижимость</li>
-                    <li onclick="openVerifyModal('passport')"><i class="fa-solid fa-address-card"></i> Паспорт гражданина</li>
+                    <li onclick="openVerifyModal('foreign_passport')"><i class="fa-solid fa-passport"></i> <span data-i18n="doc_fp">Загранпаспорт</span></li>
+                    <li onclick="openVerifyModal('license')"><i class="fa-solid fa-car"></i> <span data-i18n="doc_dl">Водительские права</span></li>
+                    <li onclick="openVerifyModal('criminal_record')"><i class="fa-solid fa-file-shield"></i> <span data-i18n="doc_cr">Справка о несудимости</span></li>
+                    <li onclick="openVerifyModal('single_status')"><i class="fa-solid fa-heart-crack"></i> <span data-i18n="doc_ss">Справка о семейном положении</span></li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="doc_dip">Диплом</span></li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-house"></i> <span data-i18n="doc_est">Недвижимость</span></li>
+                    <li onclick="openVerifyModal('passport')"><i class="fa-solid fa-address-card"></i> <span data-i18n="doc_pass">Паспорт гражданина</span></li>
                 </ul>
-                <button class="btn btn-secondary" onclick="closeModal('modal-doc-menu')">Отмена</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-doc-menu')" data-i18n="cancel">Отмена</button>
             </div>
         </div>
 
         <div id="modal-verify-code" class="modal">
             <div class="modal-content">
-                <div class="modal-title">Подтверждение личности</div>
-                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Введите ваш пароль для подтверждения личности.</p>
-                <input type="password" id="verify-code-input" class="form-input" placeholder="Ваш пароль" style="margin-bottom: 15px;">
-                <button class="btn btn-primary" onclick="verifyAndProceed()">Подтвердить</button>
-                <button class="btn btn-secondary" onclick="closeModal('modal-verify-code')">Отмена</button>
+                <div class="modal-title" data-i18n="mod_ver">Подтверждение личности</div>
+                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;" data-i18n="mod_ver_d">Введите ваш пароль для подтверждения личности.</p>
+                <input type="password" id="verify-code-input" class="form-input" data-i18n-ph="ph_pass" placeholder="Ваш пароль" style="margin-bottom: 15px;">
+                <button class="btn btn-primary" onclick="verifyAndProceed()" data-i18n="btn_conf">Подтвердить</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-verify-code')" data-i18n="cancel">Отмена</button>
             </div>
         </div>
 
         <div id="modal-region" class="modal">
             <div class="modal-content">
-                <div class="modal-title">Укажите регион/землю</div>
+                <div class="modal-title" data-i18n="mod_reg">Укажите регион/землю</div>
                 <select id="region-select" class="form-input" style="margin-bottom: 15px;"></select>
-                <button class="btn btn-primary" onclick="generatePassport()">Создать паспорт</button>
-                <button class="btn btn-secondary" onclick="closeModal('modal-region')">Отмена</button>
+                <button class="btn btn-primary" onclick="generatePassport()" data-i18n="btn_cr_pass">Создать паспорт</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-region')" data-i18n="cancel">Отмена</button>
             </div>
         </div>
 
         <div id="modal-category" class="modal">
             <div class="modal-content">
-                <div class="modal-title">Категория прав</div>
-                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Выберите разрешенную категорию транспортных средств.</p>
+                <div class="modal-title" data-i18n="mod_cat">Категория прав</div>
+                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;" data-i18n="mod_cat_d">Выберите разрешенную категорию транспортных средств.</p>
                 <select id="dl-category-select" class="form-input" style="margin-bottom: 15px;">
-                    <option value="A">Категория A (Мотоциклы)</option>
-                    <option value="B">Категория B (Легковые авто)</option>
-                    <option value="C">Категория C (Грузовики)</option>
-                    <option value="D">Категория D (Автобусы)</option>
-                    <option value="M">Категория M (Мопеды)</option>
-                    <option value="BE">Категория BE (Легковые с прицепом)</option>
+                    <option value="A">Категория A</option>
+                    <option value="B">Категория B</option>
+                    <option value="C">Категория C</option>
+                    <option value="D">Категория D</option>
+                    <option value="M">Категория M</option>
+                    <option value="BE">Категория BE</option>
                 </select>
-                <button class="btn btn-primary" onclick="generateDriverLicense()">Создать права</button>
-                <button class="btn btn-secondary" onclick="closeModal('modal-category')">Отмена</button>
+                <button class="btn btn-primary" onclick="generateDriverLicense()" data-i18n="btn_cr_dl">Создать права</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-category')" data-i18n="cancel">Отмена</button>
             </div>
         </div>
 
@@ -504,23 +490,83 @@
         <div id="cert-modal" class="modal">
             <div class="modal-content" style="background: white; color: black; padding: 30px; position: relative;">
                 <span onclick="closeModal('cert-modal')" style="position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: #666;">&times;</span>
-                <h2 style="font-size: 1.2rem; margin-bottom: 10px; text-align: center; font-weight: 800;">Экспорт документа</h2>
-                <p style="font-size: 0.8rem; color: #666; text-align: center; margin-bottom: 20px;">Предварительный просмотр перед сохранением в PDF:</p>
+                <h2 style="font-size: 1.2rem; margin-bottom: 10px; text-align: center; font-weight: 800;" data-i18n="exp_title">ЭКСПОРТ ДОКУМЕНТА / DOCUMENT EXPORT</h2>
+                <p style="font-size: 0.8rem; color: #666; text-align: center; margin-bottom: 20px;" data-i18n="exp_desc">Предварительный просмотр перед сохранением в PDF: / Preview before saving to PDF:</p>
                 
                 <div class="cert-preview" style="border: 1px solid #ccc; padding: 20px; text-align: center; margin-bottom: 20px; background: #fafafa; min-height: 200px; position: relative; overflow: hidden; border-radius: 8px;">
-                    <h3 style="font-size: 13px; margin-bottom: 10px; font-weight: 700;" id="cert-ministry">МІНІСТЕРСТВО</h3>
-                    <h4 style="margin: 20px 0; font-size: 18px; font-weight: 800;" id="cert-title-preview">ВИТЯГ<br><small style="font-size: 11px; font-weight: 600;">з інформаційно-аналітичної системи</small></h4>
-                    <p style="text-align: left; font-size: 13px; margin-bottom: 15px;" id="cert-body-preview">ВІДСУТНІ</p>
-                    <p style="text-align: left; font-size: 11px; color: #555;">ID документа: <span id="cert-id-preview" style="font-family: monospace;"></span></p>
-                    <div style="color: red; transform: rotate(-30deg); font-size: 30px; font-weight: 900; margin-top: 30px; opacity: 0.25; position: absolute; top: 30%; left: 10%; pointer-events: none;">ОБРАЗЕЦ</div>
+                    <h3 style="font-size: 13px; margin-bottom: 10px; font-weight: 700;" id="cert-ministry">МИНИСТЕРСТВО / MINISTRY</h3>
+                    <h4 style="margin: 20px 0; font-size: 18px; font-weight: 800;" id="cert-title-preview">ВЫПИСКА / EXTRACT<br><small style="font-size: 11px; font-weight: 600;" data-i18n="cert_ias">из информационно-аналитической системы / from the information-analytical system</small></h4>
+                    <p style="text-align: left; font-size: 13px; margin-bottom: 15px;" id="cert-body-preview">ОТСУТСТВУЮТ / ABSENT</p>
+                    <p style="text-align: left; font-size: 11px; color: #555;"><span data-i18n="cert_id">ID документа / Document ID:</span> <span id="cert-id-preview" style="font-family: monospace;"></span></p>
                 </div>
 
-                <button class="btn btn-primary" style="background: var(--nav-active); color: white; border-radius: 12px; font-size: 1rem;" onclick="exportToPDF()">Экспортировать в PDF</button>
+                <button class="btn btn-primary" style="background: var(--nav-active); color: white; border-radius: 12px; font-size: 1rem;" data-i18n="btn_exp" onclick="exportToPDF()">Экспортировать в PDF</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- 0. СЛОВАРЬ ПЕРЕВОДОВ И ЛОГИКА ---
+        let currentLang = 'Русский';
+        const translations = {
+            'Русский': {
+                lang_sel: 'Выберите язык / Select language', lang_real: 'Языки реального мира', lang_custom: 'Пользовательские языки',
+                app_title: 'Цифровые документы', login: 'Вход', reg: 'Регистрация', ph_log: 'Ваш логин', ph_pass: 'Ваш пароль', btn_enter: 'Войти', btn_back: 'Назад',
+                reg_title: 'Анкета гражданина', up_photo: 'Загрузить фото', name_lat: 'Имя и Фамилия (Латиница)', name_cyr: 'Имя и Фамилия (Кириллица)', dob: 'Дата рождения', gender: 'Пол', gen_m: 'Мужской', gen_f: 'Женский', gen_o: 'Иной', doc_lang: 'Язык документов', cit: 'Гражданство (Страна рождения)', res: 'Страна проживания', sig: 'Личная подпись', clear_sig: 'Очистить холст', fin_reg: 'Завершить регистрацию', cancel: 'Отмена', lbl_login: 'Логин', lbl_pass: 'Пароль', lbl_create_pass: 'Придумайте пароль',
+                wallet: 'Мой Кошелёк', nav_doc: 'ДОКУМЕНТЫ', nav_prof: 'ПРОФИЛЬ', prof_lat: 'Латиница', prof_cyr: 'Кириллица', prof_dob: 'Дата рожд.', prof_gender: 'Пол', prof_lang: 'Язык док.', prof_cit: 'Гражданство', prof_res: 'Проживание', logout: 'Выйти', add_doc: 'Добавить новый документ', mod_doc: 'Выберите документ', doc_fp: 'Загранпаспорт', doc_dl: 'Водительские права', doc_cr: 'Справка о несудимости', doc_ss: 'Справка о семейном положении', doc_dip: 'Диплом', doc_est: 'Недвижимость', doc_pass: 'Паспорт гражданина', mod_ver: 'Подтверждение личности', mod_ver_d: 'Введите ваш пароль для подтверждения личности.', btn_conf: 'Подтвердить', mod_reg: 'Укажите регион/землю', btn_cr_pass: 'Создать паспорт', mod_cat: 'Категория прав', mod_cat_d: 'Выберите разрешенную категорию транспортных средств.', btn_cr_dl: 'Создать права', exp_title: 'ЭКСПОРТ ДОКУМЕНТА / DOCUMENT EXPORT', exp_desc: 'Предварительный просмотр перед сохранением в PDF: / Preview before saving to PDF:', btn_exp: 'Экспортировать в PDF',
+                fp_type: 'Тип/Type:', fp_code: 'Код/Code:', fp_no: 'Номер/No:', fp_sur: 'Фамилия / Surname', fp_giv: 'Имя / Given Names', fp_nat: 'Гражданство / Nationality', fp_dob: 'Дата рождения / DOB', fp_sex: 'Пол / Sex', fp_rec: 'Запись № / Record No.',
+                cert_min_vd: 'МИНИСТЕРСТВО ВНУТРЕННИХ ДЕЛ / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'МИНИСТЕРСТВО ЮСТИЦИИ / MINISTRY OF JUSTICE', cert_ext: 'ВЫПИСКА / EXTRACT', cert_cert: 'СЕРТИФИКАТ / CERTIFICATE', cert_ias: 'из информационно-аналитической системы / from the information-analytical system', cert_b_cr: 'Сведения о наличии неснятой или непогашенной судимости: <strong>ОТСУТСТВУЮТ / ABSENT</strong>', cert_b_ss: 'Записи о браке: <strong>ОТСУТСТВУЮТ / ABSENT</strong> (Лицо не состоит в браке / Not married)', cert_id: 'ID документа / Document ID:'
+            },
+            'Английский': {
+                lang_sel: 'Select language', lang_real: 'Real World Languages', lang_custom: 'Custom Languages',
+                app_title: 'Digital Documents', login: 'Login', reg: 'Register', ph_log: 'Your username', ph_pass: 'Your password', btn_enter: 'Enter', btn_back: 'Back',
+                reg_title: 'Citizen Form', up_photo: 'Upload Photo', name_lat: 'Full Name (Latin)', name_cyr: 'Full Name (Cyrillic)', dob: 'Date of Birth', gender: 'Gender', gen_m: 'Male', gen_f: 'Female', gen_o: 'Other', doc_lang: 'Document Language', cit: 'Citizenship', res: 'Residence', sig: 'Personal Signature', clear_sig: 'Clear Canvas', fin_reg: 'Complete Registration', cancel: 'Cancel', lbl_login: 'Username', lbl_pass: 'Password', lbl_create_pass: 'Create Password',
+                wallet: 'My Wallet', nav_doc: 'DOCUMENTS', nav_prof: 'PROFILE', prof_lat: 'Latin', prof_cyr: 'Cyrillic', prof_dob: 'DOB', prof_gender: 'Gender', prof_lang: 'Doc Lang', prof_cit: 'Citizenship', prof_res: 'Residence', logout: 'Logout', add_doc: 'Add New Document', mod_doc: 'Select Document', doc_fp: 'Foreign Passport', doc_dl: 'Driver License', doc_cr: 'Criminal Record', doc_ss: 'Single Status', doc_dip: 'Diploma', doc_est: 'Real Estate', doc_pass: 'Citizen Passport', mod_ver: 'Identity Verification', mod_ver_d: 'Enter your password.', btn_conf: 'Confirm', mod_reg: 'Select Region', btn_cr_pass: 'Create Passport', mod_cat: 'License Category', mod_cat_d: 'Select vehicle category.', btn_cr_dl: 'Create License', exp_title: 'DOCUMENT EXPORT / ЭКСПОРТ ДОКУМЕНТА', exp_desc: 'Preview before saving to PDF: / Предварительный просмотр:', btn_exp: 'Export to PDF',
+                fp_type: 'Type:', fp_code: 'Code:', fp_no: 'No:', fp_sur: 'Surname / Фамилия', fp_giv: 'Given Names / Имя', fp_nat: 'Nationality / Гражданство', fp_dob: 'DOB / Дата рожд.', fp_sex: 'Sex / Пол', fp_rec: 'Record No.',
+                cert_min_vd: 'MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTRY OF JUSTICE', cert_ext: 'EXTRACT', cert_cert: 'CERTIFICATE', cert_ias: 'from the information and analytical system', cert_b_cr: 'Criminal records: <strong>ABSENT</strong>', cert_b_ss: 'Marriage records: <strong>ABSENT</strong>', cert_id: 'Document ID:'
+            },
+            'Испанский': {
+                lang_sel: 'Seleccione el idioma', lang_real: 'Idiomas Reales', lang_custom: 'Idiomas Personalizados',
+                app_title: 'Documentos Digitales', login: 'Acceso', reg: 'Registro', ph_log: 'Su usuario', ph_pass: 'Su contraseña', btn_enter: 'Entrar', btn_back: 'Atrás',
+                reg_title: 'Formulario de Ciudadano', up_photo: 'Subir Foto', name_lat: 'Nombre (Latín)', name_cyr: 'Nombre (Cirílico)', dob: 'Fecha de nacimiento', gender: 'Género', gen_m: 'Masculino', gen_f: 'Femenino', gen_o: 'Otro', doc_lang: 'Idioma', cit: 'Nacionalidad', res: 'Residencia', sig: 'Firma personal', clear_sig: 'Limpiar', fin_reg: 'Completar registro', cancel: 'Cancelar', lbl_login: 'Usuario', lbl_pass: 'Contraseña', lbl_create_pass: 'Crear contraseña',
+                wallet: 'Mi Billetera', nav_doc: 'DOCUMENTOS', nav_prof: 'PERFIL', prof_lat: 'Latín', prof_cyr: 'Cirílico', prof_dob: 'Nacimiento', prof_gender: 'Género', prof_lang: 'Idioma', prof_cit: 'Nacionalidad', prof_res: 'Residencia', logout: 'Cerrar sesión', add_doc: 'Añadir Documento', mod_doc: 'Seleccionar Documento', doc_fp: 'Pasaporte Extranjero', doc_dl: 'Licencia de Conducir', doc_cr: 'Antecedentes Penales', doc_ss: 'Estado Civil', doc_dip: 'Diploma', doc_est: 'Bienes Raíces', doc_pass: 'Pasaporte', mod_ver: 'Verificación', mod_ver_d: 'Ingrese su contraseña.', btn_conf: 'Confirmar', mod_reg: 'Seleccionar Región', btn_cr_pass: 'Crear Pasaporte', mod_cat: 'Categoría', mod_cat_d: 'Seleccione categoría.', btn_cr_dl: 'Crear Licencia', exp_title: 'EXPORTACIÓN DE DOCUMENTO / EXPORT', exp_desc: 'Vista previa antes de PDF: / Preview before PDF:', btn_exp: 'Exportar a PDF',
+                fp_type: 'Tipo/Type:', fp_code: 'Código/Code:', fp_no: 'Número/No:', fp_sur: 'Apellidos / Surname', fp_giv: 'Nombres / Given Names', fp_nat: 'Nacionalidad / Nationality', fp_dob: 'Fecha de nacimiento / DOB', fp_sex: 'Sexo / Sex', fp_rec: 'Registro No. / Record No.',
+                cert_min_vd: 'MINISTERIO DEL INTERIOR / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERIO DE JUSTICIA / MINISTRY OF JUSTICE', cert_ext: 'EXTRACTO / EXTRACT', cert_cert: 'CERTIFICADO / CERTIFICATE', cert_ias: 'del sistema de información / from info system', cert_b_cr: 'Antecedentes penales: <strong>AUSENTES / ABSENT</strong>', cert_b_ss: 'Registros de matrimonio: <strong>AUSENTES / ABSENT</strong>', cert_id: 'ID del Documento / Document ID:'
+            },
+            'Французский': {
+                lang_sel: 'Sélectionnez la langue', lang_real: 'Langues Réelles', lang_custom: 'Langues Personnalisées',
+                app_title: 'Documents Numériques', login: 'Connexion', reg: 'Inscription', ph_log: 'Identifiant', ph_pass: 'Mot de passe', btn_enter: 'Entrer', btn_back: 'Retour',
+                reg_title: 'Formulaire Citoyen', up_photo: 'Télécharger la photo', name_lat: 'Nom (Latin)', name_cyr: 'Nom (Cyrillique)', dob: 'Date de naissance', gender: 'Genre', gen_m: 'Homme', gen_f: 'Femme', gen_o: 'Autre', doc_lang: 'Langue', cit: 'Nationalité', res: 'Résidence', sig: 'Signature', clear_sig: 'Effacer', fin_reg: 'Terminer', cancel: 'Annuler', lbl_login: 'Identifiant', lbl_pass: 'Mot de passe', lbl_create_pass: 'Créer mot de passe',
+                wallet: 'Mon Portefeuille', nav_doc: 'DOCUMENTS', nav_prof: 'PROFIL', prof_lat: 'Latin', prof_cyr: 'Cyrillique', prof_dob: 'Naissance', prof_gender: 'Genre', prof_lang: 'Langue', prof_cit: 'Nationalité', prof_res: 'Résidence', logout: 'Déconnexion', add_doc: 'Ajouter document', mod_doc: 'Sélectionner document', doc_fp: 'Passeport Étranger', doc_dl: 'Permis de conduire', doc_cr: 'Casier judiciaire', doc_ss: 'État civil', doc_dip: 'Diplôme', doc_est: 'Immobilier', doc_pass: 'Passeport', mod_ver: 'Vérification', mod_ver_d: 'Entrez mot de passe.', btn_conf: 'Confirmer', mod_reg: 'Sélectionner Région', btn_cr_pass: 'Créer Passeport', mod_cat: 'Catégorie', mod_cat_d: 'Sélectionner catégorie.', btn_cr_dl: 'Créer Permis', exp_title: 'EXPORTATION DE DOCUMENTS / EXPORT', exp_desc: 'Aperçu avant PDF: / Preview before PDF:', btn_exp: 'Exporter en PDF',
+                fp_type: 'Type/Type:', fp_code: 'Code/Code:', fp_no: 'Numéro/No:', fp_sur: 'Nom / Surname', fp_giv: 'Prénoms / Given Names', fp_nat: 'Nationalité / Nationality', fp_dob: 'Date de naissance / DOB', fp_sex: 'Sexe / Sex', fp_rec: 'Enregistrement / Record No.',
+                cert_min_vd: 'MINISTÈRE DE L\'INTÉRIEUR / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTÈRE DE LA JUSTICE / MINISTRY OF JUSTICE', cert_ext: 'EXTRAIT / EXTRACT', cert_cert: 'CERTIFICAT / CERTIFICATE', cert_ias: 'du système d\'information / from info system', cert_b_cr: 'Casier judiciaire: <strong>ABSENT / ABSENT</strong>', cert_b_ss: 'Actes de mariage: <strong>ABSENTS / ABSENT</strong>', cert_id: 'ID du document / Document ID:'
+            },
+            'Итальянский': {
+                lang_sel: 'Seleziona la lingua', lang_real: 'Lingue Reali', lang_custom: 'Lingue Personalizzate',
+                app_title: 'Documenti Digitali', login: 'Accesso', reg: 'Registrazione', btn_enter: 'Entra', btn_back: 'Indietro', cancel: 'Annulla', add_doc: 'Aggiungi Documento', nav_doc: 'DOCUMENTI', nav_prof: 'PROFILO',
+                fp_type: 'Tipo/Type:', fp_code: 'Codice/Code:', fp_no: 'Numero/No:', fp_sur: 'Cognome / Surname', fp_giv: 'Nome / Given Names', fp_nat: 'Cittadinanza / Nationality', fp_dob: 'Data di nascita / DOB', fp_sex: 'Sesso / Sex', fp_rec: 'Registro / Record No.',
+                cert_min_vd: 'MINISTERO DELL\'INTERNO / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERO DELLA GIUSTIZIA / MINISTRY OF JUSTICE', cert_ext: 'ESTRATTO / EXTRACT', cert_cert: 'CERTIFICATO / CERTIFICATE', cert_ias: 'dal sistema / from info system', cert_b_cr: 'Precedenti penali: <strong>ASSENTI / ABSENT</strong>', cert_b_ss: 'Atti di matrimonio: <strong>ASSENTI / ABSENT</strong>', cert_id: 'ID Documento / Document ID:'
+            },
+            'Латынь': {
+                lang_sel: 'Linguam eligere', lang_real: 'Linguae Mundi', lang_custom: 'Linguae Consuetudines',
+                app_title: 'Documenta Digitalia', login: 'Aditus', reg: 'Registratio', btn_enter: 'Intrare', btn_back: 'Retro', cancel: 'Abolere', add_doc: 'Adde Documentum', nav_doc: 'DOCUMENTA', nav_prof: 'PROFILUM',
+                fp_type: 'Typus/Type:', fp_code: 'Codex/Code:', fp_no: 'Numerus/No:', fp_sur: 'Nomen / Surname', fp_giv: 'Praenomen / Given Names', fp_nat: 'Civitas / Nationality', fp_dob: 'Dies natalis / DOB', fp_sex: 'Sexus / Sex', fp_rec: 'Numerus / Record No.',
+                cert_min_vd: 'MINISTERIUM RERUM INTERNARUM / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERIUM IUSTITIAE / MINISTRY OF JUSTICE', cert_ext: 'EXTRACTUM / EXTRACT', cert_cert: 'CERTIFICATUM / CERTIFICATE', cert_ias: 'ex systema / from info system', cert_b_cr: 'Scelus recordationes: <strong>ABSENS / ABSENT</strong>', cert_b_ss: 'Matrimonium recordationes: <strong>ABSENS / ABSENT</strong>', cert_id: 'ID Documenti / Document ID:'
+            }
+        };
+
+        function t(key) {
+            if (translations[currentLang] && translations[currentLang][key]) return translations[currentLang][key];
+            if (translations['Английский'] && translations['Английский'][key]) return translations['Английский'][key];
+            return translations['Русский'][key] || key;
+        }
+
+        function updateUI() {
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+        }
+
+
         // --- 1. ЛОГИКА ВЫБОРА ЯЗЫКОВ ---
         const realLanguages = ['Русский', 'Английский', 'Испанский', 'Французский', 'Итальянский', 'Латынь'];
         const customLanguages = [
@@ -564,6 +610,12 @@
             } else {
                 document.body.classList.remove('pernian-lang');
             }
+            
+            // Применяем переводы при смене языка
+            currentLang = langName;
+            updateUI();
+            if (currentUser) renderDocumentsList();
+
             document.getElementById('language-screen').style.display = 'none';
         }
 
@@ -622,12 +674,13 @@
         let sigCanvas, sigCtx, isDrawingSig = false;
 
         window.onload = function() {
-            initLanguages(); // Инициализация экрана языков
+            initLanguages(); 
             populateSelects();
             initSignatureCanvas();
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.remove('active');
                 document.getElementById('auth-wrapper').classList.add('active');
+                updateUI(); // Инициализация переводов
             }, 1500);
         };
 
@@ -751,7 +804,7 @@
             const X = citEl.dataset.code || '1';
             const RRR = citEl.dataset.abbr || 'MML';
             const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
-            const signatureData = sigCanvas.toDataURL(); // Экспорт подписи в base64
+            const signatureData = sigCanvas.toDataURL(); 
 
             currentUser = {
                 nameLat, nameCyr, dob, gender, lang, login, password, photo: base64Photo, signature: signatureData,
@@ -794,7 +847,7 @@
             const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
             document.getElementById('prof-dob').innerText = dobFmt;
             
-            document.getElementById('prof-gender').innerText = currentUser.gender === 'M' ? 'Мужской' : (currentUser.gender === 'F' ? 'Женский' : 'Иной');
+            document.getElementById('prof-gender').innerText = currentUser.gender === 'M' ? t('gen_m') : (currentUser.gender === 'F' ? t('gen_f') : t('gen_o'));
             document.getElementById('prof-lang').innerText = currentUser.lang || 'RU';
             document.getElementById('prof-cit-text').innerText = currentUser.cit.name;
             document.getElementById('prof-cit-img').src = currentUser.cit.flag || 'mimiland.png';
@@ -821,7 +874,7 @@
 
         // --- ЛОГИКА ЭКСПОРТА ДОКУМЕНТОВ ---
         function openDocumentModal(title, ministry, bodyText, id) {
-            document.getElementById('cert-title-preview').innerHTML = `${title}<br><small style="font-size: 11px; font-weight: 600;">з інформаційно-аналітичної системи</small>`;
+            document.getElementById('cert-title-preview').innerHTML = `${title}<br><small style="font-size: 11px; font-weight: 600;" data-i18n="cert_ias">${t('cert_ias')}</small>`;
             document.getElementById('cert-ministry').innerText = ministry;
             document.getElementById('cert-body-preview').innerHTML = bodyText;
             document.getElementById('cert-id-preview').innerText = id;
@@ -843,7 +896,7 @@
 
             currentUser.documents.forEach(doc => {
                 
-                // 2. ОТРИСОВКА ЗАГРАНПАСПОРТА (МЕЖДУНАРОДНЫЙ ФОРМАТ)
+                // 2. ОТРИСОВКА ЗАГРАНПАСПОРТА (МЕЖДУНАРОДНЫЙ ФОРМАТ - РУССКИЙ И АНГЛИЙСКИЙ)
                 if (doc.type === 'foreign_passport') {
                     const countryAbbr3 = (currentUser.cit.abbr || 'UKR').substring(0, 3).toUpperCase();
                     const sexChar = currentUser.gender === 'M' ? 'M' : (currentUser.gender === 'F' ? 'F' : 'X');
@@ -866,9 +919,9 @@
                                     <h2 style="margin: 0; font-size: 15px; font-weight: 900; line-height: 1;">ПАСПОРТ<br>PASSPORT</h2>
                                 </div>
                                 <div style="text-align: right; font-size: 10px; line-height: 1.3;">
-                                    Тип/Type: <strong>P</strong><br>
-                                    Код/Code: <strong>${countryAbbr3}</strong><br>
-                                    Номер/No: <strong>${doc.idNumber}</strong>
+                                    ${t('fp_type')} <strong>P</strong><br>
+                                    ${t('fp_code')} <strong>${countryAbbr3}</strong><br>
+                                    ${t('fp_no')} <strong>${doc.idNumber}</strong>
                                 </div>
                             </div>
                             
@@ -877,12 +930,12 @@
                                     <img src="${currentUser.photo}" style="width:100%; height:100%; object-fit:cover;">
                                 </div>
                                 <div style="flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 9px;">
-                                    <div style="grid-column: span 2;"><span style="color:#666;">Прізвище/Surname</span><br><strong style="font-size:12px;">${surnameCyr.toUpperCase()} / ${surnameLat.toUpperCase()}</strong></div>
-                                    <div style="grid-column: span 2;"><span style="color:#666;">Ім'я/Given Names</span><br><strong style="font-size:12px;">${givenCyr.toUpperCase()} / ${givenLat.toUpperCase()}</strong></div>
-                                    <div style="grid-column: span 2;"><span style="color:#666;">Громадянство/Nationality</span><br><strong style="font-size:11px;">${currentUser.cit.name.toUpperCase()}</strong></div>
-                                    <div><span style="color:#666;">Дата народження/DOB</span><br><strong style="font-size:10px;">${dobFmt}</strong></div>
-                                    <div><span style="color:#666;">Стать/Sex</span><br><strong style="font-size:10px;">${sexChar}</strong></div>
-                                    <div style="grid-column: span 2;"><span style="color:#666;">Запис №/Record No.</span><br><strong style="font-size:10px;">${doc.idNumber}</strong></div>
+                                    <div style="grid-column: span 2;"><span style="color:#666;">${t('fp_sur')}</span><br><strong style="font-size:12px;">${surnameCyr.toUpperCase()} / ${surnameLat.toUpperCase()}</strong></div>
+                                    <div style="grid-column: span 2;"><span style="color:#666;">${t('fp_giv')}</span><br><strong style="font-size:12px;">${givenCyr.toUpperCase()} / ${givenLat.toUpperCase()}</strong></div>
+                                    <div style="grid-column: span 2;"><span style="color:#666;">${t('fp_nat')}</span><br><strong style="font-size:11px;">${currentUser.cit.name.toUpperCase()}</strong></div>
+                                    <div><span style="color:#666;">${t('fp_dob')}</span><br><strong style="font-size:10px;">${dobFmt}</strong></div>
+                                    <div><span style="color:#666;">${t('fp_sex')}</span><br><strong style="font-size:10px;">${sexChar}</strong></div>
+                                    <div style="grid-column: span 2;"><span style="color:#666;">${t('fp_rec')}</span><br><strong style="font-size:10px;">${doc.idNumber}</strong></div>
                                 </div>
                             </div>
 
@@ -899,11 +952,11 @@
                     let hintHtml = '';
                     
                     if (doc.type === 'criminal_record') {
-                        onclickAttr = `onclick="openDocumentModal('ВИТЯГ', 'МІНІСТЕРСТВО ВНУТРІШНІХ СПРАВ', 'Відомості про наявність незнятої чи непогашеної судимості: <strong>ВІДСУТНІ</strong>', '${doc.idNumber}')" style="cursor: pointer;"`;
-                        hintHtml = `<div style="position: absolute; top: -12px; right: -5px; background: var(--accent-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">Нажмите для PDF</div>`;
+                        onclickAttr = `onclick="openDocumentModal('${t('cert_ext')}', '${t('cert_min_vd')}', '${t('cert_b_cr')}', '${doc.idNumber}')" style="cursor: pointer;"`;
+                        hintHtml = `<div style="position: absolute; top: -12px; right: -5px; background: var(--accent-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">PDF</div>`;
                     } else if (doc.type === 'single_status') {
-                        onclickAttr = `onclick="openDocumentModal('СЕРТИФИКАТ', 'МІНІСТЕРСТВО ЮСТИЦІЇ', 'Записи про шлюб: <strong>ВІДСУТНІ</strong> (Особа не перебуває у шлюбі)', '${doc.idNumber}')" style="cursor: pointer;"`;
-                        hintHtml = `<div style="position: absolute; top: -12px; right: -5px; background: var(--accent-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">Нажмите для PDF</div>`;
+                        onclickAttr = `onclick="openDocumentModal('${t('cert_cert')}', '${t('cert_min_just')}', '${t('cert_b_ss')}', '${doc.idNumber}')" style="cursor: pointer;"`;
+                        hintHtml = `<div style="position: absolute; top: -12px; right: -5px; background: var(--accent-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">PDF</div>`;
                     }
 
                     const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
@@ -948,7 +1001,7 @@
             html += `
             <div class="add-doc-card" onclick="openModal('modal-doc-menu')">
                 <i class="fa-solid fa-square-plus"></i>
-                <p style="font-weight:700; font-size:0.85rem; letter-spacing: 0.5px;">Добавить новый документ</p>
+                <p style="font-weight:700; font-size:0.85rem; letter-spacing: 0.5px;">${t('add_doc')}</p>
             </div>`;
 
             container.innerHTML = html;
@@ -1005,7 +1058,7 @@
                     sel.innerHTML = `<option value="01">Нибирская</option><option value="02">Новахеймская</option><option value="03">Мунриджская</option><option value="58">Starford</option><option value="23">Лунская</option><option value="21">Дыркалэнд</option><option value="00">Аурасити</option><option value="89">Крайденская</option><option value="22">Ксанриджская</option><option value="68">Порт-Джалласская</option>`;
                     openModal('modal-region');
                 } else if (citName === 'Адастра') {
-                    sel.innerHTML = `<option value="OC">Охема</option><option value="LU">Люпас</option><option value="AR">Ад Рота</option><option value="TR">Тричелли</option><option value="GE">Гебии</option><option value="LUX">Люкс</option><option value="LEX">Лекс</option><option value="AI">Остров Анкорис</option>`;
+                    sel.innerHTML = `<option value="OC">Охема</option><option value="LU">Люпас</option><option value="AR">Ад Рота</option><option value="TR">Тричелли</option><option value="GE">Гебии</option><option value="regBO">Боклер</option><option value="regSA">Сансретур</option><option value="AI">Остров Анкорис</option>`;
                     openModal('modal-region');
                 } else { generatePassport(); }
             } else if (currentVerifyTarget === 'license') {
