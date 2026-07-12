@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Подключаем Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
@@ -73,10 +74,6 @@
         .photo-upload-circle.has-image img { display: block; }
         input[type="file"] { display: none; }
 
-        /* Стиль для Canvas Подписи */
-        .signature-wrapper { background: #fff; border-radius: 12px; padding: 5px; border: 1px solid var(--input-border); text-align: center;}
-        canvas#reg-signature { width: 100%; height: 100px; background: #fff; touch-action: none; cursor: crosshair; }
-
         .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; text-align: center; transition: 0.2s; }
         .btn-primary { background: white; color: var(--bg-gradient-top); }
         .btn-secondary { background: transparent; color: white; border: 2px solid white; }
@@ -100,35 +97,119 @@
         .tab-content.active { display: flex; }
 
         .documents-list-container { 
-            display: block; overflow-y: auto; flex-grow: 1; padding: 15px 24px 40px; -webkit-overflow-scrolling: touch;
+            display: block; 
+            overflow-y: auto; 
+            flex-grow: 1;
+            padding: 15px 24px 40px;
+            -webkit-overflow-scrolling: touch;
         }
         .documents-list-container::-webkit-scrollbar { display: none; }
 
-        .card-wrapper { margin-bottom: 32px; width: 100%; }
-        
-        /* Стандартная цветная карточка (Паспорт/Права) */
+        .card-wrapper {
+            margin-bottom: 32px;
+            width: 100%;
+        }
         .document-card {
-            width: 100%; border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: flex; flex-direction: column; position: relative; z-index: 2;
+            width: 100%; 
+            position: relative;
         }
 
-        /* Темы карточек */
-        .theme-system { --card-bg: linear-gradient(135deg, #101f42 0%, #070d1c 100%); --card-text-main: #ffffff; --card-text-sub: rgba(255, 255, 255, 0.7); --card-ribbon-bg: rgba(255, 255, 255, 0.12); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.25); --card-code-text: #e2e8f0; --card-accent: #ff4d4d; }
-        .theme-mimiland { --card-bg: linear-gradient(135deg, #FACC15 0%, #8B4513 50%, #FFFFFF 100%); --card-text-main: #ffffff; --card-text-sub: #fef08a; --card-ribbon-bg: rgba(139, 69, 19, 0.4); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #3d1c04; --card-accent: #8B4513; }
-        .theme-emmaria { --card-bg: linear-gradient(135deg, #9333EA 0%, #EC4899 50%, #FFFFFF 100%); --card-text-main: #ffffff; --card-text-sub: #fce7f3; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #831843; --card-accent: #FBCFE8; }
-        .theme-pernikingdom { --card-bg: linear-gradient(135deg, #16A34A 0%, #FFFFFF 50%, #000000 100%); --card-text-main: #ffffff; --card-text-sub: #dcfce7; --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff; --card-accent: #16A34A; }
-        .theme-orphia { --card-bg: linear-gradient(135deg, #FF7F50 0%, #000000 50%, #FFFFFF 100%); --card-text-main: #ffffff; --card-text-sub: #ffedd5; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #000000; --card-accent: #FF7F50; }
-        .theme-varland { --card-bg: linear-gradient(135deg, #1E3A8A 0%, #14532D 100%); --card-text-main: #ffffff; --card-text-sub: #bfdbfe; --card-ribbon-bg: rgba(255, 255, 255, 0.1); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff; --card-accent: #10B981; }
-        .theme-instaland { --card-bg: linear-gradient(135deg, #9333EA 0%, #2563EB 33%, #FFFFFF 66%, #EAB308 100%); --card-text-main: #ffffff; --card-text-sub: #e0e7ff; --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.1); --card-code-text: #422006; --card-accent: #EAB308; }
-        .theme-adastra { --card-bg: linear-gradient(135deg, #1E3A8A 0%, #FFFFFF 50%, #DC2626 100%); --card-text-main: #ffffff; --card-text-sub: #d1d5db; --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.2); --card-code-text: #ffffff; --card-accent: #DC2626; }
-        .theme-aliens { --card-bg: linear-gradient(135deg, #38BDF8 0%, #22C55E 33%, #FFFFFF 66%, #DC2626 100%); --card-text-main: #ffffff; --card-text-sub: #e0f2fe; --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff; --card-code-bg: rgba(255, 255, 255, 0.25); --card-code-text: #ffffff; --card-accent: #DC2626; }
-        .theme-dl-blue { --card-bg: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); --card-text-main: #ffffff; --card-text-sub: #e0f2fe; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff; --card-accent: #38bdf8; }
-        .theme-dl-pink { --card-bg: linear-gradient(135deg, #be185d 0%, #f472b6 100%); --card-text-main: #ffffff; --card-text-sub: #fce7f3; --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff; --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff; --card-accent: #f472b6; }
+        .card-front {
+            width: 100%;
+            border-radius: 28px;
+            background: var(--card-bg, #333);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            display: flex; flex-direction: column; position: relative; z-index: 2;
+        }
+
+        .theme-system {
+            --card-bg: linear-gradient(135deg, #101f42 0%, #070d1c 100%);
+            --card-text-main: #ffffff; --card-text-sub: rgba(255, 255, 255, 0.7);
+            --card-ribbon-bg: rgba(255, 255, 255, 0.12); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.25); --card-code-text: #e2e8f0;
+            --card-accent: #ff4d4d;
+        }
+        .theme-mimiland { 
+            --card-bg: linear-gradient(135deg, #FACC15 0%, #8B4513 50%, #FFFFFF 100%);
+            --card-text-main: #ffffff; --card-text-sub: #fef08a;
+            --card-ribbon-bg: rgba(139, 69, 19, 0.4); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #3d1c04;
+            --card-accent: #8B4513;
+        }
+        .theme-emmaria { 
+            --card-bg: linear-gradient(135deg, #9333EA 0%, #EC4899 50%, #FFFFFF 100%);
+            --card-text-main: #ffffff; --card-text-sub: #fce7f3;
+            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #831843;
+            --card-accent: #FBCFE8;
+        }
+        .theme-pernikingdom { 
+            --card-bg: linear-gradient(135deg, #16A34A 0%, #FFFFFF 50%, #000000 100%);
+            --card-text-main: #ffffff; --card-text-sub: #dcfce7;
+            --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff;
+            --card-accent: #16A34A;
+        }
+        .theme-orphia { 
+            --card-bg: linear-gradient(135deg, #FF7F50 0%, #000000 50%, #FFFFFF 100%);
+            --card-text-main: #ffffff; --card-text-sub: #ffedd5;
+            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.05); --card-code-text: #000000;
+            --card-accent: #FF7F50;
+        }
+        .theme-varland { 
+            --card-bg: linear-gradient(135deg, #1E3A8A 0%, #14532D 100%);
+            --card-text-main: #ffffff; --card-text-sub: #bfdbfe;
+            --card-ribbon-bg: rgba(255, 255, 255, 0.1); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(255, 255, 255, 0.15); --card-code-text: #ffffff;
+            --card-accent: #10B981;
+        }
+        .theme-instaland { 
+            --card-bg: linear-gradient(135deg, #9333EA 0%, #2563EB 33%, #FFFFFF 66%, #EAB308 100%);
+            --card-text-main: #ffffff; --card-text-sub: #e0e7ff;
+            --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.1); --card-code-text: #422006;
+            --card-accent: #EAB308;
+        }
+        .theme-adastra { 
+            --card-bg: linear-gradient(135deg, #1E3A8A 0%, #FFFFFF 50%, #DC2626 100%);
+            --card-text-main: #ffffff; --card-text-sub: #d1d5db;
+            --card-ribbon-bg: rgba(0, 0, 0, 0.4); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(255, 255, 255, 0.2); --card-code-text: #ffffff;
+            --card-accent: #DC2626;
+        }
+        .theme-aliens { 
+            --card-bg: linear-gradient(135deg, #38BDF8 0%, #22C55E 33%, #FFFFFF 66%, #DC2626 100%);
+            --card-text-main: #ffffff; --card-text-sub: #e0f2fe;
+            --card-ribbon-bg: rgba(0, 0, 0, 0.3); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(255, 255, 255, 0.25); --card-code-text: #ffffff;
+            --card-accent: #DC2626;
+        }
+        .theme-dl-blue {
+            --card-bg: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+            --card-text-main: #ffffff; --card-text-sub: #e0f2fe;
+            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff;
+            --card-accent: #38bdf8;
+        }
+        .theme-dl-pink {
+            --card-bg: linear-gradient(135deg, #be185d 0%, #f472b6 100%);
+            --card-text-main: #ffffff; --card-text-sub: #fce7f3;
+            --card-ribbon-bg: rgba(255, 255, 255, 0.2); --card-ribbon-text: #ffffff;
+            --card-code-bg: rgba(0, 0, 0, 0.15); --card-code-text: #ffffff;
+            --card-accent: #f472b6;
+        }
 
         .card-top { display: flex; padding: 22px; gap: 18px; align-items: flex-start; position: relative; }
         .card-chip { position: absolute; top: 22px; right: 22px; font-size: 1.6rem; color: var(--card-text-main); opacity: 0.25; }
 
-        .photo-container { width: 95px; height: 125px; border-radius: 16px; overflow: hidden; border: 2px solid rgba(255,255,255,0.4); background-color: #cbd5e1; flex-shrink: 0; box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+        .photo-container { 
+            width: 95px; height: 125px; border-radius: 16px; overflow: hidden; 
+            border: 2px solid rgba(255,255,255,0.4); background-color: #cbd5e1; 
+            flex-shrink: 0; box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
         .photo-container img { width: 100%; height: 100%; object-fit: cover; }
         
         .info-container { flex-grow: 1; display: flex; flex-direction: column; padding-top: 2px; }
@@ -139,30 +220,33 @@
         .id-number { text-align: center; color: var(--card-accent); font-weight: 800; font-size: 0.95rem; padding: 10px; background: rgba(0,0,0,0.08); letter-spacing: 1px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .card-ribbon { background: var(--card-ribbon-bg); color: var(--card-ribbon-text); text-align: center; font-size: 0.75rem; font-weight: 700; padding: 9px 0; text-transform: uppercase; letter-spacing: 1.5px; }
         .bottom-code { background-color: var(--card-code-bg); color: var(--card-code-text); text-align: center; font-family: monospace; font-size: 0.85rem; font-weight: 700; padding: 12px 5px; word-break: break-all; letter-spacing: 2px; opacity: 0.9; }
-        .front-barcode-wrapper { background-color: white; padding: 12px 10px; display: flex; justify-content: center; align-items: center; width: 100%; }
-        .front-barcode-wrapper img { width: 100%; max-width: 320px; height: 50px; object-fit: contain; }
-        .card-watermark { position: absolute; bottom: 80px; right: -10px; font-size: 6rem; font-weight: 900; color: var(--card-text-main); opacity: 0.04; pointer-events: none; }
 
-        /* Специальный вид для Загранпаспорта (Светлый дизайн + MRZ) */
-        .international-passport {
-            background: #eef2f5 url('data:image/svg+xml;utf8,<svg opacity="0.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="%233b6fd4" stroke-width="2" fill="none"/></svg>');
-            background-size: cover; color: #111; border: 1px solid #c0d1e3;
+        /* СТИЛЬ ШТРИХ-КОДА НА ЛИЦЕВОЙ СТОРОНЕ */
+        .front-barcode-wrapper {
+            background-color: white;
+            padding: 12px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
         }
-        .int-header { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 2px solid #3b6fd4; font-weight: 800; font-size: 0.8rem; color: #153c8a; text-transform: uppercase;}
-        .int-body { display: flex; padding: 15px; gap: 15px; }
-        .int-info { flex-grow: 1; font-size: 0.65rem; font-weight: 600; line-height: 1.3; color: #444; }
-        .int-info span { display: block; font-size: 0.8rem; font-weight: 800; color: #000; margin-bottom: 5px; text-transform: uppercase;}
-        .int-mrz { background: #fff; border-top: 1px dashed #ccc; padding: 15px 10px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; font-weight: 800; letter-spacing: 2px; line-height: 1.4; word-break: break-all; color: #000; text-align: center;}
-        
-        /* Специальный вид для Справок (Белый бланк) */
-        .certificate-card { background: #fff; color: #111; padding: 25px 20px; text-align: center; border: 1px solid #ddd; }
-        .cert-title { font-size: 1rem; font-weight: 800; color: #b30000; margin-bottom: 5px; text-transform: uppercase; }
-        .cert-subtitle { font-size: 0.75rem; font-weight: 700; color: #555; margin-bottom: 20px; }
-        .cert-text { font-size: 0.85rem; font-weight: 600; color: #333; text-align: left; line-height: 1.4; margin-bottom: 15px;}
-        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; font-size: 0.75rem; font-weight: 700; }
-        .cert-signature-box { border-top: 1px solid #000; padding-top: 5px; width: 120px; text-align: center; position: relative; }
+        .front-barcode-wrapper img {
+            width: 100%;
+            max-width: 320px;
+            height: 50px;
+            object-fit: contain;
+        }
 
-        .add-doc-card { width: 100%; height: 90px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.3); border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; cursor: pointer; transition: 0.3s; gap: 6px; margin-bottom: 32px; }
+        .card-watermark {
+            position: absolute; bottom: 80px; right: -10px; font-size: 6rem;
+            font-weight: 900; color: var(--card-text-main); opacity: 0.04; pointer-events: none;
+        }
+
+        .add-doc-card {
+            width: 100%; height: 90px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; cursor: pointer; transition: 0.3s; gap: 6px; margin-bottom: 32px;
+        }
         .add-doc-card:active { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.6); }
         .add-doc-card i { font-size: 1.6rem; color: #e0ecff; }
 
@@ -213,8 +297,14 @@
 
             <div id="view-login" class="auth-container hidden" style="justify-content: center;">
                 <h2 class="auth-title">Вход</h2>
-                <div class="form-group"><label>Логин</label><input type="text" id="login-input" class="form-input" placeholder="Ваш логин"></div>
-                <div class="form-group"><label>Пароль</label><input type="password" id="login-password" class="form-input" placeholder="Ваш пароль"></div>
+                <div class="form-group">
+                    <label>Логин</label>
+                    <input type="text" id="login-input" class="form-input" placeholder="Ваш логин">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Ваш пароль">
+                </div>
                 <button class="btn btn-primary" onclick="processLogin()">Войти</button>
                 <button class="btn btn-secondary" onclick="showView('view-welcome')">Назад</button>
             </div>
@@ -264,14 +354,6 @@
                         <div class="custom-options" id="res-options"></div>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label>Ваша личная подпись (распишитесь ниже)</label>
-                    <div class="signature-wrapper">
-                        <canvas id="reg-signature" width="300" height="100"></canvas>
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="clearSignature()" style="padding: 10px; font-size: 0.9rem; border: 1px solid #8ab4f8; color: #8ab4f8; margin-top: 5px;">Очистить подпись</button>
-                </div>
 
                 <div class="form-group"><label>Логин</label><input type="text" id="reg-login" class="form-input" placeholder="Только латиница и цифры"></div>
                 <div class="form-group"><label>Придумайте пароль</label><input type="password" id="reg-password" class="form-input" placeholder="Ваш пароль"></div>
@@ -282,16 +364,22 @@
         </div>
 
         <div id="main-app" class="screen">
-            <header><h1>MDA</h1><p>Цифровые документы</p></header>
+            <header>
+                <h1>MDA</h1><p>Цифровые документы</p>
+            </header>
 
             <div id="tab-haupt" class="tab-content active">
                 <div class="section-title">Мой Кошелёк</div>
-                <div class="documents-list-container" id="documents-list"></div>
+                <div class="documents-list-container" id="documents-list">
+                    <!-- Документы генерируются сюда -->
+                </div>
             </div>
 
             <div id="tab-pripl" class="tab-content">
                 <div class="profile-container">
-                    <div style="text-align: center;"><img id="prof-photo" class="profile-photo-mini" src=""></div>
+                    <div style="text-align: center;">
+                        <img id="prof-photo" class="profile-photo-mini" src="">
+                    </div>
                     <div class="profile-card">
                         <div class="profile-item"><span class="profile-label">Латиница</span><span class="profile-value" id="prof-name-lat"></span></div>
                         <div class="profile-item"><span class="profile-label">Кириллица</span><span class="profile-value" id="prof-name-cyr"></span></div>
@@ -315,11 +403,11 @@
             <div class="modal-content">
                 <div class="modal-title">Выберите документ</div>
                 <ul class="doc-list">
-                    <li onclick="openVerifyModal('passport')"><i class="fa-solid fa-address-card"></i> Внутренний паспорт</li>
-                    <li onclick="openVerifyModal('int_passport')"><i class="fa-solid fa-passport"></i> Загранпаспорт</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-passport"></i> Загранпаспорт</li>
                     <li onclick="openVerifyModal('license')"><i class="fa-solid fa-car"></i> Водительские права</li>
-                    <li onclick="openVerifyModal('police_cert')"><i class="fa-solid fa-file-shield"></i> Справка о несудимости</li>
-                    <li onclick="openVerifyModal('marriage_cert')"><i class="fa-solid fa-heart-circle-check"></i> Сертификат об отсутствии брака</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-graduation-cap"></i> Диплом</li>
+                    <li onclick="unavailableAlert()"><i class="fa-solid fa-house"></i> Недвижимость</li>
+                    <li onclick="openVerifyModal('passport')"><i class="fa-solid fa-address-card"></i> Паспорт гражданина</li>
                 </ul>
                 <button class="btn btn-secondary" onclick="closeModal('modal-doc-menu')">Отмена</button>
             </div>
@@ -339,7 +427,7 @@
             <div class="modal-content">
                 <div class="modal-title">Укажите регион/землю</div>
                 <select id="region-select" class="form-input" style="margin-bottom: 15px;"></select>
-                <button class="btn btn-primary" onclick="generateInternalPassport()">Создать паспорт</button>
+                <button class="btn btn-primary" onclick="generatePassport()">Создать паспорт</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-region')">Отмена</button>
             </div>
         </div>
@@ -347,11 +435,14 @@
         <div id="modal-category" class="modal">
             <div class="modal-content">
                 <div class="modal-title">Категория прав</div>
+                <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;">Выберите разрешенную категорию транспортных средств.</p>
                 <select id="dl-category-select" class="form-input" style="margin-bottom: 15px;">
                     <option value="A">Категория A (Мотоциклы)</option>
                     <option value="B">Категория B (Легковые авто)</option>
                     <option value="C">Категория C (Грузовики)</option>
                     <option value="D">Категория D (Автобусы)</option>
+                    <option value="M">Категория M (Мопеды)</option>
+                    <option value="BE">Категория BE (Легковые с прицепом)</option>
                 </select>
                 <button class="btn btn-primary" onclick="generateDriverLicense()">Создать права</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-category')">Отмена</button>
@@ -365,15 +456,23 @@
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT.firebaseapp.com",
             databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT"
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "SENDER_ID",
+            appId: "APP_ID"
         };
+
         let db;
-        try { firebase.initializeApp(firebaseConfig); db = firebase.database(); } 
-        catch(e) { console.log("Firebase не настроен, используем LocalStorage."); }
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+        } catch(e) {
+            console.log("ОШИБКА: Firebase не настроен. Данные будут сохраняться только локально.");
+        }
 
         async function saveUser(user) {
             if (db && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-                try { await db.ref('users/' + user.login).set(user); } catch(e) {}
+                try { await db.ref('users/' + user.login).set(user); } catch(e) { console.error("DB Error:", e); }
             }
             localStorage.setItem('mda_' + user.login, JSON.stringify(user));
         }
@@ -383,22 +482,22 @@
                 try {
                     const snapshot = await db.ref('users/' + login).once('value');
                     if (snapshot.exists()) return snapshot.val();
-                } catch(e) {}
+                } catch(e) { console.error("DB Error:", e); }
             }
             const stored = localStorage.getItem('mda_' + login);
             return stored ? JSON.parse(stored) : null;
         }
 
-        const countriesMap = {
-            'Мимиляндия': { en: 'MIMILANDIA', flag: 'mimiland.png', code: '1', abbr: 'MML' },
-            'Эммария': { en: 'EMMARIA', flag: 'emmaria.png', code: '2', abbr: 'EMM' },
-            'Королевство Пернии': { en: 'KINGDOM OF PERNIA', flag: 'pernikingdom.png', code: '3', abbr: 'PRN' },
-            'Орфия': { en: 'ORPHIA', flag: 'orphia.png', code: '4', abbr: 'ORP' },
-            'Инопланетяне': { en: 'ALIENS', flag: 'aliens.png', code: '5', abbr: 'ALI' },
-            'Варландия': { en: 'VARLANDIA', flag: 'varland.png', code: '6', abbr: 'VRL' },
-            'Инсталяндия': { en: 'INSTALANDIA', flag: 'instaland.png', code: '7', abbr: 'INS' },
-            'Адастра': { en: 'ADASTRA', flag: 'adastra.png', code: '8', abbr: 'AST' }
-        };
+        const countries = [
+            { name: 'Мимиляндия', flag: 'mimiland.png', code: '1', abbr: 'MML' },
+            { name: 'Эммария', flag: 'emmaria.png', code: '2', abbr: 'EMM' },
+            { name: 'Королевство Пернии', flag: 'pernikingdom.png', code: '3', abbr: 'PRN' },
+            { name: 'Орфия', flag: 'orphia.png', code: '4', abbr: 'ORP' },
+            { name: 'Инопланетяне', flag: 'aliens.png', code: '5', abbr: 'ALI' },
+            { name: 'Варландия', flag: 'varland.png', code: '6', abbr: 'VRL' },
+            { name: 'Инсталяндия', flag: 'instaland.png', code: '7', abbr: 'INS' },
+            { name: 'Адастра', flag: 'adastra.png', code: '8', abbr: 'AST' }
+        ];
 
         let currentUser = null;
         let base64Photo = "";
@@ -406,7 +505,6 @@
 
         window.onload = function() {
             populateSelects();
-            initSignaturePad();
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.remove('active');
                 document.getElementById('auth-wrapper').classList.add('active');
@@ -415,22 +513,26 @@
 
         function populateSelects() {
             let html = '';
-            for (let name in countriesMap) {
-                const c = countriesMap[name];
-                html += `<div class="custom-option" onclick="selectOption(this, '${name}', '${c.flag}', '${c.code}', '${c.abbr}')">
-                            <img src="${c.flag}"> ${name}
+            countries.forEach(c => {
+                html += `<div class="custom-option" onclick="selectOption(this, '${c.name}', '${c.flag}', '${c.code}', '${c.abbr}')">
+                            <img src="${c.flag}"> ${c.name}
                          </div>`;
-            }
+            });
             document.getElementById('cit-options').innerHTML = html;
             document.getElementById('res-options').innerHTML = html;
         }
 
         function toggleDropdown(id) { document.getElementById(id).classList.toggle('show'); }
+        
         function selectOption(el, name, flag, code, abbr) {
             const wrapper = el.closest('.custom-select-wrapper');
             const imgEl = wrapper.querySelector('.custom-select img');
             const textEl = wrapper.querySelector('.custom-select span');
-            imgEl.src = flag; textEl.innerText = name; textEl.dataset.flag = flag; textEl.dataset.code = code; textEl.dataset.abbr = abbr;
+            imgEl.src = flag; 
+            textEl.innerText = name; 
+            textEl.dataset.flag = flag; 
+            textEl.dataset.code = code; 
+            textEl.dataset.abbr = abbr;
             wrapper.querySelector('.custom-options').classList.remove('show');
         }
 
@@ -442,11 +544,14 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const scaleSize = 300 / img.width;
-                    canvas.width = 300; canvas.height = img.height * scaleSize;
+                    const MAX_WIDTH = 300; 
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     base64Photo = canvas.toDataURL('image/jpeg', 0.8);
+                    
                     const circle = document.getElementById('photo-preview-circle');
                     document.getElementById('photo-preview-img').src = base64Photo;
                     circle.classList.add('has-image');
@@ -456,266 +561,270 @@
             reader.readAsDataURL(file);
         }
 
-        // МОДУЛЬ РИСОВАНИЯ ПОДПИСИ
-        const sigCanvas = document.getElementById('reg-signature');
-        const sigCtx = sigCanvas.getContext('2d');
-        let isDrawing = false;
-        
-        function initSignaturePad() {
-            sigCtx.lineWidth = 3; sigCtx.lineCap = 'round'; sigCtx.strokeStyle = '#000080';
-            const getPos = (e) => {
-                const rect = sigCanvas.getBoundingClientRect();
-                const scaleX = sigCanvas.width / rect.width;
-                const scaleY = sigCanvas.height / rect.height;
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
-            };
-            const start = (e) => { e.preventDefault(); isDrawing = true; const p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); };
-            const draw = (e) => { e.preventDefault(); if(!isDrawing) return; const p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); };
-            const stop = () => { isDrawing = false; };
-            sigCanvas.addEventListener('mousedown', start); sigCanvas.addEventListener('mousemove', draw);
-            sigCanvas.addEventListener('mouseup', stop); sigCanvas.addEventListener('mouseout', stop);
-            sigCanvas.addEventListener('touchstart', start, {passive: false}); sigCanvas.addEventListener('touchmove', draw, {passive: false}); sigCanvas.addEventListener('touchend', stop);
-        }
-        function clearSignature() { sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height); }
-
-
         function randNum(len) { return Array.from({length: len}, () => Math.floor(Math.random() * 10)).join(''); }
-        function randLetters(len) { const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; return Array.from({length: len}, () => chars.charAt(Math.floor(Math.random() * chars.length))).join(''); }
+        function randLetters(len) { 
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
+            return Array.from({length: len}, () => chars.charAt(Math.floor(Math.random() * chars.length))).join(''); 
+        }
 
-        function showView(id) { document.querySelectorAll('.auth-container').forEach(v => v.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+        function showView(id) {
+            document.querySelectorAll('.auth-container').forEach(v => v.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
 
         async function processRegistration() {
-            const nameLat = document.getElementById('reg-name-lat').value.trim().toUpperCase();
-            const nameCyr = document.getElementById('reg-name-cyr').value.trim().toUpperCase();
+            const nameLat = document.getElementById('reg-name-lat').value.trim();
+            const nameCyr = document.getElementById('reg-name-cyr').value.trim();
             const dob = document.getElementById('reg-dob').value;
             const gender = document.getElementById('reg-gender').value;
             const login = document.getElementById('reg-login').value.trim();
             const password = document.getElementById('reg-password').value.trim();
             const citEl = document.getElementById('cit-selected-text');
             const resEl = document.getElementById('res-selected-text');
-            const signatureBase64 = sigCanvas.toDataURL('image/png'); // Сохраняем подпись
 
-            if (!nameLat || !nameCyr || !dob || !login || !password || !base64Photo) { alert("Заполните все поля и загрузите фото!"); return; }
+            if (!nameLat || !nameCyr || !dob || !login || !password || !base64Photo) {
+                alert("Пожалуйста, заполните все поля и загрузите фото!"); return;
+            }
+            if (!/^[a-zA-Z0-9]+$/.test(login)) {
+                alert("Ошибка! Логин должен содержать только латинские буквы и цифры."); return;
+            }
+
             const existingUser = await loadUser(login);
-            if (existingUser) { alert("Логин занят!"); return; }
+            if (existingUser) {
+                alert("Этот логин уже занят!"); return;
+            }
 
-            const abbr = citEl.dataset.abbr || 'MML';
-            const sysId = `${citEl.dataset.code || '1'}${randNum(7)}${abbr}${randNum(3)}${randLetters(2)}`;
+            const X = citEl.dataset.code || '1';
+            const RRR = citEl.dataset.abbr || 'MML';
+            const sysId = `${X}${randNum(7)}${RRR}${randNum(3)}${randLetters(2)}`;
 
             currentUser = {
-                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo, signature: signatureBase64,
-                cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: abbr, en: countriesMap[citEl.innerText].en },
+                nameLat, nameCyr, dob, gender, login, password, photo: base64Photo,
+                cit: { name: citEl.innerText, flag: citEl.dataset.flag, abbr: RRR },
                 res: { name: resEl.innerText, flag: resEl.dataset.flag },
+                hasPassport: false,
                 documents: [{ type: 'system', title: 'SYSTEM ID - MDA', idNumber: sysId, theme: 'theme-system' }]
             };
 
             await saveUser(currentUser);
-            alert("Регистрация успешна!");
+            alert("Регистрация успешна! Теперь вы можете войти, используя ваш пароль.");
             showView('view-login');
         }
 
         async function processLogin() {
             const login = document.getElementById('login-input').value.trim();
             const pass = document.getElementById('login-password').value.trim();
-            if(!login || !pass) return;
+            
+            if(!login || !pass) { alert("Введите логин и пароль"); return; }
+
             const userData = await loadUser(login);
-            if (!userData) { alert("Пользователь не найден."); return; }
-            if (userData.password !== pass && userData.code !== pass) { alert("Неверный пароль!"); return; }
-            currentUser = userData; startApp();
+            if (!userData) { alert("Пользователь не найден. Пройдите регистрацию."); return; }
+            
+            if (userData.password !== pass && userData.code !== pass) {
+                alert("Неверный логин или пароль!"); return; 
+            }
+            
+            currentUser = userData;
+            startApp();
         }
 
         function startApp() {
-            document.getElementById('auth-wrapper').classList.remove('active'); document.getElementById('main-app').classList.add('active');
+            document.getElementById('auth-wrapper').classList.remove('active');
+            document.getElementById('main-app').classList.add('active');
+            
             document.getElementById('prof-photo').src = currentUser.photo;
-            document.getElementById('prof-name-lat').innerText = currentUser.nameLat; document.getElementById('prof-name-cyr').innerText = currentUser.nameCyr;
-            document.getElementById('prof-dob').innerText = currentUser.dob.split('-').reverse().join('.');
-            document.getElementById('prof-gender').innerText = currentUser.gender === 'M' ? 'Мужской' : 'Женский';
-            document.getElementById('prof-cit-text').innerText = currentUser.cit.name; document.getElementById('prof-cit-img').src = currentUser.cit.flag;
-            document.getElementById('prof-res-text').innerText = currentUser.res.name; document.getElementById('prof-res-img').src = currentUser.res.flag;
+            document.getElementById('prof-name-lat').innerText = String(currentUser.nameLat);
+            document.getElementById('prof-name-cyr').innerText = String(currentUser.nameCyr);
+            
+            const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
+            document.getElementById('prof-dob').innerText = dobFmt;
+            
+            document.getElementById('prof-gender').innerText = currentUser.gender === 'M' ? 'Мужской' : (currentUser.gender === 'F' ? 'Женский' : 'Иной');
+            document.getElementById('prof-cit-text').innerText = currentUser.cit.name;
+            document.getElementById('prof-cit-img').src = currentUser.cit.flag || 'mimiland.png';
+            document.getElementById('prof-res-text').innerText = currentUser.res.name;
+            document.getElementById('prof-res-img').src = currentUser.res.flag || 'mimiland.png';
             document.getElementById('prof-login').innerText = currentUser.login;
+
             renderDocumentsList();
         }
 
         function getCountryThemeClass(countryName) {
             switch(countryName) {
-                case 'Мимиляндия': return 'theme-mimiland'; case 'Эммария': return 'theme-emmaria';
-                case 'Королевство Пернии': return 'theme-pernikingdom'; case 'Орфия': return 'theme-orphia';
-                case 'Инопланетяне': return 'theme-aliens'; case 'Варландия': return 'theme-varland';
-                case 'Инсталяндия': return 'theme-instaland'; case 'Адастра': return 'theme-adastra';
+                case 'Мимиляндия': return 'theme-mimiland';
+                case 'Эммария': return 'theme-emmaria';
+                case 'Королевство Пернии': return 'theme-pernikingdom';
+                case 'Орфия': return 'theme-orphia';
+                case 'Инопланетяне': return 'theme-aliens';
+                case 'Варландия': return 'theme-varland';
+                case 'Инсталяндия': return 'theme-instaland';
+                case 'Адастра': return 'theme-adastra';
                 default: return 'theme-system';
             }
         }
 
-        // --- ЛОГИКА MRZ ---
-        function calculateCheckDigit(str) {
-            const w = [7, 3, 1]; let sum = 0;
-            for (let i=0; i<str.length; i++) {
-                let char = str[i], val = 0;
-                if (char >= '0' && char <= '9') val = parseInt(char);
-                else if (char >= 'A' && char <= 'Z') val = char.charCodeAt(0) - 55;
-                sum += val * w[i % 3];
-            } return sum % 10;
-        }
-        function formatMRZDate(d) { return d.replace(/-/g, '').substring(2); } // YYYY-MM-DD -> YYMMDD
-        function pad(str, len) { return str.padEnd(len, '<').substring(0, len); }
-
         function renderDocumentsList() {
             const container = document.getElementById('documents-list');
             let html = '';
-            const dobFmt = currentUser.dob.split('-').reverse().join('.');
-            const safeNameLat = currentUser.nameLat || "USER";
             
-            // Расчет MRZ Имен
-            const nameParts = safeNameLat.split(' ');
-            const mrzSurname = nameParts[0] || '';
-            const mrzGiven = nameParts.slice(1).join('<') || '';
-            const nameString = `${mrzSurname}<<${mrzGiven}`;
+            const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
+            const safeNameLat = (currentUser.nameLat) ? String(currentUser.nameLat) : "USER";
 
             currentUser.documents.forEach(doc => {
-                if (doc.type === 'int_passport') {
-                    // ГЕНЕРАЦИЯ ЗАГРАНПАСПОРТА
-                    let mrzDob = formatMRZDate(currentUser.dob);
-                    let mrzExp = formatMRZDate(new Date(new Date().setFullYear(new Date().getFullYear() + 10)).toISOString().split('T')[0]);
-                    let passNum = doc.idNumber.padEnd(9, '<');
-                    let line1 = pad(`P<${currentUser.cit.abbr}${nameString}`, 44);
-                    let line2_part = `${passNum}${calculateCheckDigit(passNum)}${currentUser.cit.abbr}${mrzDob}${calculateCheckDigit(mrzDob)}${currentUser.gender}${mrzExp}${calculateCheckDigit(mrzExp)}${pad('', 14)}${calculateCheckDigit(pad('',14))}`;
-                    let line2 = pad(`${line2_part}${calculateCheckDigit(line2_part)}`, 44);
+                const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
+                let appliedTheme = doc.theme;
+                if (doc.type === 'passport') { appliedTheme = getCountryThemeClass(currentUser.cit.name); }
 
-                    html += `
-                    <div class="card-wrapper">
-                        <div class="document-card international-passport">
-                            <div class="int-header"><span>${currentUser.cit.ru || currentUser.cit.name}</span><span>PASSPORT</span></div>
-                            <div class="int-body">
-                                <div class="photo-container" style="width:80px; height:105px; border-radius:4px;"><img src="${currentUser.photo}"></div>
-                                <div class="int-info">
-                                    Type: <span>P</span> Code: <span>${currentUser.cit.abbr}</span> No: <span>${doc.idNumber}</span>
-                                    Surname: <span>${mrzSurname}</span> Given Names: <span>${mrzGiven.replace(/</g, ' ')}</span>
-                                    Sex: <span>${currentUser.gender}</span> DOB: <span>${dobFmt}</span>
-                                    <img src="${currentUser.signature}" style="height:30px; margin-top:5px; filter: contrast(1.5);">
+                html += `
+                <div class="card-wrapper">
+                    <div class="document-card ${appliedTheme}">
+                        <div class="card-front">
+                            <div class="card-chip"><i class="fa-solid fa-microchip"></i></div>
+                            <div class="card-watermark">MDA</div>
+                            <div class="card-top">
+                                <div class="photo-container"><img src="${currentUser.photo}"></div>
+                                <div class="info-container">
+                                    <h2>${safeNameLat.toUpperCase()}</h2>
+                                    <p>DOB: <span>${dobFmt}</span></p>
+                                    <p>CIT: <span>${currentUser.cit.name}</span></p>
+                                    <p>RES: <span>${currentUser.res.name}</span></p>
                                 </div>
                             </div>
-                            <div class="int-mrz">${line1}<br>${line2}</div>
-                        </div>
-                    </div>`;
-                } 
-                else if (doc.type === 'police_cert' || doc.type === 'marriage_cert') {
-                    // ГЕНЕРАЦИЯ СПРАВОК
-                    const isPolice = doc.type === 'police_cert';
-                    const titleRu = isPolice ? "ВЫПИСКА О НЕСУДИМОСТИ" : "СПРАВКА ОБ ОТСУТСТВИИ БРАКА";
-                    const titleEn = isPolice ? "POLICE CLEARANCE CERTIFICATE" : "CERTIFICATE OF NO IMPEDIMENT";
-                    const statusRu = isPolice ? "Сведений о судимости не найдено." : "Записи о заключении брака отсутствуют.";
-                    const statusEn = isPolice ? "No criminal record found." : "No record of marriage found.";
-
-                    html += `
-                    <div class="card-wrapper">
-                        <div class="document-card certificate-card">
-                            <div class="cert-title">${titleRu}</div>
-                            <div class="cert-subtitle">${titleEn}</div>
-                            <div class="cert-text">
-                                <b>Гражданин(ка) / Citizen:</b><br>${currentUser.nameCyr} / ${currentUser.nameLat}<br><br>
-                                <b>Государство / State:</b><br>${currentUser.cit.name} / ${currentUser.cit.en}<br><br>
-                                <b>Статус / Status:</b><br>${statusRu}<br>${statusEn}
-                            </div>
-                            <div class="cert-footer">
-                                <div>Дата: <br>${new Date().toLocaleDateString('ru-RU')}</div>
-                                <div class="cert-signature-box">
-                                    <img src="${currentUser.signature}" style="height:40px; position:absolute; bottom:15px; left:0; right:0; margin:auto;">
-                                    Подпись / Signature
-                                </div>
-                            </div>
-                            <div class="front-barcode-wrapper" style="margin-top:20px; padding:0;">
-                                <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(doc.idNumber)}&scale=3&height=10&includetext=false" style="height:35px;">
+                            <div class="id-number">${doc.idNumber}</div>
+                            <div class="card-ribbon">${doc.title}</div>
+                            <div class="bottom-code">${bottomStr}</div>
+                            
+                            <!-- ШТРИХ-КОД В САМОМ НИЗУ -->
+                            <div class="front-barcode-wrapper">
+                                <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(doc.idNumber)}&scale=3&height=12&includetext=false" alt="Barcode">
                             </div>
                         </div>
-                    </div>`;
-                }
-                else {
-                    // ГЕНЕРАЦИЯ ВНУТРЕННИХ КАРТОЧЕК (ПАСПОРТ, ПРАВА, СИСТЕМА)
-                    let appliedTheme = doc.theme;
-                    if (doc.type === 'passport') appliedTheme = getCountryThemeClass(currentUser.cit.name);
-                    const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
-
-                    html += `
-                    <div class="card-wrapper">
-                        <div class="document-card ${appliedTheme}">
-                            <div class="card-front">
-                                <div class="card-chip"><i class="fa-solid fa-microchip"></i></div>
-                                <div class="card-watermark">MDA</div>
-                                <div class="card-top">
-                                    <div class="photo-container"><img src="${currentUser.photo}"></div>
-                                    <div class="info-container">
-                                        <h2>${safeNameLat.toUpperCase()}</h2>
-                                        <p>DOB: <span>${dobFmt}</span></p>
-                                        <p>CIT: <span>${currentUser.cit.name}</span></p>
-                                        <p>RES: <span>${currentUser.res.name}</span></p>
-                                    </div>
-                                </div>
-                                <img src="${currentUser.signature}" style="height: 35px; position: absolute; bottom: 85px; right: 20px; z-index: 5; filter: drop-shadow(0px 1px 1px rgba(255,255,255,0.7));">
-                                
-                                <div class="id-number">${doc.idNumber}</div>
-                                <div class="card-ribbon">${doc.title}</div>
-                                <div class="bottom-code">${bottomStr}</div>
-                                <div class="front-barcode-wrapper">
-                                    <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(doc.idNumber)}&scale=3&height=12&includetext=false" alt="Barcode">
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-                }
+                    </div>
+                </div>`;
             });
 
             html += `
             <div class="add-doc-card" onclick="openModal('modal-doc-menu')">
-                <i class="fa-solid fa-square-plus"></i><p style="font-weight:700; font-size:0.85rem;">Добавить новый документ</p>
+                <i class="fa-solid fa-square-plus"></i>
+                <p style="font-weight:700; font-size:0.85rem; letter-spacing: 0.5px;">Добавить новый документ</p>
             </div>`;
+
             container.innerHTML = html;
         }
 
-        function logout() { currentUser = null; document.getElementById('login-password').value = ''; document.getElementById('main-app').classList.remove('active'); document.getElementById('auth-wrapper').classList.add('active'); showView('view-welcome'); }
-        function switchTab(tab, el) { document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById('tab-' + tab).classList.add('active'); el.classList.add('active'); }
+        function logout() {
+            currentUser = null;
+            document.getElementById('login-password').value = '';
+            document.getElementById('main-app').classList.remove('active');
+            document.getElementById('auth-wrapper').classList.add('active');
+            showView('view-welcome');
+        }
+
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            el.classList.add('active');
+        }
+
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function unavailableAlert() { alert("Временно недоступно."); closeModal('modal-doc-menu'); }
 
         function openVerifyModal(type) {
             if (!currentUser) return;
             currentVerifyTarget = type;
-            if (type === 'passport' && currentUser.documents.some(d => d.type === 'passport')) { alert("Внутренний паспорт уже получен!"); return; }
-            if (type === 'int_passport' && currentUser.documents.some(d => d.type === 'int_passport')) { alert("Загранпаспорт уже получен!"); return; }
-            if (type === 'license' && currentUser.documents.some(d => d.type === 'driver_license')) { alert("Права уже получены!"); return; }
-            if (type === 'police_cert' && currentUser.documents.some(d => d.type === 'police_cert')) { alert("Справка уже выдана!"); return; }
-            if (type === 'marriage_cert' && currentUser.documents.some(d => d.type === 'marriage_cert')) { alert("Справка уже выдана!"); return; }
-            closeModal('modal-doc-menu'); document.getElementById('verify-code-input').value = ''; openModal('modal-verify-code');
+            
+            if (type === 'passport' && currentUser.hasPassport) { alert("Паспорт гражданина уже получен!"); return; }
+            if (type === 'license' && currentUser.documents.some(d => d.type === 'driver_license')) { alert("Водительские права уже получены!"); return; }
+            
+            closeModal('modal-doc-menu');
+            document.getElementById('verify-code-input').value = '';
+            openModal('modal-verify-code');
         }
 
         function verifyAndProceed() {
             const pass = document.getElementById('verify-code-input').value.trim();
-            if (pass !== currentUser.password) { alert("Неверный пароль!"); return; }
+            if (pass !== currentUser.password && pass !== currentUser.code) { alert("Неверный пароль!"); return; }
+            
             closeModal('modal-verify-code');
 
-            if (currentVerifyTarget === 'passport') { openModal('modal-region'); } 
-            else if (currentVerifyTarget === 'license') { openModal('modal-category'); }
-            else if (currentVerifyTarget === 'int_passport') { generateDocument('int_passport', 'ЗАГРАНПАСПОРТ', `${randLetters(2)}${randNum(6)}`); }
-            else if (currentVerifyTarget === 'police_cert') { generateDocument('police_cert', 'СПРАВКА О НЕСУДИМОСТИ', `PC-${new Date().getFullYear()}-${randNum(5)}`); }
-            else if (currentVerifyTarget === 'marriage_cert') { generateDocument('marriage_cert', 'СЕРТИФИКАТ ОБ ОТСУТСТВИИ БРАКА', `MC-${new Date().getFullYear()}-${randNum(5)}`); }
+            if (currentVerifyTarget === 'passport') {
+                const citName = currentUser.cit.name;
+                const sel = document.getElementById('region-select');
+
+                if (citName === 'Варландия') {
+                    sel.innerHTML = `<option value="01">Бьоркпилс</option><option value="02">Аскенд</option><option value="03">Эзертальд</option><option value="04">Вальгард</option><option value="05">Гаал</option><option value="06">Брайнинг</option><option value="07">Одебург</option><option value="08">Риет-Ас-Квилле</option><option value="09">Кёнигланд</option><option value="10">Сольхейм</option><option value="11">Мительхене</option><option value="12">Налвага</option><option value="13">Таумапилс</option><option value="14">Де Гримвалд</option><option value="15">Торнланд</option><option value="16">Дзервените</option><option value="17">Аневежас</option>`;
+                    openModal('modal-region');
+                } else if (citName === 'Инопланетяне') {
+                    sel.innerHTML = `<option value="01">Нибирская</option><option value="02">Новахеймская</option><option value="03">Мунриджская</option><option value="58">Starford</option><option value="23">Лунская</option><option value="21">Дыркалэнд</option><option value="00">Аурасити</option><option value="89">Крайденская</option><option value="22">Ксанриджская</option><option value="68">Порт-Джалласская</option>`;
+                    openModal('modal-region');
+                } else if (citName === 'Адастра') {
+                    sel.innerHTML = `<option value="OC">Охема</option><option value="LU">Люпас</option><option value="AR">Ад Рота</option><option value="TR">Тричелли</option><option value="GE">Гебии</option><option value="LUX">Люкс</option><option value="LEX">Лекс</option><option value="AI">Остров Анкорис</option>`;
+                    openModal('modal-region');
+                } else { generatePassport(); }
+            } else if (currentVerifyTarget === 'license') {
+                openModal('modal-category');
+            }
         }
 
-        async function generateDocument(type, title, idNum) {
-            currentUser.documents.push({ type: type, title: title, idNumber: idNum, theme: '' });
+        async function generateDriverLicense() {
+            if (!currentUser) return;
+            const category = document.getElementById('dl-category-select').value;
+            closeModal('modal-category');
+
+            const cit = currentUser.cit.name;
+            const dobParts = currentUser.dob.split('-'); 
+            let dlId = '';
+
+            if (cit === 'Мимиляндия') {
+                dlId = `${Math.floor(Math.random() * 9) + 1}${randNum(6)}${randNum(2)}${randNum(1)}${randLetters(2)}`;
+            } else if (['Эммария', 'Королевство Пернии', 'Орфия'].includes(cit)) {
+                dlId = `${category.substring(0,1)}${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}${randNum(7)}`;
+            } else if (cit === 'Варландия') {
+                dlId = `${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}${randNum(5)}`;
+            } 
+            else if (cit === 'Инсталяндия') {
+                dlId = `IDL-${randNum(9)}`;
+            } 
+            else if (cit === 'Инопланетяне') {
+                const transType = (category === 'A' || category === 'M') ? 'M' : 'A';
+                const orderNum = randNum(7); 
+                const year = new Date().getFullYear().toString().slice(-2); 
+                const region = randNum(2); 
+                dlId = `${transType}${orderNum}${year}${region}ALI`;
+            } else {
+                dlId = `${randLetters(2)}${randNum(8)}`; 
+            }
+
+            const randomThemeClass = Math.random() > 0.5 ? 'theme-dl-blue' : 'theme-dl-pink';
+            currentUser.documents.push({ type: 'driver_license', title: `ВОДИТЕЛЬСКИЕ ПРАВА (${category})`, idNumber: dlId, theme: randomThemeClass });
+
             await saveUser(currentUser);
             renderDocumentsList();
             setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
 
-        async function generateInternalPassport() {
-            const passId = `ID${randNum(9)}`; closeModal('modal-region');
-            generateDocument('passport', 'ВНУТРЕННИЙ ПАСПОРТ', passId);
-        }
+        async function generatePassport() {
+            const cit = currentUser.cit.name;
+            const reg = document.getElementById('region-select').value;
+            const dobParts = currentUser.dob.split('-'); 
+            let passId = '';
 
-        async function generateDriverLicense() {
-            const cat = document.getElementById('dl-category-select').value; closeModal('modal-category');
-            generateDocument('driver_license', `ВОДИТЕЛЬСКИЕ ПРАВА (${cat})`, `DL${randNum(8)}`);
+            if (cit === 'Мимиляндия') passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
+            else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) passId = `${randNum(9)}U${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}01${randNum(1)}`;
+            else if (cit === 'Варландия') passId = `${reg}${randNum(5)}${currentUser.gender}${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}VAR`;
+            else if (cit === 'Инсталяндия') passId = `${randNum(9)}${"TRWAGMYFPDXBNJZSQVHLCKE"[parseInt(randNum(9)) % 23]}`;
+            else if (cit === 'Инопланетяне') passId = `${dobParts[0]}.${dobParts[1]}.${dobParts[2]}${currentUser.gender}ALIREGION${reg}.${randLetters(5)}`;
+            else if (cit === 'Адастра') passId = `ASTreg${reg}/${String(currentUser.nameLat).replace(/\s/g, '')}/${dobParts[0]}/${currentUser.gender === 'M' ? 'Male' : (currentUser.gender === 'F' ? 'Female' : 'Other')}`;
+
+            closeModal('modal-region');
+            currentUser.documents.push({ type: 'passport', title: 'ПАСПОРТ ГРАЖДАНИНА', idNumber: passId, theme: '' });
+            currentUser.hasPassport = true;
+            
+            await saveUser(currentUser);
+            renderDocumentsList();
+            setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
     </script>
 </body>
