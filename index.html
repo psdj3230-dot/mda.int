@@ -28,6 +28,9 @@
 
         body { background-color: #121212; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
+        /* --- ПЕРНИЙСКИЙ ЯЗЫК --- */
+        body.pernian-lang { text-transform: uppercase !important; }
+
         .app-container {
             width: 100%; max-width: 414px; height: 100vh; max-height: 896px;
             background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 40%, var(--bg-gradient-bottom) 100%);
@@ -291,9 +294,26 @@
         .doc-list li:last-child { border-bottom: none; }
 
         .hidden { display: none !important; }
+
+        /* --- СТИЛИ ДЛЯ ЭКРАНА ВЫБОРА ЯЗЫКОВ --- */
+        #language-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; }
+        .lang-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: white; padding: 12px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; margin: 5px; flex-grow: 1; text-align: center; }
+        .lang-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
     </style>
 </head>
 <body>
+
+    <!-- 1. БЛОКИРУЮЩИЙ ЭКРАН ВЫБОРА ЯЗЫКА -->
+    <div id="language-screen">
+        <h1 style="font-size: 3rem; margin-bottom: 5px; font-weight: 800; letter-spacing: 2px;">MDA-INT</h1>
+        <p style="margin-bottom: 30px; font-weight: 600;">Выберите язык / Select language</p>
+        <div style="width: 90%; max-width: 400px; text-align: center;">
+            <h3 style="font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">Языки реального мира</h3>
+            <div id="real-langs" style="display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 25px;"></div>
+            <h3 style="font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">Пользовательские языки</h3>
+            <div id="custom-langs" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+        </div>
+    </div>
 
     <div class="app-container">
         <div id="splash-screen" class="screen active">
@@ -479,9 +499,75 @@
                 <button class="btn btn-secondary" onclick="closeModal('modal-category')">Отмена</button>
             </div>
         </div>
+
+        <!-- 3. МОДАЛЬНОЕ ОКНО ПРЕДПРОСМОТРА И ЭКСПОРТА ДОКУМЕНТОВ -->
+        <div id="cert-modal" class="modal">
+            <div class="modal-content" style="background: white; color: black; padding: 30px; position: relative;">
+                <span onclick="closeModal('cert-modal')" style="position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: #666;">&times;</span>
+                <h2 style="font-size: 1.2rem; margin-bottom: 10px; text-align: center; font-weight: 800;">Экспорт документа</h2>
+                <p style="font-size: 0.8rem; color: #666; text-align: center; margin-bottom: 20px;">Предварительный просмотр перед сохранением в PDF:</p>
+                
+                <div class="cert-preview" style="border: 1px solid #ccc; padding: 20px; text-align: center; margin-bottom: 20px; background: #fafafa; min-height: 200px; position: relative; overflow: hidden; border-radius: 8px;">
+                    <h3 style="font-size: 13px; margin-bottom: 10px; font-weight: 700;" id="cert-ministry">МІНІСТЕРСТВО</h3>
+                    <h4 style="margin: 20px 0; font-size: 18px; font-weight: 800;" id="cert-title-preview">ВИТЯГ<br><small style="font-size: 11px; font-weight: 600;">з інформаційно-аналітичної системи</small></h4>
+                    <p style="text-align: left; font-size: 13px; margin-bottom: 15px;" id="cert-body-preview">ВІДСУТНІ</p>
+                    <p style="text-align: left; font-size: 11px; color: #555;">ID документа: <span id="cert-id-preview" style="font-family: monospace;"></span></p>
+                    <div style="color: red; transform: rotate(-30deg); font-size: 30px; font-weight: 900; margin-top: 30px; opacity: 0.25; position: absolute; top: 30%; left: 10%; pointer-events: none;">ОБРАЗЕЦ</div>
+                </div>
+
+                <button class="btn btn-primary" style="background: var(--nav-active); color: white; border-radius: 12px; font-size: 1rem;" onclick="exportToPDF()">Экспортировать в PDF</button>
+            </div>
+        </div>
     </div>
 
     <script>
+        // --- 1. ЛОГИКА ВЫБОРА ЯЗЫКОВ ---
+        const realLanguages = ['Русский', 'Английский', 'Испанский', 'Французский', 'Итальянский', 'Латынь'];
+        const customLanguages = [
+            { name: 'Мимский', dev: true },
+            { name: 'Эммарский', dev: true },
+            { name: 'Инопланетянский', dev: true },
+            { name: 'Орфия', dev: true },
+            { name: 'Олинский', dev: true },
+            { name: 'Варландский', dev: true },
+            { name: 'Пернийский', dev: false, isPernian: true }
+        ];
+
+        function initLanguages() {
+            const realContainer = document.getElementById('real-langs');
+            const customContainer = document.getElementById('custom-langs');
+
+            realLanguages.forEach(lang => {
+                let btn = document.createElement('button');
+                btn.className = 'lang-btn';
+                btn.innerText = lang;
+                btn.onclick = () => selectLanguage(lang, false);
+                realContainer.appendChild(btn);
+            });
+
+            customLanguages.forEach(lang => {
+                let btn = document.createElement('button');
+                btn.className = 'lang-btn';
+                btn.innerText = lang.name;
+                btn.onclick = () => selectLanguage(lang.name, lang.dev, lang.isPernian);
+                customContainer.appendChild(btn);
+            });
+        }
+
+        function selectLanguage(langName, isDev, isPernian = false) {
+            if (isDev) {
+                alert(`ОШИБКА ДОСТУПА:\nЯзык "${langName}" находится в разработке. Пожалуйста, выберите другой язык.`);
+                return;
+            }
+            if (isPernian) {
+                document.body.classList.add('pernian-lang');
+            } else {
+                document.body.classList.remove('pernian-lang');
+            }
+            document.getElementById('language-screen').style.display = 'none';
+        }
+
+
         // ИНТЕГРАЦИЯ БАЗЫ ДАННЫХ FIREBASE
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
@@ -536,6 +622,7 @@
         let sigCanvas, sigCtx, isDrawingSig = false;
 
         window.onload = function() {
+            initLanguages(); // Инициализация экрана языков
             populateSelects();
             initSignatureCanvas();
             setTimeout(() => {
@@ -732,52 +819,130 @@
             }
         }
 
+        // --- ЛОГИКА ЭКСПОРТА ДОКУМЕНТОВ ---
+        function openDocumentModal(title, ministry, bodyText, id) {
+            document.getElementById('cert-title-preview').innerHTML = `${title}<br><small style="font-size: 11px; font-weight: 600;">з інформаційно-аналітичної системи</small>`;
+            document.getElementById('cert-ministry').innerText = ministry;
+            document.getElementById('cert-body-preview').innerHTML = bodyText;
+            document.getElementById('cert-id-preview').innerText = id;
+            openModal('cert-modal');
+        }
+
+        function exportToPDF() {
+            alert('Генерация PDF файла начата...\nДокумент будет скачан на ваше устройство.');
+            closeModal('cert-modal');
+        }
+
         function renderDocumentsList() {
             const container = document.getElementById('documents-list');
             let html = '';
             
             const dobFmt = currentUser.dob ? currentUser.dob.split('-').reverse().join('.') : '';
             const safeNameLat = (currentUser.nameLat) ? String(currentUser.nameLat) : "USER";
+            const safeNameCyr = (currentUser.nameCyr) ? String(currentUser.nameCyr) : "ПОЛЬЗОВАТЕЛЬ";
 
             currentUser.documents.forEach(doc => {
-                const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
-                let appliedTheme = doc.theme;
-                if (['passport', 'foreign_passport', 'criminal_record', 'single_status'].includes(doc.type)) { 
-                    appliedTheme = getCountryThemeClass(currentUser.cit.name); 
-                }
+                
+                // 2. ОТРИСОВКА ЗАГРАНПАСПОРТА (МЕЖДУНАРОДНЫЙ ФОРМАТ)
+                if (doc.type === 'foreign_passport') {
+                    const countryAbbr3 = (currentUser.cit.abbr || 'UKR').substring(0, 3).toUpperCase();
+                    const sexChar = currentUser.gender === 'M' ? 'M' : (currentUser.gender === 'F' ? 'F' : 'X');
+                    const dobParts = currentUser.dob ? currentUser.dob.split('-') : ['1999', '01', '01'];
+                    const mrzDob = dobParts[0].substring(2) + dobParts[1] + dobParts[2];
+                    
+                    const namePartsCyr = safeNameCyr.split(' ');
+                    const namePartsLat = safeNameLat.split(' ');
+                    const surnameCyr = namePartsCyr.length > 1 ? namePartsCyr[1] : safeNameCyr;
+                    const givenCyr = namePartsCyr[0];
+                    const surnameLat = namePartsLat.length > 1 ? namePartsLat[1] : safeNameLat;
+                    const givenLat = namePartsLat[0];
 
-                // Рендерим подпись только там, где она не перекрывает текст (в свободной правой нижней зоне карточки)
-                const signatureImgHtml = currentUser.signature ? `<img src="${currentUser.signature}" class="card-signature-overlay">` : '';
-
-                html += `
-                <div class="card-wrapper">
-                    <div class="document-card ${appliedTheme}">
-                        <div class="card-front">
-                            <div class="card-chip"><i class="fa-solid fa-microchip"></i></div>
-                            <div class="card-watermark">MDA</div>
-                            <div class="card-top">
-                                <div class="photo-container"><img src="${currentUser.photo}"></div>
-                                <div class="info-container">
-                                    <h2>${safeNameLat.toUpperCase()}</h2>
-                                    <p>DOB: <span>${dobFmt}</span></p>
-                                    <p>CIT: <span>${currentUser.cit.name}</span></p>
-                                    <p>RES: <span>${currentUser.res.name}</span></p>
+                    html += `
+                    <div class="card-wrapper" style="margin-bottom: 32px;">
+                        <div style="background: #fff url('data:image/svg+xml;utf8,<svg opacity=%220.03%22 xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22/></svg>'); border-radius: 16px; padding: 18px; color: #111; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid #ccc; font-family: sans-serif; position: relative;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 12px; margin-bottom: 12px;">
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <img src="${currentUser.cit.flag || 'mimiland.png'}" style="width: 45px; height: 30px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">
+                                    <h2 style="margin: 0; font-size: 15px; font-weight: 900; line-height: 1;">ПАСПОРТ<br>PASSPORT</h2>
+                                </div>
+                                <div style="text-align: right; font-size: 10px; line-height: 1.3;">
+                                    Тип/Type: <strong>P</strong><br>
+                                    Код/Code: <strong>${countryAbbr3}</strong><br>
+                                    Номер/No: <strong>${doc.idNumber}</strong>
                                 </div>
                             </div>
-                            <div class="id-number">${doc.idNumber}</div>
-                            <div class="card-ribbon">${doc.title}</div>
-                            <div class="bottom-code">${bottomStr}</div>
                             
-                            <!-- Вывод подписи из холста -->
-                            ${signatureImgHtml}
+                            <div style="display: flex; gap: 12px;">
+                                <div style="width: 90px; height: 120px; background: #eee; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="${currentUser.photo}" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <div style="flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 9px;">
+                                    <div style="grid-column: span 2;"><span style="color:#666;">Прізвище/Surname</span><br><strong style="font-size:12px;">${surnameCyr.toUpperCase()} / ${surnameLat.toUpperCase()}</strong></div>
+                                    <div style="grid-column: span 2;"><span style="color:#666;">Ім'я/Given Names</span><br><strong style="font-size:12px;">${givenCyr.toUpperCase()} / ${givenLat.toUpperCase()}</strong></div>
+                                    <div style="grid-column: span 2;"><span style="color:#666;">Громадянство/Nationality</span><br><strong style="font-size:11px;">${currentUser.cit.name.toUpperCase()}</strong></div>
+                                    <div><span style="color:#666;">Дата народження/DOB</span><br><strong style="font-size:10px;">${dobFmt}</strong></div>
+                                    <div><span style="color:#666;">Стать/Sex</span><br><strong style="font-size:10px;">${sexChar}</strong></div>
+                                    <div style="grid-column: span 2;"><span style="color:#666;">Запис №/Record No.</span><br><strong style="font-size:10px;">${doc.idNumber}</strong></div>
+                                </div>
+                            </div>
 
-                            <!-- ШТРИХ-КОД В САМОМ НИЗУ -->
-                            <div class="front-barcode-wrapper">
-                                <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(doc.idNumber)}&scale=3&height=12&includetext=false" alt="Barcode">
+                            <div style="margin-top: 18px; font-family: monospace; font-size: 11px; letter-spacing: 0px; word-break: break-all; line-height: 1.3; font-weight: bold; background: #f9f9f9; padding: 10px 8px; border-radius: 6px; border: 1px solid #eaeaea;">
+                                P&lt;${countryAbbr3}${surnameLat.toUpperCase()}&lt;&lt;${givenLat.toUpperCase()}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>
+                                ${doc.idNumber}&lt;0${countryAbbr3}${mrzDob}${sexChar}24091571234567890&lt;&lt;&lt;70
                             </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
+                } else {
+                    
+                    // СТАНДАРТНАЯ ОТРИСОВКА ВНУТРЕННИХ ДОКУМЕНТОВ
+                    let onclickAttr = '';
+                    let hintHtml = '';
+                    
+                    if (doc.type === 'criminal_record') {
+                        onclickAttr = `onclick="openDocumentModal('ВИТЯГ', 'МІНІСТЕРСТВО ВНУТРІШНІХ СПРАВ', 'Відомості про наявність незнятої чи непогашеної судимості: <strong>ВІДСУТНІ</strong>', '${doc.idNumber}')" style="cursor: pointer;"`;
+                        hintHtml = `<div style="position: absolute; top: -12px; right: -5px; background: var(--accent-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">Нажмите для PDF</div>`;
+                    } else if (doc.type === 'single_status') {
+                        onclickAttr = `onclick="openDocumentModal('СЕРТИФИКАТ', 'МІНІСТЕРСТВО ЮСТИЦІЇ', 'Записи про шлюб: <strong>ВІДСУТНІ</strong> (Особа не перебуває у шлюбі)', '${doc.idNumber}')" style="cursor: pointer;"`;
+                        hintHtml = `<div style="position: absolute; top: -12px; right: -5px; background: var(--accent-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">Нажмите для PDF</div>`;
+                    }
+
+                    const bottomStr = `${doc.idNumber}<${safeNameLat.replace(/\s/g, '').substring(0,6).toUpperCase()}`;
+                    let appliedTheme = doc.theme;
+                    if (['passport', 'criminal_record', 'single_status'].includes(doc.type)) { 
+                        appliedTheme = getCountryThemeClass(currentUser.cit.name); 
+                    }
+
+                    const signatureImgHtml = currentUser.signature ? `<img src="${currentUser.signature}" class="card-signature-overlay">` : '';
+
+                    html += `
+                    <div class="card-wrapper" style="position: relative;" ${onclickAttr}>
+                        ${hintHtml}
+                        <div class="document-card ${appliedTheme}">
+                            <div class="card-front">
+                                <div class="card-chip"><i class="fa-solid fa-microchip"></i></div>
+                                <div class="card-watermark">MDA</div>
+                                <div class="card-top">
+                                    <div class="photo-container"><img src="${currentUser.photo}"></div>
+                                    <div class="info-container">
+                                        <h2>${safeNameLat.toUpperCase()}</h2>
+                                        <p>DOB: <span>${dobFmt}</span></p>
+                                        <p>CIT: <span>${currentUser.cit.name}</span></p>
+                                        <p>RES: <span>${currentUser.res.name}</span></p>
+                                    </div>
+                                </div>
+                                <div class="id-number">${doc.idNumber}</div>
+                                <div class="card-ribbon">${doc.title}</div>
+                                <div class="bottom-code">${bottomStr}</div>
+                                
+                                ${signatureImgHtml}
+
+                                <div class="front-barcode-wrapper">
+                                    <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(doc.idNumber)}&scale=3&height=12&includetext=false" alt="Barcode">
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
             });
 
             html += `
@@ -891,7 +1056,6 @@
             setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
 
-        // ГЕНЕРАЦИЯ ЗАГРАНПАСПОРТОВ ПО МЕЖДУНАРОДНОМУ СТАНДАРТУ (2 БУКВЫ СТРАНЫ + 7 ЦИФР)
         async function generateForeignPassport() {
             if (!currentUser) return;
             const countryAbbr = (currentUser.cit.abbr || 'XX').substring(0, 2).toUpperCase();
@@ -903,7 +1067,6 @@
             setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
 
-        // ГЕНЕРАЦИЯ СПРАВКИ О НЕСУДИМОСТИ
         async function generateCriminalRecord() {
             if (!currentUser) return;
             const crId = `CR-${currentUser.cit.abbr}-${randNum(8)}`;
@@ -913,7 +1076,6 @@
             setTimeout(() => { const cont = document.getElementById('documents-list'); cont.scrollTop = cont.scrollHeight; }, 100);
         }
 
-        // ГЕНЕРАЦИЯ СЕРТИФИКАТА НЕЖЕНАТОГО / НЕЗАМУЖНЕЙ
         async function generateSingleStatus() {
             if (!currentUser) return;
             const ssId = `SS-${currentUser.cit.abbr}-${randNum(8)}`;
@@ -932,14 +1094,12 @@
             if (cit === 'Мимиляндия') passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
             else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) passId = `${randNum(9)}U${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}01${randNum(1)}`;
             else if (cit === 'Варландия') passId = `${reg}${randNum(5)}${currentUser.gender}${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}VAR`;
-            
-            // ИСПРАВЛЕННЫЙ АЛГОРИТМ ДЛЯ ИНСТАЛЯНДИИ
             else if (cit === 'Инсталяндия') {
                 const baseNumStr = randNum(9);
                 const initialNum = parseInt(baseNumStr);
                 const divided = Math.floor(initialNum / 23);
                 const multiplied = divided * 23;
-                const resultIndex = Math.abs(multiplied - initialNum); // Чистая разница (0-22)
+                const resultIndex = Math.abs(multiplied - initialNum);
                 
                 const alphabet = "TRWAGMYFPDXBNJZSQVHLCKE";
                 const checkLetter = alphabet.charAt(resultIndex);
