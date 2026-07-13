@@ -354,9 +354,9 @@
                 <div class="form-group">
                     <label data-i18n="doc_lang">Язык документов</label>
                     <select id="reg-lang" class="form-input">
-                        <option value="RU">Русский</option>
-                        <option value="EN">English</option>
-                        <option value="LA">Латинский</option>
+                        <option value="RU" data-i18n="lang_ru">Русский</option>
+                        <option value="EN" data-i18n="lang_en">English</option>
+                        <option value="LA" data-i18n="lang_la">Латинский</option>
                     </select>
                 </div>
 
@@ -474,12 +474,12 @@
                 <div class="modal-title" data-i18n="mod_cat">Категория прав</div>
                 <p style="font-size: 0.8rem; margin-bottom: 15px; text-align: center; color: #b0c0d1;" data-i18n="mod_cat_d">Выберите разрешенную категорию транспортных средств.</p>
                 <select id="dl-category-select" class="form-input" style="margin-bottom: 15px;">
-                    <option value="A">Категория A</option>
-                    <option value="B">Категория B</option>
-                    <option value="C">Категория C</option>
-                    <option value="D">Категория D</option>
-                    <option value="M">Категория M</option>
-                    <option value="BE">Категория BE</option>
+                    <option value="A" data-i18n="cat_a">Категория A</option>
+                    <option value="B" data-i18n="cat_b">Категория B</option>
+                    <option value="C" data-i18n="cat_c">Категория C</option>
+                    <option value="D" data-i18n="cat_d">Категория D</option>
+                    <option value="M" data-i18n="cat_m">Категория M</option>
+                    <option value="BE" data-i18n="cat_be">Категория BE</option>
                 </select>
                 <button class="btn btn-primary" onclick="generateDriverLicense()" data-i18n="btn_cr_dl">Создать права</button>
                 <button class="btn btn-secondary" onclick="closeModal('modal-category')" data-i18n="cancel">Отмена</button>
@@ -515,7 +515,12 @@
                 reg_title: 'Анкета гражданина', up_photo: 'Загрузить фото', name_lat: 'Имя и Фамилия (Латиница)', name_cyr: 'Имя и Фамилия (Кириллица)', dob: 'Дата рождения', gender: 'Пол', gen_m: 'Мужской', gen_f: 'Женский', gen_o: 'Иной', doc_lang: 'Язык документов', cit: 'Гражданство (Страна рождения)', res: 'Страна проживания', sig: 'Личная подпись', clear_sig: 'Очистить холст', fin_reg: 'Завершить регистрацию', cancel: 'Отмена', lbl_login: 'Логин', lbl_pass: 'Пароль', lbl_create_pass: 'Придумайте пароль',
                 wallet: 'Мой Кошелёк', nav_doc: 'ДОКУМЕНТЫ', nav_prof: 'ПРОФИЛЬ', prof_lat: 'Латиница', prof_cyr: 'Кириллица', prof_dob: 'Дата рожд.', prof_gender: 'Пол', prof_lang: 'Язык док.', prof_cit: 'Гражданство', prof_res: 'Проживание', logout: 'Выйти', add_doc: 'Добавить новый документ', mod_doc: 'Выберите документ', doc_fp: 'Загранпаспорт', doc_dl: 'Водительские права', doc_cr: 'Справка о несудимости', doc_ss: 'Справка о семейном положении', doc_dip: 'Диплом', doc_est: 'Недвижимость', doc_pass: 'Паспорт гражданина', mod_ver: 'Подтверждение личности', mod_ver_d: 'Введите ваш пароль для подтверждения личности.', btn_conf: 'Подтвердить', mod_reg: 'Укажите регион/землю', btn_cr_pass: 'Создать паспорт', mod_cat: 'Категория прав', mod_cat_d: 'Выберите разрешенную категорию транспортных средств.', btn_cr_dl: 'Создать права', exp_title: 'ЭКСПОРТ ДОКУМЕНТА / DOCUMENT EXPORT', exp_desc: 'Предварительный просмотр перед сохранением в PDF: / Preview before saving to PDF:', btn_exp: 'Экспортировать в PDF',
                 fp_type: 'Тип/Type:', fp_code: 'Код/Code:', fp_no: 'Номер/No:', fp_sur: 'Фамилия / Surname', fp_giv: 'Имя / Given Names', fp_nat: 'Гражданство / Nationality', fp_dob: 'Дата рождения / DOB', fp_sex: 'Пол / Sex', fp_rec: 'Запись № / Record No.',
-                cert_min_vd: 'МИНИСТЕРСТВО ВНУТРЕННИХ ДЕЛ / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'МИНИСТЕРСТВО ЮСТИЦИИ / MINISTRY OF JUSTICE', cert_ext: 'ВЫПИСКА / EXTRACT', cert_cert: 'СЕРТИФИКАТ / CERTIFICATE', cert_ias: 'из информационно-аналитической системы / from the information-analytical system', cert_b_cr: 'Сведения о наличии неснятой или непогашенной судимости: <strong>ОТСУТСТВУЮТ / ABSENT</strong>', cert_b_ss: 'Записи о браке: <strong>ОТСУТСТВУЮТ / ABSENT</strong> (Лицо не состоит в браке / Not married)', cert_id: 'ID документа / Document ID:'
+                cert_min_vd: 'МИНИСТЕРСТВО ВНУТРЕННИХ ДЕЛ / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'МИНИСТЕРСТВО ЮСТИЦИИ / MINISTRY OF JUSTICE', cert_ext: 'ВЫПИСКА / EXTRACT', cert_cert: 'СЕРТИФИКАТ / CERTIFICATE', cert_ias: 'из информационно-аналитической системы / from the information-analytical system', cert_b_cr: 'Сведения о наличии неснятой или непогашенной судимости: <strong>ОТСУТСТВУЮТ / ABSENT</strong>', cert_b_ss: 'Записи о браке: <strong>ОТСУТСТВУЮТ / ABSENT</strong> (Лицо не состоит в браке / Not married)', cert_id: 'ID документа / Document ID:',
+                
+                // Добавленные ключи для системных уведомлений и динамических элементов
+                alert_fill_all: 'Пожалуйста, заполните все поля и загрузите фото!', alert_login_chars: 'Ошибка! Логин должен содержать только латинские буквы и цифры.', alert_login_taken: 'Этот логин уже занят!', alert_reg_success: 'Регистрация успешна! Теперь вы можете войти, используя ваш пароль.', alert_enter_cred: 'Введите логин и пароль', alert_user_not_found: 'Пользователь не найден. Пройдите регистрацию.', alert_wrong_pass: 'Неверный логин или пароль!', alert_unavail: 'Временно недоступно.', alert_pass_exist: 'Паспорт гражданина уже получен!', alert_fp_exist: 'Загранпаспорт уже получен!', alert_dl_exist: 'Водительские права уже получены!', alert_cr_exist: 'Справка о несудимости уже получена!', alert_ss_exist: 'Справка о семейном положении уже получена!', alert_wrong_code: 'Неверный пароль!', alert_pdf: 'Генерация PDF файла начата...\nДокумент будет скачан на ваше устройство.', alert_dev: 'ОШИБКА ДОСТУПА:\nЯзык "%s" находится в разработке. Пожалуйста, выберите другой язык.',
+                doc_sys: 'SYSTEM ID - MDA', doc_pass_title: 'ПАСПОРТ ГРАЖДАНИНА', doc_fp_title: 'ЗАГРАНИЧНЫЙ ПАСПОРТ', doc_cr_title: 'СПРАВКА О НЕСУДИМОСТИ', doc_ss_title: 'СЕРТИФИКАТ СЕМЕЙНОГО ПОЛОЖЕНИЯ', doc_dl_title: 'ВОДИТЕЛЬСКИЕ ПРАВА',
+                lang_ru: 'Русский', lang_en: 'English', lang_la: 'Латинский', cat_a: 'Категория A', cat_b: 'Категория B', cat_c: 'Категория C', cat_d: 'Категория D', cat_m: 'Категория M', cat_be: 'Категория BE', lbl_dob: 'DOB:', lbl_cit: 'CIT:', lbl_res: 'RES:'
             },
             'Английский': {
                 lang_sel: 'Select language', lang_real: 'Real World Languages', lang_custom: 'Custom Languages',
@@ -523,7 +528,11 @@
                 reg_title: 'Citizen Form', up_photo: 'Upload Photo', name_lat: 'Full Name (Latin)', name_cyr: 'Full Name (Cyrillic)', dob: 'Date of Birth', gender: 'Gender', gen_m: 'Male', gen_f: 'Female', gen_o: 'Other', doc_lang: 'Document Language', cit: 'Citizenship', res: 'Residence', sig: 'Personal Signature', clear_sig: 'Clear Canvas', fin_reg: 'Complete Registration', cancel: 'Cancel', lbl_login: 'Username', lbl_pass: 'Password', lbl_create_pass: 'Create Password',
                 wallet: 'My Wallet', nav_doc: 'DOCUMENTS', nav_prof: 'PROFILE', prof_lat: 'Latin', prof_cyr: 'Cyrillic', prof_dob: 'DOB', prof_gender: 'Gender', prof_lang: 'Doc Lang', prof_cit: 'Citizenship', prof_res: 'Residence', logout: 'Logout', add_doc: 'Add New Document', mod_doc: 'Select Document', doc_fp: 'Foreign Passport', doc_dl: 'Driver License', doc_cr: 'Criminal Record', doc_ss: 'Single Status', doc_dip: 'Diploma', doc_est: 'Real Estate', doc_pass: 'Citizen Passport', mod_ver: 'Identity Verification', mod_ver_d: 'Enter your password.', btn_conf: 'Confirm', mod_reg: 'Select Region', btn_cr_pass: 'Create Passport', mod_cat: 'License Category', mod_cat_d: 'Select vehicle category.', btn_cr_dl: 'Create License', exp_title: 'DOCUMENT EXPORT / ЭКСПОРТ ДОКУМЕНТА', exp_desc: 'Preview before saving to PDF: / Предварительный просмотр:', btn_exp: 'Export to PDF',
                 fp_type: 'Type:', fp_code: 'Code:', fp_no: 'No:', fp_sur: 'Surname / Фамилия', fp_giv: 'Given Names / Имя', fp_nat: 'Nationality / Гражданство', fp_dob: 'DOB / Дата рожд.', fp_sex: 'Sex / Пол', fp_rec: 'Record No.',
-                cert_min_vd: 'MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTRY OF JUSTICE', cert_ext: 'EXTRACT', cert_cert: 'CERTIFICATE', cert_ias: 'from the information and analytical system', cert_b_cr: 'Criminal records: <strong>ABSENT</strong>', cert_b_ss: 'Marriage records: <strong>ABSENT</strong>', cert_id: 'Document ID:'
+                cert_min_vd: 'MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTRY OF JUSTICE', cert_ext: 'EXTRACT', cert_cert: 'CERTIFICATE', cert_ias: 'from the information and analytical system', cert_b_cr: 'Criminal records: <strong>ABSENT</strong>', cert_b_ss: 'Marriage records: <strong>ABSENT</strong>', cert_id: 'Document ID:',
+                
+                alert_fill_all: 'Please fill out all fields and upload a photo!', alert_login_chars: 'Error! Username must contain only Latin letters and numbers.', alert_login_taken: 'This username is already taken!', alert_reg_success: 'Registration successful! You can now log in.', alert_enter_cred: 'Enter username and password', alert_user_not_found: 'User not found. Please register.', alert_wrong_pass: 'Invalid username or password!', alert_unavail: 'Temporarily unavailable.', alert_pass_exist: 'Citizen passport already obtained!', alert_fp_exist: 'Foreign passport already obtained!', alert_dl_exist: 'Driver license already obtained!', alert_cr_exist: 'Criminal record already obtained!', alert_ss_exist: 'Single status certificate already obtained!', alert_wrong_code: 'Invalid password!', alert_pdf: 'PDF generation started...\nThe document will be downloaded to your device.', alert_dev: 'ACCESS ERROR:\nThe language "%s" is in development. Please select another language.',
+                doc_sys: 'SYSTEM ID - MDA', doc_pass_title: 'CITIZEN PASSPORT', doc_fp_title: 'FOREIGN PASSPORT', doc_cr_title: 'CRIMINAL RECORD', doc_ss_title: 'SINGLE STATUS CERTIFICATE', doc_dl_title: 'DRIVER LICENSE',
+                lang_ru: 'Russian', lang_en: 'English', lang_la: 'Latin', cat_a: 'Category A', cat_b: 'Category B', cat_c: 'Category C', cat_d: 'Category D', cat_m: 'Category M', cat_be: 'Category BE', lbl_dob: 'DOB:', lbl_cit: 'CIT:', lbl_res: 'RES:'
             },
             'Испанский': {
                 lang_sel: 'Seleccione el idioma', lang_real: 'Idiomas Reales', lang_custom: 'Idiomas Personalizados',
@@ -531,7 +540,11 @@
                 reg_title: 'Formulario de Ciudadano', up_photo: 'Subir Foto', name_lat: 'Nombre (Latín)', name_cyr: 'Nombre (Cirílico)', dob: 'Fecha de nacimiento', gender: 'Género', gen_m: 'Masculino', gen_f: 'Femenino', gen_o: 'Otro', doc_lang: 'Idioma', cit: 'Nacionalidad', res: 'Residencia', sig: 'Firma personal', clear_sig: 'Limpiar', fin_reg: 'Completar registro', cancel: 'Cancelar', lbl_login: 'Usuario', lbl_pass: 'Contraseña', lbl_create_pass: 'Crear contraseña',
                 wallet: 'Mi Billetera', nav_doc: 'DOCUMENTOS', nav_prof: 'PERFIL', prof_lat: 'Latín', prof_cyr: 'Cirílico', prof_dob: 'Nacimiento', prof_gender: 'Género', prof_lang: 'Idioma', prof_cit: 'Nacionalidad', prof_res: 'Residencia', logout: 'Cerrar sesión', add_doc: 'Añadir Documento', mod_doc: 'Seleccionar Documento', doc_fp: 'Pasaporte Extranjero', doc_dl: 'Licencia de Conducir', doc_cr: 'Antecedentes Penales', doc_ss: 'Estado Civil', doc_dip: 'Diploma', doc_est: 'Bienes Raíces', doc_pass: 'Pasaporte', mod_ver: 'Verificación', mod_ver_d: 'Ingrese su contraseña.', btn_conf: 'Confirmar', mod_reg: 'Seleccionar Región', btn_cr_pass: 'Crear Pasaporte', mod_cat: 'Categoría', mod_cat_d: 'Seleccione categoría.', btn_cr_dl: 'Crear Licencia', exp_title: 'EXPORTACIÓN DE DOCUMENTO / EXPORT', exp_desc: 'Vista previa antes de PDF: / Preview before PDF:', btn_exp: 'Exportar a PDF',
                 fp_type: 'Tipo/Type:', fp_code: 'Código/Code:', fp_no: 'Número/No:', fp_sur: 'Apellidos / Surname', fp_giv: 'Nombres / Given Names', fp_nat: 'Nacionalidad / Nationality', fp_dob: 'Fecha de nacimiento / DOB', fp_sex: 'Sexo / Sex', fp_rec: 'Registro No. / Record No.',
-                cert_min_vd: 'MINISTERIO DEL INTERIOR / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERIO DE JUSTICIA / MINISTRY OF JUSTICE', cert_ext: 'EXTRACTO / EXTRACT', cert_cert: 'CERTIFICADO / CERTIFICATE', cert_ias: 'del sistema de información / from info system', cert_b_cr: 'Antecedentes penales: <strong>AUSENTES / ABSENT</strong>', cert_b_ss: 'Registros de matrimonio: <strong>AUSENTES / ABSENT</strong>', cert_id: 'ID del Documento / Document ID:'
+                cert_min_vd: 'MINISTERIO DEL INTERIOR / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERIO DE JUSTICIA / MINISTRY OF JUSTICE', cert_ext: 'EXTRACTO / EXTRACT', cert_cert: 'CERTIFICADO / CERTIFICATE', cert_ias: 'del sistema de información / from info system', cert_b_cr: 'Antecedentes penales: <strong>AUSENTES / ABSENT</strong>', cert_b_ss: 'Registros de matrimonio: <strong>AUSENTES / ABSENT</strong>', cert_id: 'ID del Documento / Document ID:',
+                
+                alert_fill_all: '¡Por favor, complete todos los campos y suba una foto!', alert_login_chars: '¡Error! El usuario solo debe contener letras latinas y números.', alert_login_taken: '¡Este usuario ya está en uso!', alert_reg_success: '¡Registro exitoso! Ya puede iniciar sesión.', alert_enter_cred: 'Ingrese usuario y contraseña', alert_user_not_found: 'Usuario no encontrado. Por favor regístrese.', alert_wrong_pass: '¡Usuario o contraseña incorrectos!', alert_unavail: 'Temporalmente no disponible.', alert_pass_exist: '¡El pasaporte ciudadano ya fue obtenido!', alert_fp_exist: '¡El pasaporte extranjero ya fue obtenido!', alert_dl_exist: '¡La licencia de conducir ya fue obtenida!', alert_cr_exist: '¡Los antecedentes penales ya fueron obtenidos!', alert_ss_exist: '¡El certificado de estado civil ya fue obtenido!', alert_wrong_code: '¡Contraseña incorrecta!', alert_pdf: 'Generación de PDF iniciada...\nEl documento se descargará en su dispositivo.', alert_dev: 'ERROR DE ACCESO:\nEl idioma "%s" está en desarrollo. Seleccione otro idioma.',
+                doc_sys: 'SYSTEM ID - MDA', doc_pass_title: 'PASAPORTE CIUDADANO', doc_fp_title: 'PASAPORTE EXTRANJERO', doc_cr_title: 'ANTECEDENTES PENALES', doc_ss_title: 'ESTADO CIVIL', doc_dl_title: 'LICENCIA DE CONDUCIR',
+                lang_ru: 'Ruso', lang_en: 'Inglés', lang_la: 'Latín', cat_a: 'Categoría A', cat_b: 'Categoría B', cat_c: 'Categoría C', cat_d: 'Categoría D', cat_m: 'Categoría M', cat_be: 'Categoría BE', lbl_dob: 'Nacimiento:', lbl_cit: 'NAC:', lbl_res: 'RES:'
             },
             'Французский': {
                 lang_sel: 'Sélectionnez la langue', lang_real: 'Langues Réelles', lang_custom: 'Langues Personnalisées',
@@ -539,19 +552,31 @@
                 reg_title: 'Formulaire Citoyen', up_photo: 'Télécharger la photo', name_lat: 'Nom (Latin)', name_cyr: 'Nom (Cyrillique)', dob: 'Date de naissance', gender: 'Genre', gen_m: 'Homme', gen_f: 'Femme', gen_o: 'Autre', doc_lang: 'Langue', cit: 'Nationalité', res: 'Résidence', sig: 'Signature', clear_sig: 'Effacer', fin_reg: 'Terminer', cancel: 'Annuler', lbl_login: 'Identifiant', lbl_pass: 'Mot de passe', lbl_create_pass: 'Créer mot de passe',
                 wallet: 'Mon Portefeuille', nav_doc: 'DOCUMENTS', nav_prof: 'PROFIL', prof_lat: 'Latin', prof_cyr: 'Cyrillique', prof_dob: 'Naissance', prof_gender: 'Genre', prof_lang: 'Langue', prof_cit: 'Nationalité', prof_res: 'Résidence', logout: 'Déconnexion', add_doc: 'Ajouter document', mod_doc: 'Sélectionner document', doc_fp: 'Passeport Étranger', doc_dl: 'Permis de conduire', doc_cr: 'Casier judiciaire', doc_ss: 'État civil', doc_dip: 'Diplôme', doc_est: 'Immobilier', doc_pass: 'Passeport', mod_ver: 'Vérification', mod_ver_d: 'Entrez mot de passe.', btn_conf: 'Confirmer', mod_reg: 'Sélectionner Région', btn_cr_pass: 'Créer Passeport', mod_cat: 'Catégorie', mod_cat_d: 'Sélectionner catégorie.', btn_cr_dl: 'Créer Permis', exp_title: 'EXPORTATION DE DOCUMENTS / EXPORT', exp_desc: 'Aperçu avant PDF: / Preview before PDF:', btn_exp: 'Exporter en PDF',
                 fp_type: 'Type/Type:', fp_code: 'Code/Code:', fp_no: 'Numéro/No:', fp_sur: 'Nom / Surname', fp_giv: 'Prénoms / Given Names', fp_nat: 'Nationalité / Nationality', fp_dob: 'Date de naissance / DOB', fp_sex: 'Sexe / Sex', fp_rec: 'Enregistrement / Record No.',
-                cert_min_vd: 'MINISTÈRE DE L\'INTÉRIEUR / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTÈRE DE LA JUSTICE / MINISTRY OF JUSTICE', cert_ext: 'EXTRAIT / EXTRACT', cert_cert: 'CERTIFICAT / CERTIFICATE', cert_ias: 'du système d\'information / from info system', cert_b_cr: 'Casier judiciaire: <strong>ABSENT / ABSENT</strong>', cert_b_ss: 'Actes de mariage: <strong>ABSENTS / ABSENT</strong>', cert_id: 'ID du document / Document ID:'
+                cert_min_vd: 'MINISTÈRE DE L\'INTÉRIEUR / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTÈRE DE LA JUSTICE / MINISTRY OF JUSTICE', cert_ext: 'EXTRAIT / EXTRACT', cert_cert: 'CERTIFICAT / CERTIFICATE', cert_ias: 'du système d\'information / from info system', cert_b_cr: 'Casier judiciaire: <strong>ABSENT / ABSENT</strong>', cert_b_ss: 'Actes de mariage: <strong>ABSENTS / ABSENT</strong>', cert_id: 'ID du document / Document ID:',
+                
+                alert_fill_all: 'Veuillez remplir tous les champs et télécharger une photo !', alert_login_chars: 'Erreur ! L\'identifiant doit contenir uniquement des lettres et des chiffres.', alert_login_taken: 'Cet identifiant est déjà pris !', alert_reg_success: 'Inscription réussie ! Vous pouvez maintenant vous connecter.', alert_enter_cred: 'Entrez l\'identifiant et le mot de passe', alert_user_not_found: 'Utilisateur introuvable. Veuillez vous inscrire.', alert_wrong_pass: 'Identifiant ou mot de passe incorrect !', alert_unavail: 'Temporairement indisponible.', alert_pass_exist: 'Passeport citoyen déjà obtenu !', alert_fp_exist: 'Passeport étranger déjà obtenu !', alert_dl_exist: 'Permis de conduire déjà obtenu !', alert_cr_exist: 'Casier judiciaire déjà obtenu !', alert_ss_exist: 'Certificat d\'état civil déjà obtenu !', alert_wrong_code: 'Mot de passe incorrect !', alert_pdf: 'Génération du PDF démarrée...\nLe document sera téléchargé.', alert_dev: 'ERREUR D\'ACCÈS :\nLa langue "%s" est en développement. Veuillez en sélectionner une autre.',
+                doc_sys: 'SYSTEM ID - MDA', doc_pass_title: 'PASSEPORT CITOYEN', doc_fp_title: 'PASSEPORT ÉTRANGER', doc_cr_title: 'CASIER JUDICIAIRE', doc_ss_title: 'ÉTAT CIVIL', doc_dl_title: 'PERMIS DE CONDUIRE',
+                lang_ru: 'Russe', lang_en: 'Anglais', lang_la: 'Latin', cat_a: 'Catégorie A', cat_b: 'Catégorie B', cat_c: 'Catégorie C', cat_d: 'Catégorie D', cat_m: 'Catégorie M', cat_be: 'Catégorie BE', lbl_dob: 'Naiss.:', lbl_cit: 'NAT:', lbl_res: 'RÉS:'
             },
             'Итальянский': {
                 lang_sel: 'Seleziona la lingua', lang_real: 'Lingue Reali', lang_custom: 'Lingue Personalizzate',
                 app_title: 'Documenti Digitali', login: 'Accesso', reg: 'Registrazione', btn_enter: 'Entra', btn_back: 'Indietro', cancel: 'Annulla', add_doc: 'Aggiungi Documento', nav_doc: 'DOCUMENTI', nav_prof: 'PROFILO',
                 fp_type: 'Tipo/Type:', fp_code: 'Codice/Code:', fp_no: 'Numero/No:', fp_sur: 'Cognome / Surname', fp_giv: 'Nome / Given Names', fp_nat: 'Cittadinanza / Nationality', fp_dob: 'Data di nascita / DOB', fp_sex: 'Sesso / Sex', fp_rec: 'Registro / Record No.',
-                cert_min_vd: 'MINISTERO DELL\'INTERNO / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERO DELLA GIUSTIZIA / MINISTRY OF JUSTICE', cert_ext: 'ESTRATTO / EXTRACT', cert_cert: 'CERTIFICATO / CERTIFICATE', cert_ias: 'dal sistema / from info system', cert_b_cr: 'Precedenti penali: <strong>ASSENTI / ABSENT</strong>', cert_b_ss: 'Atti di matrimonio: <strong>ASSENTI / ABSENT</strong>', cert_id: 'ID Documento / Document ID:'
+                cert_min_vd: 'MINISTERO DELL\'INTERNO / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERO DELLA GIUSTIZIA / MINISTRY OF JUSTICE', cert_ext: 'ESTRATTO / EXTRACT', cert_cert: 'CERTIFICATO / CERTIFICATE', cert_ias: 'dal sistema / from info system', cert_b_cr: 'Precedenti penali: <strong>ASSENTI / ABSENT</strong>', cert_b_ss: 'Atti di matrimonio: <strong>ASSENTI / ABSENT</strong>', cert_id: 'ID Documento / Document ID:',
+                
+                alert_fill_all: 'Compila tutti i campi e carica una foto!', alert_login_chars: 'Errore! Il nome utente deve contenere solo lettere latine e numeri.', alert_login_taken: 'Questo nome utente è già in uso!', alert_reg_success: 'Registrazione completata! Ora puoi accedere.', alert_enter_cred: 'Inserisci nome utente e password', alert_user_not_found: 'Utente non trovato. Per favore registrati.', alert_wrong_pass: 'Nome utente o password errati!', alert_unavail: 'Temporaneamente non disponibile.', alert_pass_exist: 'Passaporto cittadino già ottenuto!', alert_fp_exist: 'Passaporto straniero già ottenuto!', alert_dl_exist: 'Patente di guida già ottenuta!', alert_cr_exist: 'Casellario giudiziario già ottenuto!', alert_ss_exist: 'Certificato di stato civile già ottenuto!', alert_wrong_code: 'Password errata!', alert_pdf: 'Generazione PDF avviata...\nIl documento verrà scaricato.', alert_dev: 'ERRORE DI ACCESSO:\nLa lingua "%s" è in fase di sviluppo. Seleziona un\'altra lingua.',
+                doc_sys: 'SYSTEM ID - MDA', doc_pass_title: 'PASSAPORTO CITTADINO', doc_fp_title: 'PASSAPORTO STRANIERO', doc_cr_title: 'CASELLARIO GIUDIZIARIO', doc_ss_title: 'STATO CIVILE', doc_dl_title: 'PATENTE DI GUIDA',
+                lang_ru: 'Russo', lang_en: 'Inglese', lang_la: 'Latino', cat_a: 'Categoria A', cat_b: 'Categoria B', cat_c: 'Categoria C', cat_d: 'Categoria D', cat_m: 'Categoria M', cat_be: 'Categoria BE', lbl_dob: 'Nascita:', lbl_cit: 'CITT:', lbl_res: 'RES:'
             },
             'Латынь': {
                 lang_sel: 'Linguam eligere', lang_real: 'Linguae Mundi', lang_custom: 'Linguae Consuetudines',
                 app_title: 'Documenta Digitalia', login: 'Aditus', reg: 'Registratio', btn_enter: 'Intrare', btn_back: 'Retro', cancel: 'Abolere', add_doc: 'Adde Documentum', nav_doc: 'DOCUMENTA', nav_prof: 'PROFILUM',
                 fp_type: 'Typus/Type:', fp_code: 'Codex/Code:', fp_no: 'Numerus/No:', fp_sur: 'Nomen / Surname', fp_giv: 'Praenomen / Given Names', fp_nat: 'Civitas / Nationality', fp_dob: 'Dies natalis / DOB', fp_sex: 'Sexus / Sex', fp_rec: 'Numerus / Record No.',
-                cert_min_vd: 'MINISTERIUM RERUM INTERNARUM / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERIUM IUSTITIAE / MINISTRY OF JUSTICE', cert_ext: 'EXTRACTUM / EXTRACT', cert_cert: 'CERTIFICATUM / CERTIFICATE', cert_ias: 'ex systema / from info system', cert_b_cr: 'Scelus recordationes: <strong>ABSENS / ABSENT</strong>', cert_b_ss: 'Matrimonium recordationes: <strong>ABSENS / ABSENT</strong>', cert_id: 'ID Documenti / Document ID:'
+                cert_min_vd: 'MINISTERIUM RERUM INTERNARUM / MINISTRY OF INTERNAL AFFAIRS', cert_min_just: 'MINISTERIUM IUSTITIAE / MINISTRY OF JUSTICE', cert_ext: 'EXTRACTUM / EXTRACT', cert_cert: 'CERTIFICATUM / CERTIFICATE', cert_ias: 'ex systema / from info system', cert_b_cr: 'Scelus recordationes: <strong>ABSENS / ABSENT</strong>', cert_b_ss: 'Matrimonium recordationes: <strong>ABSENS / ABSENT</strong>', cert_id: 'ID Documenti / Document ID:',
+                
+                alert_fill_all: 'Imple omnia et onerare imaginem!', alert_login_chars: 'Error! Nomen usoris debet continere tantum litteras et numeros.', alert_login_taken: 'Nomen usoris iam occupatum est!', alert_reg_success: 'Registratio felix! Nunc intrare potes.', alert_enter_cred: 'Intra nomen usoris et tesseram', alert_user_not_found: 'Usor non inventus. Quaeso subcriptio.', alert_wrong_pass: 'Nomen usoris aut tessera falsa!', alert_unavail: 'Ad tempus non praesto.', alert_pass_exist: 'Diploma civis iam obtinuit!', alert_fp_exist: 'Diploma alienum iam obtinuit!', alert_dl_exist: 'Licentia agendi iam obtinuit!', alert_cr_exist: 'Recordatio criminis iam obtinuit!', alert_ss_exist: 'Certificatorium status civilis iam obtinuit!', alert_wrong_code: 'Tessera falsa!', alert_pdf: 'Generatio PDF coepit...\nDocumentum deponetur.', alert_dev: 'ERROR ADITUS:\nLingua "%s" in progressu est. Elige aliam linguam.',
+                doc_sys: 'SYSTEM ID - MDA', doc_pass_title: 'DIPLOMA CIVIS', doc_fp_title: 'DIPLOMA ALIENUM', doc_cr_title: 'RECORDATIO CRIMINIS', doc_ss_title: 'STATUS CIVILIS', doc_dl_title: 'LICENTIA AGENDI',
+                lang_ru: 'Russica', lang_en: 'Anglica', lang_la: 'Latina', cat_a: 'Categoria A', cat_b: 'Categoria B', cat_c: 'Categoria C', cat_d: 'Categoria D', cat_m: 'Categoria M', cat_be: 'Categoria BE', lbl_dob: 'Natus:', lbl_cit: 'CIV:', lbl_res: 'RES:'
             }
         };
 
@@ -602,7 +627,7 @@
 
         function selectLanguage(langName, isDev, isPernian = false) {
             if (isDev) {
-                alert(`ОШИБКА ДОСТУПА:\nЯзык "${langName}" находится в разработке. Пожалуйста, выберите другой язык.`);
+                alert(t('alert_dev').replace('%s', langName));
                 return;
             }
             if (isPernian) {
@@ -790,15 +815,15 @@
             const resEl = document.getElementById('res-selected-text');
 
             if (!nameLat || !nameCyr || !dob || !login || !password || !base64Photo) {
-                alert("Пожалуйста, заполните все поля и загрузите фото!"); return;
+                alert(t('alert_fill_all')); return;
             }
             if (!/^[a-zA-Z0-9]+$/.test(login)) {
-                alert("Ошибка! Логин должен содержать только латинские буквы и цифры."); return;
+                alert(t('alert_login_chars')); return;
             }
 
             const existingUser = await loadUser(login);
             if (existingUser) {
-                alert("Этот логин уже занят!"); return;
+                alert(t('alert_login_taken')); return;
             }
 
             const X = citEl.dataset.code || '1';
@@ -815,7 +840,7 @@
             };
 
             await saveUser(currentUser);
-            alert("Регистрация успешна! Теперь вы можете войти, используя ваш пароль.");
+            alert(t('alert_reg_success'));
             showView('view-login');
         }
 
@@ -823,13 +848,13 @@
             const login = document.getElementById('login-input').value.trim();
             const pass = document.getElementById('login-password').value.trim();
             
-            if(!login || !pass) { alert("Введите логин и пароль"); return; }
+            if(!login || !pass) { alert(t('alert_enter_cred')); return; }
 
             const userData = await loadUser(login);
-            if (!userData) { alert("Пользователь не найден. Пройдите регистрацию."); return; }
+            if (!userData) { alert(t('alert_user_not_found')); return; }
             
             if (userData.password !== pass && userData.code !== pass) {
-                alert("Неверный логин или пароль!"); return; 
+                alert(t('alert_wrong_pass')); return; 
             }
             
             currentUser = userData;
@@ -882,7 +907,7 @@
         }
 
         function exportToPDF() {
-            alert('Генерация PDF файла начата...\nДокумент будет скачан на ваше устройство.');
+            alert(t('alert_pdf'));
             closeModal('cert-modal');
         }
 
@@ -896,6 +921,18 @@
 
             currentUser.documents.forEach(doc => {
                 
+                // Динамический перевод заголовков документов
+                let docTitleDynamic = doc.title;
+                if (doc.type === 'system') docTitleDynamic = t('doc_sys');
+                else if (doc.type === 'passport') docTitleDynamic = t('doc_pass_title');
+                else if (doc.type === 'foreign_passport') docTitleDynamic = t('doc_fp_title');
+                else if (doc.type === 'criminal_record') docTitleDynamic = t('doc_cr_title');
+                else if (doc.type === 'single_status') docTitleDynamic = t('doc_ss_title');
+                else if (doc.type === 'driver_license') {
+                    const catMatch = doc.title.match(/\(([^)]+)\)/);
+                    docTitleDynamic = t('doc_dl_title') + (catMatch ? ` (${catMatch[1]})` : '');
+                }
+
                 // 2. ОТРИСОВКА ЗАГРАНПАСПОРТА (МЕЖДУНАРОДНЫЙ ФОРМАТ - РУССКИЙ И АНГЛИЙСКИЙ)
                 if (doc.type === 'foreign_passport') {
                     const countryAbbr3 = (currentUser.cit.abbr || 'UKR').substring(0, 3).toUpperCase();
@@ -916,7 +953,7 @@
                             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 12px; margin-bottom: 12px;">
                                 <div style="display: flex; gap: 12px; align-items: center;">
                                     <img src="${currentUser.cit.flag || 'mimiland.png'}" style="width: 45px; height: 30px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">
-                                    <h2 style="margin: 0; font-size: 15px; font-weight: 900; line-height: 1;">ПАСПОРТ<br>PASSPORT</h2>
+                                    <h2 style="margin: 0; font-size: 15px; font-weight: 900; line-height: 1;">${t('doc_pass_title')}<br>PASSPORT</h2>
                                 </div>
                                 <div style="text-align: right; font-size: 10px; line-height: 1.3;">
                                     ${t('fp_type')} <strong>P</strong><br>
@@ -978,13 +1015,13 @@
                                     <div class="photo-container"><img src="${currentUser.photo}"></div>
                                     <div class="info-container">
                                         <h2>${safeNameLat.toUpperCase()}</h2>
-                                        <p>DOB: <span>${dobFmt}</span></p>
-                                        <p>CIT: <span>${currentUser.cit.name}</span></p>
-                                        <p>RES: <span>${currentUser.res.name}</span></p>
+                                        <p>${t('lbl_dob')} <span>${dobFmt}</span></p>
+                                        <p>${t('lbl_cit')} <span>${currentUser.cit.name}</span></p>
+                                        <p>${t('lbl_res')} <span>${currentUser.res.name}</span></p>
                                     </div>
                                 </div>
                                 <div class="id-number">${doc.idNumber}</div>
-                                <div class="card-ribbon">${doc.title}</div>
+                                <div class="card-ribbon">${docTitleDynamic}</div>
                                 <div class="bottom-code">${bottomStr}</div>
                                 
                                 ${signatureImgHtml}
@@ -1024,17 +1061,17 @@
 
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function unavailableAlert() { alert("Временно недоступно."); closeModal('modal-doc-menu'); }
+        function unavailableAlert() { alert(t('alert_unavail')); closeModal('modal-doc-menu'); }
 
         function openVerifyModal(type) {
             if (!currentUser) return;
             currentVerifyTarget = type;
             
-            if (type === 'passport' && currentUser.hasPassport) { alert("Паспорт гражданина уже получен!"); return; }
-            if (type === 'foreign_passport' && currentUser.documents.some(d => d.type === 'foreign_passport')) { alert("Загранпаспорт уже получен!"); return; }
-            if (type === 'license' && currentUser.documents.some(d => d.type === 'driver_license')) { alert("Водительские права уже получены!"); return; }
-            if (type === 'criminal_record' && currentUser.documents.some(d => d.type === 'criminal_record')) { alert("Справка о несудимости уже получена!"); return; }
-            if (type === 'single_status' && currentUser.documents.some(d => d.type === 'single_status')) { alert("Справка о семейном положении уже получена!"); return; }
+            if (type === 'passport' && currentUser.hasPassport) { alert(t('alert_pass_exist')); return; }
+            if (type === 'foreign_passport' && currentUser.documents.some(d => d.type === 'foreign_passport')) { alert(t('alert_fp_exist')); return; }
+            if (type === 'license' && currentUser.documents.some(d => d.type === 'driver_license')) { alert(t('alert_dl_exist')); return; }
+            if (type === 'criminal_record' && currentUser.documents.some(d => d.type === 'criminal_record')) { alert(t('alert_cr_exist')); return; }
+            if (type === 'single_status' && currentUser.documents.some(d => d.type === 'single_status')) { alert(t('alert_ss_exist')); return; }
             
             closeModal('modal-doc-menu');
             document.getElementById('verify-code-input').value = '';
@@ -1043,7 +1080,7 @@
 
         function verifyAndProceed() {
             const pass = document.getElementById('verify-code-input').value.trim();
-            if (pass !== currentUser.password && pass !== currentUser.code) { alert("Неверный пароль!"); return; }
+            if (pass !== currentUser.password && pass !== currentUser.code) { alert(t('alert_wrong_code')); return; }
             
             closeModal('modal-verify-code');
 
@@ -1051,7 +1088,41 @@
                 const citName = currentUser.cit.name;
                 const sel = document.getElementById('region-select');
 
-                if (citName === 'Варландия') {
+                if (citName === 'Мимиляндия') {
+                    sel.innerHTML = `
+                        <option value="MM">Момодогская область</option>
+                        <option value="PD">Желудочно-Кишечная область</option>
+                        <option value="SV">Пенсионерская область</option>
+                        <option value="FB">Блюмрестаранг</option>
+                        <option value="ME">Эммарская область</option>
+                        <option value="SL">Слатовская</option>
+                        <option value="AR">Лавиния</option>
+                        <option value="BD">Шалавия</option>
+                        <option value="SL">Мразиния</option>
+                        <option value="OG">Королевская</option>
+                        <option value="DR">Дастанская</option>
+                        <option value="DL">Пердунино</option>
+                        <option value="IB">Пернийская область</option>
+                        <option value="VG">Валенсовская</option>
+                        <option value="PM">Помойкинская область</option>
+                        <option value="BF">Истеричкино</option>
+                        <option value="KS">Привет я коза</option>
+                        <option value="SH">Проститутск</option>
+                        <option value="WT">Южное Трипиздишино</option>
+                        <option value="NT">Северное Трипиздишино</option>
+                        <option value="MT">Миминская</option>
+                        <option value="WL">Выселенская</option>
+                        <option value="PL">Леблядинонск</option>
+                        <option value="FR">Флорианская</option>
+                        <option value="PJ">Паяутская</option>
+                        <option value="JK">Жакондская</option>
+                        <option value="OR">Небуловская</option>
+                        <option value="NS">Нью-Симамийский округ</option>
+                        <option value="SR">Срадручильницкая</option>
+                        <option value="SC">Симамия-Сити</option>
+                    `;
+                    openModal('modal-region');
+                } else if (citName === 'Варландия') {
                     sel.innerHTML = `<option value="01">Бьоркпилс</option><option value="02">Аскенд</option><option value="03">Эзертальд</option><option value="04">Вальгард</option><option value="05">Гаал</option><option value="06">Брайнинг</option><option value="07">Одебург</option><option value="08">Риет-Ас-Квилле</option><option value="09">Кёнигланд</option><option value="10">Сольхейм</option><option value="11">Мительхене</option><option value="12">Налвага</option><option value="13">Таумапилс</option><option value="14">Де Гримвалд</option><option value="15">Торнланд</option><option value="16">Дзервените</option><option value="17">Аневежас</option>`;
                     openModal('modal-region');
                 } else if (citName === 'Инопланетяне') {
@@ -1144,7 +1215,7 @@
             const dobParts = currentUser.dob.split('-'); 
             let passId = '';
 
-            if (cit === 'Мимиляндия') passId = `ML${randNum(13)}SC${randLetters(2)}${randNum(2)}`;
+            if (cit === 'Мимиляндия') passId = `ML${randNum(13)}${reg}${randLetters(2)}${randNum(2)}`;
             else if (['Эммария', 'Орфия', 'Королевство Пернии'].includes(cit)) passId = `${randNum(9)}U${cit === 'Эммария' ? 'E' : (cit === 'Орфия' ? 'O' : 'P')}01${randNum(1)}`;
             else if (cit === 'Варландия') passId = `${reg}${randNum(5)}${currentUser.gender}${dobParts[2]}${dobParts[1]}${dobParts[0].substring(2)}VAR`;
             else if (cit === 'Инсталяндия') {
